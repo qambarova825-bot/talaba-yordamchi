@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talaba yordamchi</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: system-ui, sans-serif; margin: 0; background: #f4f6fb; color: #222; }
+  header { background: #2b6cb0; color: #fff; padding: 16px; text-align: center; }
+  header h1 { margin: 0; font-size: 1.4em; }
+  nav { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; padding: 12px; background: #fff; }
+  nav button { padding: 8px 12px; border: 1px solid #2b6cb0; background: #fff; color: #2b6cb0; border-radius: 8px; cursor: pointer; }
+  nav button.active { background: #2b6cb0; color: #fff; }
+  main { max-width: 760px; margin: 20px auto; padding: 20px; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  input, select, textarea { width: 100%; padding: 10px; margin: 6px 0 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1em; }
+  .btn { padding: 10px 16px; background: #2b6cb0; color: #fff; border: 0; border-radius: 8px; cursor: pointer; font-size: 1em; }
+  .natija { white-space: pre-wrap; background: #f0f4fa; padding: 14px; border-radius: 8px; margin-top: 14px; line-height: 1.6; }
+  .sec { display: none; }
+  .sec.active { display: block; }
+  .kartochka { border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; margin: 10px 0; }
+  .kartochka h3 { margin: 0 0 6px; font-size: 1.05em; }
+  .kartochka ul { margin: 0; padding-left: 20px; }
+</style>
+</head>
+<body>
+
+<header><h1>🎓 TALABA YORDAMCHI</h1></header>
+
+<nav id="nav"></nav>
+
+<main>
+
+  <!-- BOSH SAHIFA -->
+  <section id="bosh" class="sec">
+    <h2>Assalomu alaykum! 👋</h2>
+    <p>Bu yerda mustaqil ish, referat, prezentatsiya, ilmiy ish va konspekt uchun tayyor reja va shablonlar topasiz. Yuqoridagi bo'limlardan birini tanlang.</p>
+    <div class="kartochka">
+      <h3>📝 Referat rejasi</h3>
+      <p>Mavzuni yozing, tayyor reja (kirish, boblar, xulosa) chiqadi.</p>
+    </div>
+    <div class="kartochka">
+      <h3>📊 Prezentatsiya rejasi</h3>
+      <p>Slaydlar soni va mavzu bo'yicha slaydlar ro'yxati.</p>
+    </div>
+    <div class="kartochka">
+      <h3>📚 Mustaqil ish talablari</h3>
+      <p>Odatda talab qilinadigan tarkib va tekshirish ro'yxati.</p>
+    </div>
+    <div class="kartochka">
+      <h3>🔬 Ilmiy ish tuzilishi</h3>
+      <p>Dolzarblik, maqsad, metodika, natijalar va xulosa qismlari.</p>
+    </div>
+    <div class="kartochka">
+      <h3>📖 Konspekt shabloni</h3>
+      <p>Ma'ruzani yozib borish uchun tayyor shablon.</p>
+    </div>
+  </section>
+
+  <!-- REFERAT -->
+  <section id="referat" class="sec">
+    <h2>📝 Referat rejasi</h2>
+    <label>Mavzu:</label>
+    <input id="referat-mavzu" placeholder="Masalan: Iqtisodiyot asoslari">
+    <button class="btn" onclick="referatYarat()">Reja tuzish</button>
+    <div id="referat-natija" class="natija" style="display:none"></div>
+  </section>
+
+  <!-- PREZENTATSIYA -->
+  <section id="prezentatsiya" class="sec">
+    <h2>📊 Prezentatsiya rejasi</h2>
+    <label>Mavzu:</label>
+    <input id="pr-mavzu" placeholder="Masalan: Ekologik muammolar">
+    <label>Slaydlar soni:</label>
+    <select id="pr-soni">
+      <option>5</option><option selected>8</option><option>10</option><option>12</option>
+    </select>
+    <button class="btn" onclick="prezentatsiyaYarat()">Slaydlar rejasi</button>
+    <div id="pr-natija" class="natija" style="display:none"></div>
+  </section>
+
+  <!-- MUSTAQIL ISH -->
+  <section id="mustaqil" class="sec">
+    <h2>📚 Mustaqil ish</h2>
+    <label>Mavzu:</label>
+    <input id="must-mavzu" placeholder="Masalan: Marketing strategiyasi">
+    <button class="btn" onclick="mustaqilYarat()">Reja va tekshiruv ro'yxati</button>
+    <div id="must-natija" class="natija" style="display:none"></div>
+  </section>
+
+  <!-- ILMIY ISH -->
+  <section id="ilmiy" class="sec">
+    <h2>🔬 Ilmiy ish tuzilishi</h2>
+    <label>Mavzu:</label>
+    <input id="ilmiy-mavzu" placeholder="Masalan: Sun'iy intellektning ta'limdagi o'rni">
+    <button class="btn" onclick="ilmiyYarat()">Tuzilish</button>
+    <div id="ilmiy-natija" class="natija" style="display:none"></div>
+  </section>
+
+  <!-- KONSPEKT -->
+  <section id="konspekt" class="sec">
+    <h2>📖 Ma'ruza konspekti</h2>
+    <label>Fan nomi:</label>
+    <input id="kons-fan" placeholder="Fan">
+    <label>Mavzu:</label>
+    <input id="kons-mavzu" placeholder="Mavzu">
+    <label>Sana:</label>
+    <input id="kons-sana" type="date">
+    <button class="btn" onclick="konspektYarat()">Shablon yaratish</button>
+    <div id="kons-natija" class="natija" style="display:none"></div>
+  </section>
+
+</main>
+
+<script>
+const bolimlar = [
+  { id: "bosh", nom: "Bosh sahifa" },
+  { id: "referat", nom: "📝 Referat" },
+  { id: "prezentatsiya", nom: "📊 Prezentatsiya" },
+  { id: "mustaqil", nom: "📚 Mustaqil ish" },
+  { id: "ilmiy", nom: "🔬 Ilmiy ish" },
+  { id: "konspekt", nom: "📖 Konspekt" }
+];
+
+const nav = document.getElementById("nav");
+bolimlar.forEach(b => {
+  const btn = document.createElement("button");
+  btn.textContent = b.nom;
+  btn.dataset.id = b.id;
+  btn.onclick = () => bolimniKorsat(b.id);
+  nav.appendChild(btn);
+});
+
+function bolimniKorsat(id) {
+  document.querySelectorAll(".sec").forEach(s => s.classList.toggle("active", s.id === id));
+  document.querySelectorAll("nav button").forEach(b => b.classList.toggle("active", b.dataset.id === id));
+}
+bolimniKorsat("bosh");
+
+function natijaniChiqar(id, matn) {
+  const el = document.getElementById(id);
+  el.textContent = matn;
+  el.style.display = "block";
+}
+
+function mavzuniOl(id) {
+  const v = document.getElementById(id).value.trim();
+  if (!v) { alert("Avval mavzuni yozing."); return null; }
+  return v;
+}
+
+function referatYarat() {
+  const m = mavzuniOl("referat-mavzu"); if (!m) return;
+  natijaniChiqar("referat-natija",
+`REFERAT REJASI
+Mavzu: ${m}
+
+KIRISH
+  - Mavzuning dolzarbligi
+  - Maqsad va vazifalar
+
+I BOB. Nazariy asoslar
+  1.1. Asosiy tushunchalar
+  1.2. Mavzu bo'yicha yondashuvlar
+
+II BOB. Amaliy qism
+  2.1. Mavzuning joriy holati
+  2.2. Misollar va tahlil
+
+XULOSA
+  - Asosiy natijalar
+  - Tavsiyalar
+
+FOYDALANILGAN ADABIYOTLAR
+  - Kitoblar, maqolalar, rasmiy manbalar`);
+}
+
+function prezentatsiyaYarat() {
+  const m = mavzuniOl("pr-mavzu"); if (!m) return;
+  const n = parseInt(document.getElementById("pr-soni").value);
+  const qismlar = ["Mavzu va muallif", "Dolzarblik", "Maqsad va vazifalar", "Asosiy tushunchalar"];
+  const oraliq = ["Birinchi yondashuv", "Ikkinchi yondashuv", "Misol va tahlil", "Statistika va natijalar", "Muammolar", "Yechimlar"];
+  let matn = `PREZENTATSIYA REJASI (${n} slayd)\nMavzu: ${m}\n\n`;
+  const royxat = [...qismlar, ...oraliq, "Xulosa", "Foydalanilgan manbalar", "E'tiboringiz uchun rahmat"];
+  for (let i = 0; i < n; i++) {
+    matn += `Slayd ${i + 1}: ${royxat[i] || "Qo'shimcha ma'lumot"}\n`;
+  }
+  natijaniChiqar("pr-natija", matn);
+}
+
+function mustaqilYarat() {
+  const m = mavzuniOl("must-mavzu"); if (!m) return;
+  natijaniChiqar("must-natija",
+`MUSTAQIL ISH REJASI
+Mavzu: ${m}
+
+Tarkib:
+  1. Kirish
+  2. Asosiy qism (2–3 savol yoki bo'lim)
+  3. Xulosa
+  4. Foydalanilgan adabiyotlar
+
+TEKSHIRISH RO'YXATI
+  [ ] Titul varag'i to'ldirilgan
+  [ ] Mavzu topshiriqqa mos
+  [ ] Reja va bo'limlar mantiqiy ketma-ketlikda
+  [ ] Har bir fikr manbaga asoslangan
+  [ ] Xulosa savollarga javob beradi
+  [ ] Imloviy va uslubiy xatolar tekshirilgan
+  [ ] Talab qilingan hajm (varaq, so'z) bajarilgan`);
+}
+
+function ilmiyYarat() {
+  const m = mavzuniOl("ilmiy-mavzu"); if (!m) return;
+  natijaniChiqar("ilmiy-natija",
+`ILMIY ISH TUZILISHI
+Mavzu: ${m}
+
+  1. Annotatsiya
+  2. Kirish
+     - Dolzarblik
+     - Tadqiqot maqsadi va vazifalari
+     - Ob'ekt va predmet
+  3. Nazariy qism
+     - Adabiyotlar sharhi
+  4. Metodologiya
+     - Ma'lumot yig'ish usullari
+     - Tahlil usullari
+  5. Natijalar va muhokama
+  6. Xulosa va tavsiyalar
+  7. Foydalanilgan adabiyotlar`);
+}
+
+function konspektYarat() {
+  const fan = document.getElementById("kons-fan").value.trim() || "_______";
+  const mavzu = document.getElementById("kons-mavzu").value.trim() || "_______";
+  const sana = document.getElementById("kons-sana").value || "_______";
+  natijaniChiqar("kons-natija",
+`MA'RUZA KONSPEKTI
+Fan: ${fan}
+Mavzu: ${mavzu}
+Sana: ${sana}
+
+Asosiy tushunchalar:
+  -
+  -
+
+Asosiy g'oyalar:
+  1.
+  2.
+
+Misollar:
+  -
+
+Savollar (keyinroq o'rganish uchun):
+  -
+
+Xulosa:
+  `);
+}
+</script>
+</body>
+</html>
