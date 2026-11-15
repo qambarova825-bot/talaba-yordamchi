@@ -2,7 +2,7 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Talaba Yordamchi</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
@@ -27,32 +27,35 @@
     --dock: rgba(255,255,255,.75);
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; min-height: 100%; color: var(--text);
-    font-family: -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+  html, body {
+    margin: 0; min-height: 100%; color: var(--text); touch-action: manipulation;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased;
+  }
   body { background: linear-gradient(170deg, var(--bg1) 0%, var(--bg2) 100%); background-attachment: fixed; }
   body::before {
     content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
     background: radial-gradient(520px 320px at 100% 0%, var(--glow-a), transparent 65%),
                 radial-gradient(480px 320px at 0% 55%, var(--glow-b), transparent 65%);
   }
-  .app { max-width: 520px; margin: 0 auto; min-height: 100vh; padding: 18px 16px calc(120px + env(safe-area-inset-bottom)); }
+  .app { max-width: 520px; margin: 0 auto; min-height: 100vh; padding: 64px 16px calc(120px + env(safe-area-inset-bottom)); }
   .glass {
     background: var(--glass); border: 1px solid var(--line); border-radius: var(--radius);
     backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
   }
 
-  .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .brand { font-size: 21px; font-weight: 800; }
-  .brand span { color: var(--cyan); }
-  .top-right { display: flex; align-items: center; gap: 8px; }
+  /* Har bir bo'limda ko'rinadigan rejim tugmasi */
+  .theme-fab {
+    position: fixed; top: calc(12px + env(safe-area-inset-top)); right: 14px; z-index: 30;
+    width: 40px; height: 40px; border-radius: 14px; border: 1px solid var(--line); background: var(--glass);
+    color: var(--text); font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  }
   .mini-bal {
-    padding: 7px 11px; border-radius: 12px; background: var(--glass-strong); border: 1px solid var(--line);
-    font-size: 12px; font-weight: 700; color: var(--cyan); white-space: nowrap;
+    position: fixed; top: calc(12px + env(safe-area-inset-top)); left: 14px; z-index: 30;
+    padding: 9px 12px; border-radius: 13px; background: var(--glass-strong); border: 1px solid var(--line);
+    font-size: 12px; font-weight: 700; color: var(--cyan);
   }
-  .icon-btn {
-    width: 38px; height: 38px; border-radius: 13px; border: 1px solid var(--line); background: var(--glass);
-    color: var(--text); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-  }
+
   h1.hello { margin: 18px 0 4px; font-size: 25px; font-weight: 800; }
   .sub { margin: 0 0 14px; font-size: 14px; color: var(--muted); }
 
@@ -64,11 +67,11 @@
   .roles button.on { background: linear-gradient(120deg, var(--accent), var(--accent2)); color: #fff; box-shadow: 0 6px 20px rgba(155,107,255,.45); }
 
   .free { display: flex; align-items: center; gap: 12px; padding: 14px 16px; margin-top: 14px; }
-  .free .st { font-size: 24px; }
-  .free b { display: block; font-size: 15px; }
-  .free small { color: var(--muted); font-size: 12px; }
+  .free .st, .gift .st, .about-row .st { font-size: 24px; }
+  .free b, .gift b { display: block; font-size: 15px; }
+  .free small, .gift small { color: var(--muted); font-size: 12px; line-height: 1.4; }
 
-  .label { margin: 22px 2px 10px; font-size: 13px; color: var(--muted); letter-spacing: .04em; }
+  .label, .sec-title { margin: 22px 2px 10px; font-size: 13px; color: var(--muted); letter-spacing: .04em; }
   .list { display: flex; flex-direction: column; gap: 12px; }
   .row { display: flex; align-items: center; gap: 14px; padding: 14px; color: var(--text); font: inherit; text-align: left; width: 100%; cursor: pointer; }
   .row:active { transform: scale(.985); }
@@ -80,7 +83,6 @@
   .row .info { flex: 1; min-width: 0; }
   .row h3 { margin: 0 0 3px; font-size: 16px; }
   .row p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.4; }
-  .price { font-size: 12px; color: var(--cyan); font-weight: 600; margin-top: 4px; display: block; }
   .arrow { color: var(--muted); font-size: 22px; }
 
   /* Forma */
@@ -89,9 +91,10 @@
   .form-hint { margin: 0 0 16px; font-size: 14px; color: var(--muted); line-height: 1.5; }
   .field { padding: 14px; margin-bottom: 12px; }
   .field > label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
-  input, textarea {
+  .inner { padding: 12px; margin-bottom: 10px; }
+  input, textarea, select {
     width: 100%; padding: 13px 14px; border-radius: 14px; border: 1px solid var(--line);
-    background: var(--field); color: var(--text); font: inherit; font-size: 15px;
+    background: var(--field); color: var(--text); font: inherit; font-size: 16px;
   }
   textarea { min-height: 96px; resize: vertical; }
   .seg3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
@@ -100,10 +103,10 @@
     color: var(--muted); font: inherit; font-size: 13px; cursor: pointer;
   }
   .seg3 button.on { border-color: var(--soft); color: var(--text); background: var(--glass-strong); font-weight: 600; }
-  .stepper { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .stepper { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .stepper button {
-    width: 52px; height: 52px; border-radius: 16px; border: 1px solid var(--line); background: var(--glass);
-    color: var(--text); font-size: 24px; cursor: pointer;
+    min-width: 50px; height: 50px; padding: 0 8px; border-radius: 16px; border: 1px solid var(--line); background: var(--glass);
+    color: var(--text); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
   }
   .stepper .val { flex: 1; text-align: center; font-size: 28px; font-weight: 800; }
   .stepper .val small { display: block; font-size: 13px; font-weight: 400; color: var(--muted); }
@@ -112,10 +115,7 @@
   .extra-head b { font-size: 15px; }
   .extra-head small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
   .tick { width: 22px; height: 22px; accent-color: #9b6bff; pointer-events: none; }
-  .extra-body { margin-top: 14px; }
-  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .two .field { margin-bottom: 0; }
-  .inner { padding: 12px; margin-bottom: 10px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
 
   .cta {
     width: 100%; padding: 16px; border: 0; border-radius: 18px; margin-top: 6px; font: inherit;
@@ -128,18 +128,17 @@
   .result { white-space: pre-wrap; line-height: 1.65; font-size: 14px; padding: 16px; margin-top: 14px; }
   .disclaimer { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
 
-  .item { display: flex; justify-content: space-between; gap: 10px; padding: 13px 14px; margin-bottom: 10px; }
+  .item { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 13px 14px; margin-bottom: 10px; }
   .item b { font-size: 14px; }
   .item small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
-  .cost { font-size: 13px; font-weight: 700; white-space: nowrap; }
-  .cost.free { color: var(--cyan); }
-  .cost.paid { color: #ff9ab5; }
+  .tag { font-size: 12px; font-weight: 700; white-space: nowrap; padding: 5px 9px; border-radius: 10px; }
+  .tag.free { color: var(--cyan); background: rgba(94,231,255,.12); }
+  .tag.bal { color: var(--soft); background: var(--glass-strong); }
   .empty { text-align: center; color: var(--muted); padding: 36px 10px; font-size: 14px; }
 
   .sheet { padding: 16px; margin-bottom: 14px; }
   .sheet h2 { margin: 0 0 4px; font-size: 18px; }
   .sheet p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.55; }
-  .sec-title { margin: 22px 2px 10px; font-size: 13px; color: var(--muted); letter-spacing: .04em; }
   .balance { padding: 22px 18px; text-align: center; background: linear-gradient(135deg, rgba(155,107,255,.35), rgba(61,155,255,.30)); }
   .balance small { color: var(--muted); font-size: 13px; }
   .balance .amount { font-size: 34px; font-weight: 800; margin-top: 6px; }
@@ -150,14 +149,10 @@
   }
   .pay-note { font-size: 12px; color: var(--muted); margin: 10px 2px 0; line-height: 1.5; }
   .gift { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
-  .gift .st { font-size: 26px; }
-  .gift b { font-size: 15px; display: block; }
-  .gift small { color: var(--muted); font-size: 12px; line-height: 1.4; }
-  .row2 { display: flex; justify-content: space-between; padding: 12px 2px; border-bottom: 1px solid var(--line); font-size: 14px; gap: 10px; }
+  .row2 { display: flex; justify-content: space-between; align-items: center; padding: 12px 2px; border-bottom: 1px solid var(--line); font-size: 14px; gap: 10px; }
   .row2:last-child { border-bottom: 0; }
   .about-row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; font-size: 14px; }
   .about-row + .about-row { border-top: 1px solid var(--line); }
-  .about-row .st { font-size: 20px; }
   .about-row small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; line-height: 1.4; }
 
   .dock {
@@ -179,18 +174,14 @@
 </style>
 </head>
 <body>
+
+<button class="theme-fab" id="themeBtn" onclick="toggleTheme()" aria-label="Rejim">☾</button>
+
 <div class="app">
 
   <!-- ASOSIY -->
   <section id="home" class="screen on">
-    <div class="top">
-      <div class="brand">Talaba<span>AI</span></div>
-      <div class="top-right">
-        <div class="mini-bal" id="miniBal">0 so'm</div>
-        <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Rejim">☾</button>
-      </div>
-    </div>
-
+    <div class="mini-bal" id="miniBal" style="position:static;display:inline-block;margin-bottom:6px">0 so'm</div>
     <h1 class="hello" id="greet">Assalomu alaykum!</h1>
     <p class="sub" id="homeSub">Bugun nima tayyorlaymiz?</p>
 
@@ -250,10 +241,10 @@
 
     <div class="sec-title">Haqida</div>
     <div class="glass">
-      <div class="about-row"><span class="st">🤖</span><div><b>AI versiyasi</b><small>Claude Haiku 4.5. Demo rejimda hozircha haqiqiy AI javob chiqmaydi.</small></div></div>
-      <div class="about-row"><span class="st">📝</span><div><b>Talaba Yordamchi</b><small>Mustaqil ish, referat va prezentatsiya uchun reja va matn. Har bir javobni o'zingiz tekshiring.</small></div></div>
-      <div class="about-row"><span class="st">💬</span><div><b>Yordam</b><small>Savollar va takliflar uchun bot orqali murojaat qiling.</small></div></div>
-      <div class="about-row"><span class="st">📄</span><div><b>Huquqiy ma'lumot</b><small>Ommaviy oferta va maxfiylik siyosati tez orada shu yerda bo'ladi.</small></div></div>
+      <div class="about-row"><span>🤖</span><div><b>AI versiyasi</b><small>Claude Haiku 4.5. Demo rejimda hozircha haqiqiy AI javob chiqmaydi.</small></div></div>
+      <div class="about-row"><span>📝</span><div><b>Talaba Yordamchi</b><small>Mustaqil ish, referat, prezentatsiya va ilmiy ishlar uchun reja va matn. Har bir javobni o'zingiz tekshiring.</small></div></div>
+      <div class="about-row"><span>💬</span><div><b>Yordam</b><small>Savollar va takliflar uchun bot orqali murojaat qiling.</small></div></div>
+      <div class="about-row"><span>📄</span><div><b>Huquqiy ma'lumot</b><small>Ommaviy oferta va maxfiylik siyosati tez orada shu yerda bo'ladi.</small></div></div>
     </div>
   </section>
 
@@ -280,13 +271,15 @@ let S = {
   role: lsGet("talaba_rol", "talaba"),
   freeUsed: lsGet("talaba_bepul", false),
   balance: lsGet("talaba_balans", 0),
-  history: lsGet("talaba_tarix", [])
+  history: lsGet("talaba_tarix", []),
+  person: lsGet("talaba_shaxsiy", {})
 };
 function saveAll() {
   lsSet("talaba_rol", S.role);
   lsSet("talaba_bepul", S.freeUsed);
   lsSet("talaba_balans", S.balance);
   lsSet("talaba_tarix", S.history.slice(0, 80));
+  lsSet("talaba_shaxsiy", S.person);
 }
 
 /* ---------- Foydalanuvchi ---------- */
@@ -299,7 +292,7 @@ if (tg) {
   }
 }
 
-/* ---------- Rejim ---------- */
+/* ---------- Rejim (har bir bo'limda) ---------- */
 const TEMA_KEY = "talaba_tema";
 function temaQollash(rejim) {
   document.body.classList.toggle("light", rejim === "kunduzgi");
@@ -313,39 +306,46 @@ function toggleTheme() {
   lsSet(TEMA_KEY, yangi);
   temaQollash(yangi);
 }
-(function boshlangichTema() {
-  const saqlangan = lsGet(TEMA_KEY, null);
-  if (saqlangan) return temaQollash(saqlangan);
-  temaQollash(tg && tg.colorScheme === "light" ? "kunduzgi" : "tungi");
-})();
 
-/* ---------- Yo'nalishlar (rolga qarab) ---------- */
+/* ---------- Yo'nalishlar ---------- */
 const TYPES = {
-  referat:       { name: "Referat",           icon: "📝", hint: "Reja va to'liq matn",          topicQ: "Referat mavzusi nima?",       sizeQ: "Referat hajmi", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet",   min: 3, max: 10, def: 5,  price: 2000, personal: true },
-  prezentatsiya: { name: "Prezentatsiya",     icon: "📊", hint: "Slaydlar va asosiy matn",      topicQ: "Prezentatsiya mavzusi nima?", sizeQ: "Uslub",         sizes: ["Oddiy", "Ilmiy", "Ijodiy"],   unit: "slayd", min: 5, max: 20, def: 8,  price: 4000, personal: true },
-  mustaqil:      { name: "Mustaqil ish",      icon: "📚", hint: "Reja, bo'limlar va tekshiruv", topicQ: "Mustaqil ish mavzusi nima?",  sizeQ: "Chuqurlik",     sizes: ["Yengil", "O'rta", "Chuqur"],  unit: "savol", min: 2, max: 6,  def: 3,  price: 2000, personal: false },
-  ilmiy:         { name: "Ilmiy ish",         icon: "🔬", hint: "Dolzarblik, maqsad, metodika", topicQ: "Ilmiy ish mavzusi nima?",     sizeQ: "Hajm",          sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bob",   min: 2, max: 5,  def: 3,  price: 4000, personal: false },
-  konspekt:      { name: "Ma'ruza konspekti", icon: "📖", hint: "Tayyor konspekt",              topicQ: "Ma'ruza mavzusi nima?",       sizeQ: "Uzunlik",       sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "band",  min: 3, max: 10, def: 5,  price: 2000, personal: false }
+  referat:       { name: "Referat",           icon: "📝", hint: "Reja va to'liq matn",          topicQ: "Referat mavzusi nima?",       sizeQ: "Referat hajmi", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet",   min: 3,  max: 10,  def: 5,  personal: true },
+  prezentatsiya: { name: "Prezentatsiya",     icon: "📊", hint: "Slaydlar va asosiy matn",      topicQ: "Prezentatsiya mavzusi nima?", sizeQ: "Uslub",         sizes: ["Oddiy", "Ilmiy", "Ijodiy"],   unit: "slayd", min: 5,  max: 100, def: 8,  personal: true },
+  mustaqil:      { name: "Mustaqil ish",      icon: "📚", hint: "Reja, bo'limlar va tekshiruv", topicQ: "Mustaqil ish mavzusi nima?",  sizeQ: "Chuqurlik",     sizes: ["Yengil", "O'rta", "Chuqur"],  unit: "savol", min: 2,  max: 6,   def: 3,  personal: true },
+  ilmiy:         { name: "Ilmiy ish",         icon: "🔬", hint: "Dolzarblik, maqsad, metodika", topicQ: "Ilmiy ish mavzusi nima?",     sizeQ: "Hajm",          sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bob",   min: 2,  max: 5,   def: 3,  personal: false },
+  konspekt:      { name: "Ma'ruza konspekti", icon: "📖", hint: "Tayyor konspekt",              topicQ: "Ma'ruza mavzusi nima?",       sizeQ: "Uzunlik",       sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "band",  min: 3,  max: 10,  def: 5,  personal: false }
 };
-const ROLE_TYPES = {
+// Ichki narxlar (ekranda ko'rsatilmaydi)
+const PRICE = { referat: 2000, prezentatsiya: 4000, mustaqil: 2000, ilmiy: 4000, konspekt: 2000 };
+
+const ROLE_TYPE_KEYS = {
   talaba: ["prezentatsiya", "mustaqil", "referat"],
   oqituvchi: ["prezentatsiya", "mustaqil", "ilmiy", "konspekt"]
 };
-const ROLE_TYPE_KEYS = { talaba: ["prezentatsiya", "mustaqil", "referat"], oqituvchi: ["prezentatsiya", "mustaqil", "ilmiy", "konspekt"] };
-const ROLE_LBL = {
-  talaba:    { uni: "Universitet nomi", group: "Guruh raqami", dir: "Yo'nalish",      hint: "Mustaqil ish, referat va prezentatsiya uchun" },
-  oqituvchi: { uni: "Muassasa nomi",    group: "Sinf",         dir: "Fan yo'nalishi", hint: "Dars uchun materiallar" }
+
+// Shaxsiy ma'lumot maydonlari rolga qarab
+const FIELDS = {
+  talaba: [
+    ["ism", "Ism"], ["fam", "Familiya"], ["uni", "Universitet nomi"],
+    ["fan", "Fan nomi"], ["guruh", "Guruh raqami"], ["yonalish", "Yo'nalish"]
+  ],
+  oqituvchi: [
+    ["ism", "Ism"], ["fam", "Familiya"], ["uni", "Universitet nomi"],
+    ["kafedra", "Kafedra"], ["fan", "Fan nomi"], ["lavozim", "Lavozim (ixtiyoriy)"]
+  ]
 };
-const PERSONAL_FIELDS = ["f_ism", "f_fam", "f_uni", "f_fan", "f_guruh", "f_yonalish"];
+const ROLE_HINT = {
+  talaba: "Mustaqil ish, referat va prezentatsiya uchun",
+  oqituvchi: "Ma'ruza, dars slaydlari va topshiriqlar uchun"
+};
+
 const fmt = n => Number(n).toLocaleString("uz-UZ").replace(/,/g, " ") + " so'm";
-
 function typesForRole() { return ROLE_TYPE_KEYS[S.role] || ROLE_TYPE_KEYS.talaba; }
-
 function rowHTML(k) {
   const t = TYPES[k];
   return `<button class="row glass" onclick="openForm('${k}')">
     <div class="sticker">${t.icon}</div>
-    <div class="info"><h3>${t.name}</h3><p>${t.hint}</p><span class="price">${fmt(t.price)}</span></div>
+    <div class="info"><h3>${t.name}</h3><p>${t.hint}</p></div>
     <span class="arrow">›</span></button>`;
 }
 
@@ -355,6 +355,7 @@ function rolesHTML() {
           <button class="${S.role === "oqituvchi" ? "on" : ""}" onclick="setRole('oqituvchi')">👩‍🏫 O'qituvchi</button>`;
 }
 function setRole(r) {
+  saveFields();
   S.role = r; saveAll();
   if (st && !ROLE_TYPE_KEYS[r].includes(st.type)) { st = null; go("home"); }
   renderRoles(); renderHome(); renderProfile();
@@ -370,8 +371,7 @@ function renderRoles() {
 /* ---------- Asosiy sahifa ---------- */
 function renderHome() {
   renderRoles();
-  const free = document.getElementById("homeFree");
-  free.innerHTML = !S.freeUsed
+  document.getElementById("homeFree").innerHTML = !S.freeUsed
     ? `<div class="st">🎁</div><div><b>Birinchi ish bepul</b><small>Bu imkoniyat faqat bir marta beriladi.</small></div>`
     : `<div class="st">✨</div><div><b>Bepul imkoniyat ishlatilgan</b><small>Keyingi ishlar balansdan yechiladi.</small></div>`;
   document.getElementById("allTypes").innerHTML = typesForRole().map(rowHTML).join("");
@@ -380,8 +380,8 @@ function renderHome() {
 
 /* ---------- Ishlar va profil ---------- */
 function itemHTML(x) {
-  const c = x.cost === 0 ? `<span class="cost free">Bepul</span>` : `<span class="cost paid">−${fmt(x.cost)}</span>`;
-  return `<div class="glass item"><div><b>${TYPES[x.type].icon} ${TYPES[x.type].name}: ${escapeHTML(x.topic)}</b><small>${x.sana}</small></div>${c}</div>`;
+  const tag = x.cost === 0 ? `<span class="tag free">Bepul</span>` : `<span class="tag bal">Balansdan</span>`;
+  return `<div class="glass item"><div><b>${TYPES[x.type].icon} ${TYPES[x.type].name}: ${escapeHTML(x.topic)}</b><small>${x.sana}</small></div>${tag}</div>`;
 }
 function renderHistory() {
   document.getElementById("histList").innerHTML = S.history.length
@@ -395,7 +395,7 @@ function renderProfile() {
     ? `<div class="st">🎁</div><div><b>1 marta bepul</b><small>Birinchi ishingiz uchun bir marta beriladi. Keyingi ishlar balansdan yechiladi.</small></div>`
     : `<div class="st">✨</div><div><b>Ishlatilgan</b><small>Bepul imkoniyat faqat bir marta beriladi va allaqachon sarflangan.</small></div>`;
   document.getElementById("spendBox").innerHTML = S.history.length
-    ? S.history.slice(0, 20).map(x => `<div class="row2"><span>${TYPES[x.type].icon} ${TYPES[x.type].name}</span><span class="cost ${x.cost === 0 ? "free" : "paid"}">${x.cost === 0 ? "Bepul" : "−" + fmt(x.cost)}</span></div>`).join("")
+    ? S.history.slice(0, 20).map(x => `<div class="row2"><span>${TYPES[x.type].icon} ${TYPES[x.type].name}</span>${x.cost === 0 ? `<span class="tag free">Bepul</span>` : `<span class="tag bal">Balansdan</span>`}</div>`).join("")
     : `<div class="empty" style="padding:14px">Hali sarflanmagan.</div>`;
   document.getElementById("miniBal").textContent = fmt(S.balance);
 }
@@ -403,59 +403,52 @@ function renderProfile() {
 /* ---------- Forma ---------- */
 let st = null;
 function openForm(k) {
-  st = { type: k, hajm: -1, soni: TYPES[k].def, topic: "", extraOn: true, ism: "", f_ism: "", f_fam: "", f_uni: "", f_fan: "", f_guruh: "", f_yonalish: "" };
+  st = { type: k, hajm: -1, soni: TYPES[k].def, topic: "", extraOn: true };
   document.getElementById("out").innerHTML = "";
   go("form");
   renderForm();
 }
-function v(id) { const el = document.getElementById(id); return el ? el.value.trim() : ""; }
 
-// Qiymatlarni render paytida saqlab qolish
 function saveFields() {
   if (!st) return;
-  const t = document.getElementById("f_topic");
-  if (t) st.topic = t.value;
-  PERSONAL_FIELDS.forEach(id => { const el = document.getElementById(id); if (el) st[id] = el.value; });
+  const topic = document.getElementById("f_topic");
+  if (topic) st.topic = topic.value;
+  FIELDS[S.role].forEach(([key]) => {
+    const el = document.getElementById("p_" + key);
+    if (el) S.person[key] = el.value;
+  });
 }
 
 function renderForm() {
   const t = TYPES[st.type];
-  const L = ROLE_LBL[S.role];
-  saveFields();
   document.getElementById("fTitle").textContent = t.name;
-  document.getElementById("fHint").textContent = L.hint;
+  document.getElementById("fHint").textContent = ROLE_HINT[S.role];
   document.getElementById("out").innerHTML = "";
 
   let personal = "";
   if (t.personal) {
-    const labels = { f_uni: L.uni, f_guruh: L.group, f_yonalish: L.dir, f_fan: "Fan" };
-    const val = id => escapeHTML(st[id] || "");
+    const inputs = FIELDS[S.role].map(([key, label]) =>
+      `<div class="glass inner"><label style="display:block;font-size:12px;color:var(--muted);margin-bottom:6px">${label}</label>
+       <input id="p_${key}" value="${escapeHTML(S.person[key] || "")}" placeholder="${label}"></div>`).join("");
     personal = `
     <div class="glass field">
       <div class="extra-head" onclick="toggleExtra()">
         <div><b>Shaxsiy ma'lumot</b><small>Titulga chiqadigan ma'lumotlar</small></div>
         <input type="checkbox" class="tick" ${st.extraOn ? "checked" : ""} tabindex="-1">
       </div>
-      ${st.extraOn ? `
-      <div class="extra-body">
-        <div class="two">
-          <div class="field inner glass"><label>Ism</label><input id="f_ism" value="${val("f_ism")}" placeholder="Ism"></div>
-          <div class="field inner glass"><label>Familiya</label><input id="f_fam" value="${val("f_fam")}" placeholder="Familiya"></div>
-        </div>
-        <div class="field inner glass"><label>${labels.f_uni}</label><input id="f_uni" value="${val("f_uni")}" placeholder="${labels.f_uni}"></div>
-        <div class="field inner glass"><label>${labels.f_fan}</label><input id="f_fan" value="${val("f_fan")}" placeholder="Masalan: Iqtisodiyot"></div>
-        <div class="two">
-          <div class="field inner glass"><label>${labels.f_guruh}</label><input id="f_guruh" value="${val("f_guruh")}" placeholder="${labels.f_guruh}"></div>
-          <div class="field inner glass"><label>${labels.f_yonalish}</label><input id="f_yonalish" value="${val("f_yonalish")}" placeholder="${labels.f_yonalish}"></div>
-        </div>
-      </div>` : ""}
+      ${st.extraOn ? `<div class="grid2">${inputs}</div>` : ""}
     </div>`;
   }
+
+  const stepBtns = t.max >= 20
+    ? `<button onclick="stepBy(-10)">−10</button><button onclick="stepBy(-1)">−1</button>
+       <button onclick="stepBy(1)">+1</button><button onclick="stepBy(10)">+10</button>`
+    : `<button onclick="stepBy(-1)">−</button><button onclick="stepBy(1)">+</button>`;
 
   document.getElementById("formBox").innerHTML = `
     <div class="glass field">
       <label for="f_topic">${t.topicQ}</label>
-      <textarea id="f_topic" placeholder="Mavzuni aniq yozing">${escapeHTML(st.topic || "")}</textarea>
+      <textarea id="f_topic" placeholder="Mavzuni aniq yozing">${escapeHTML(st.topic)}</textarea>
     </div>
     ${personal}
     <div class="glass field">
@@ -466,14 +459,9 @@ function renderForm() {
     <div class="glass field">
       <label>Nechta ${t.unit} kerak? (${t.min}–${t.max})</label>
       <div class="stepper">
-        <button onclick="stepBy(-1)">−</button>
-        <div class="val">${st.soni}<small>${t.unit}</small></div>
-        <button onclick="stepBy(1)">+</button>
+        ${stepBtns}
+        <div class="val" style="min-width:70px">${st.soni}<small>${t.unit}</small></div>
       </div>
-    </div>
-    <div class="glass field" style="display:flex;justify-content:space-between;align-items:center">
-      <span style="color:var(--muted);font-size:14px">Narxi</span>
-      <b style="color:var(--cyan)">${S.freeUsed ? fmt(t.price) : "Birinchi ish bepul"}</b>
     </div>
     <button class="cta" id="submitBtn" onclick="submitForm()">Tayyorlash</button>`;
 }
@@ -486,25 +474,23 @@ function stepBy(d) {
   st.soni = Math.min(t.max, Math.max(t.min, st.soni + d));
   renderForm();
 }
+function v(id) { const el = document.getElementById(id); return el ? el.value.trim() : ""; }
 
 async function submitForm() {
+  saveFields();
   const t = TYPES[st.type];
-  const topic = v("f_topic");
+  const topic = (st.topic || "").trim();
   if (!topic) { alert("Avval mavzuni yozing."); return; }
   if (st.hajm < 0) { alert("Hajm yoki uslubni tanlang."); return; }
 
   const bepul = !S.freeUsed;
-  const cost = bepul ? 0 : t.price;
+  const cost = bepul ? 0 : PRICE[st.type];
   if (!bepul && S.balance < cost) {
-    alert("Balans yetarli emas (" + fmt(cost) + " kerak). Balansni to'ldirish tez orada ishga tushadi.");
+    alert("Balans yetarli emas. Balansni to'ldirish tez orada ishga tushadi.");
     return;
   }
 
-  const meta = {};
-  if (t.personal && st.extraOn) {
-    meta.ism = v("f_ism"); meta.familiya = v("f_fam"); meta.uni = v("f_uni");
-    meta.fan = v("f_fan"); meta.guruh = v("f_guruh"); meta.yonalish = v("f_yonalish");
-  }
+  const meta = t.personal && st.extraOn ? { ...S.person } : {};
 
   const btn = document.getElementById("submitBtn");
   const loader = document.getElementById("loader");
@@ -517,7 +503,7 @@ async function submitForm() {
     matn = "Xato yuz berdi. Qayta urinib ko'ring.";
   }
 
-  // to'lov faqat javob olingandan keyin yechiladi
+  // To'lov faqat javob olingandan keyin yechiladi
   if (bepul) S.freeUsed = true; else S.balance -= cost;
   S.history.unshift({ type: st.type, topic, cost, sana: new Date().toISOString().slice(0, 16).replace("T", " ") });
   saveAll();
@@ -529,13 +515,12 @@ async function submitForm() {
     <div class="disclaimer">AI javobini darslik va manbalar bilan tekshiring.</div>
     <button class="cta" onclick="openForm('${st.type}')">Yangi ish</button>
     <button class="cta ghost" onclick="go('home')">Asosiy sahifa</button>`;
-  renderHome();
 }
 
 async function generate(type, topic, hajmMatn, son, meta) {
   if (!API_URL) {
     await new Promise(r => setTimeout(r, 900));
-    const kishi = meta && meta.ism ? "\nMuallif: " + [meta.ism, meta.familiya].filter(Boolean).join(" ") : "";
+    const kishi = meta && meta.ism ? "\nMuallif: " + [meta.ism, meta.fam].filter(Boolean).join(" ") : "";
     return "Demo rejim: server hali ulanmagan.\n\nMavzu: " + topic + "\nYo'nalish: " + TYPES[type].name +
            "\nHajm: " + hajmMatn + ", " + son + " " + TYPES[type].unit + kishi +
            "\n\nServer ulangach, bu yerda haqiqiy tayyor matn chiqadi.";
@@ -558,6 +543,7 @@ function escapeHTML(s) {
 function go(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.toggle("on", s.id === id));
   document.querySelectorAll(".dock button").forEach(b => b.classList.toggle("on", b.dataset.go === id));
+  document.querySelector(".mini-bal") && (document.getElementById("miniBal").style.display = id === "home" ? "inline-block" : "none");
   if (id === "home") renderHome();
   if (id === "history") renderHistory();
   if (id === "profile") renderProfile();
@@ -565,7 +551,16 @@ function go(id) {
 }
 document.querySelectorAll(".dock button").forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
 
-temaQollash(lsGet(TEMA_KEY, "tungi"));
+// Ikki marta bosganda yaqinlashishni o'chirish
+let lastTouch = 0;
+document.addEventListener("touchend", e => {
+  const now = Date.now();
+  if (now - lastTouch < 300) e.preventDefault();
+  lastTouch = now;
+}, { passive: false });
+document.addEventListener("gesturestart", e => e.preventDefault());
+
+temaQollash(lsGet(TEMA_KEY, tg && tg.colorScheme === "light" ? "kunduzgi" : "tungi"));
 renderHome();
 renderProfile();
 </script>
