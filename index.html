@@ -7,134 +7,187 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
   :root {
-    --bg: #0b1210; --panel: rgba(255,255,255,.05); --line: rgba(255,255,255,.09);
-    --text: #eef7f3; --muted: #8aa39a; --field: rgba(0,0,0,.25); --dock: rgba(15,24,21,.92);
-    --glow1: rgba(16,185,129,.18); --glow2: rgba(6,182,212,.14);
-    --a1: #10b981; --a2: #06b6d4;
-    --radius: 20px;
+    --bg1: #0d0b1f; --bg2: #1a1438;
+    --glow-a: rgba(124,92,255,.35); --glow-b: rgba(56,120,255,.22);
+    --glass: rgba(255,255,255,.07); --glass-strong: rgba(255,255,255,.12);
+    --line: rgba(255,255,255,.14);
+    --text: #f4f2ff; --muted: #a9a5c7;
+    --accent1: #7c5cff; --accent2: #5b8cff;
+    --field: rgba(10,8,30,.45);
+    --dock: rgba(20,16,44,.55);
+    --radius: 22px;
   }
   body.light {
-    --bg: #f2f8f5; --panel: #ffffff; --line: rgba(15,40,30,.1);
-    --text: #0f1f1a; --muted: #5b7068; --field: #f6faf8; --dock: rgba(255,255,255,.94);
-    --glow1: rgba(16,185,129,.12); --glow2: rgba(6,182,212,.10);
-    --a1: #059669; --a2: #0891b2;
+    --bg1: #f7f5ff; --bg2: #e9ecff;
+    --glow-a: rgba(124,92,255,.18); --glow-b: rgba(91,140,255,.14);
+    --glass: rgba(255,255,255,.55); --glass-strong: rgba(255,255,255,.75);
+    --line: rgba(110,90,230,.16);
+    --text: #1b1640; --muted: #6b6a86;
+    --field: rgba(255,255,255,.7);
+    --dock: rgba(255,255,255,.6);
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--bg); color: var(--text);
-    font-family: -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
-  body::before {
-    content: ""; position: fixed; inset: 0; z-index: -1;
-    background: radial-gradient(600px 300px at 90% -10%, var(--glow1), transparent 60%),
-                radial-gradient(500px 300px at -10% 40%, var(--glow2), transparent 60%);
+  html, body {
+    margin: 0; min-height: 100%; color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased;
   }
-  .app { max-width: 520px; margin: 0 auto; min-height: 100vh; padding: 18px 16px 120px; }
+  body {
+    background: linear-gradient(170deg, var(--bg1) 0%, var(--bg2) 100%);
+    background-attachment: fixed;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background:
+      radial-gradient(520px 320px at 100% 0%, var(--glow-a), transparent 65%),
+      radial-gradient(480px 320px at 0% 55%, var(--glow-b), transparent 65%);
+  }
+  .app { max-width: 520px; margin: 0 auto; min-height: 100vh; padding: 18px 16px 130px; }
 
   /* Yuqori qism */
-  .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
-  .hello h1 { margin: 0; font-size: 21px; font-weight: 700; }
-  .hello p { margin: 4px 0 0; font-size: 13px; color: var(--muted); }
-  .top-right { display: flex; align-items: center; gap: 8px; }
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+  .brand { font-size: 20px; font-weight: 800; letter-spacing: .2px; }
+  .brand span { color: #8f7bff; }
+  .top-right { display: flex; gap: 8px; }
+  .icon-btn {
+    width: 40px; height: 40px; border-radius: 14px; border: 1px solid var(--line);
+    background: var(--glass); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    color: var(--text); font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+
+  .hello h1 { margin: 22px 0 4px; font-size: 24px; font-weight: 800; }
+  .hello p { margin: 0; font-size: 14px; color: var(--muted); }
+
+  /* Balans va limit */
+  .balance-row { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; gap: 10px; }
   .pill {
-    display: flex; flex-direction: column; align-items: flex-end; padding: 8px 12px;
-    border-radius: 14px; background: var(--panel); border: 1px solid var(--line); min-width: 96px;
+    display: flex; align-items: center; gap: 10px; padding: 9px 9px 9px 14px; border-radius: 16px;
+    background: var(--glass-strong); border: 1px solid var(--line);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   }
-  .pill small { font-size: 11px; color: var(--muted); }
-  .pill b { font-size: 14px; color: var(--a1); }
-  .theme-btn {
-    width: 40px; height: 40px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel);
-    color: var(--text); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  .pill small { display: block; font-size: 11px; color: var(--muted); }
+  .pill b { font-size: 14px; }
+  .plus-btn {
+    width: 32px; height: 32px; border-radius: 10px; border: 0; color: #fff; font-size: 18px; font-weight: 700;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2)); cursor: pointer;
   }
 
-  .chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
-  .chips::-webkit-scrollbar { display: none; }
-  .chip {
-    flex: 0 0 auto; padding: 8px 14px; border-radius: 999px; font: inherit; font-size: 13px;
-    background: var(--panel); border: 1px solid var(--line); color: var(--muted); cursor: pointer;
+  /* Segment: kategoriya */
+  .seg-bar {
+    display: flex; gap: 6px; margin-top: 16px; padding: 5px; border-radius: 16px;
+    background: var(--glass); border: 1px solid var(--line);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    overflow-x: auto; scrollbar-width: none;
   }
-  .chip.on { color: #04110c; background: linear-gradient(90deg, var(--a1), var(--a2)); border-color: transparent; font-weight: 600; }
+  .seg-bar::-webkit-scrollbar { display: none; }
+  .seg-bar button {
+    flex: 0 0 auto; padding: 9px 14px; border-radius: 12px; border: 0; background: transparent;
+    color: var(--muted); font: inherit; font-size: 13px; cursor: pointer;
+  }
+  .seg-bar button.on { background: linear-gradient(135deg, var(--accent1), var(--accent2)); color: #fff; font-weight: 600; }
 
-  /* Yo'nalish kartalari */
-  .list { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+  /* Katta gradient banner */
+  .banner {
+    margin-top: 18px; padding: 18px; border-radius: var(--radius); color: #fff;
+    background: linear-gradient(120deg, #7c5cff, #4f7bff);
+    box-shadow: 0 10px 30px rgba(92,80,255,.25);
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .banner h3 { margin: 0 0 4px; font-size: 16px; }
+  .banner p { margin: 0; font-size: 13px; opacity: .85; }
+  .banner .bar { margin-top: 10px; height: 6px; border-radius: 6px; background: rgba(255,255,255,.25); overflow: hidden; }
+  .banner .bar i { display: block; height: 100%; background: #fff; border-radius: 6px; }
+  .banner .num { font-size: 26px; font-weight: 800; }
+
+  .label { margin: 22px 2px 10px; font-size: 13px; color: var(--muted); }
+
+  /* Yo'nalish kartalari (shaffof) */
+  .list { display: flex; flex-direction: column; gap: 12px; }
   .row {
     display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: var(--radius);
-    background: var(--panel); border: 1px solid var(--line); cursor: pointer; color: var(--text);
-    font: inherit; text-align: left; width: 100%;
+    background: var(--glass); border: 1px solid var(--line); color: var(--text);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    font: inherit; text-align: left; width: 100%; cursor: pointer;
   }
-  .row:active { transform: scale(.985); }
   .badge {
     width: 52px; height: 52px; flex: 0 0 52px; border-radius: 16px; display: flex;
-    align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #04110c;
+    align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff;
   }
   .row .info { flex: 1; min-width: 0; }
-  .row h3 { margin: 0 0 3px; font-size: 15px; }
-  .row p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.4; }
-  .arrow { color: var(--muted); font-size: 18px; }
+  .row h3 { margin: 0 0 3px; font-size: 16px; }
+  .row p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.4; }
+  .arrow { color: var(--muted); font-size: 20px; }
 
-  .label { margin: 22px 2px 8px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-
-  /* Yangi ish formasi */
-  .back { background: none; border: 0; color: var(--a1); font: inherit; font-size: 14px; padding: 0; margin-bottom: 12px; cursor: pointer; }
-  .sheet { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-bottom: 14px; }
+  /* Forma */
+  .back { background: none; border: 0; color: #8f7bff; font: inherit; font-size: 14px; padding: 0; margin-bottom: 12px; cursor: pointer; }
+  .sheet {
+    background: var(--glass); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 16px; margin-bottom: 14px; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  }
   .sheet h2 { margin: 0 0 4px; font-size: 18px; }
-  .sheet p { margin: 0; font-size: 13px; color: var(--muted); }
+  .sheet p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.5; }
   input, textarea {
-    width: 100%; padding: 13px 14px; border-radius: 14px; border: 1px solid var(--line);
+    width: 100%; padding: 13px 14px; border-radius: 16px; border: 1px solid var(--line);
     background: var(--field); color: var(--text); font: inherit; font-size: 15px;
   }
   textarea { min-height: 88px; resize: vertical; }
-  .field-label { display: block; margin: 16px 2px 8px; font-size: 13px; color: var(--muted); }
+  .field-label { display: block; margin: 18px 2px 8px; font-size: 13px; color: var(--muted); }
 
-  .seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .seg button {
-    padding: 12px 6px; border-radius: 14px; border: 1px solid var(--line); background: var(--field);
+  .opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .opts button {
+    padding: 12px 6px; border-radius: 14px; border: 1px solid var(--line); background: var(--glass);
     color: var(--muted); font: inherit; font-size: 14px; cursor: pointer;
   }
-  .seg button.on { border-color: var(--a1); color: var(--text); background: rgba(16,185,129,.12); }
+  .opts button.on { border-color: #8f7bff; color: var(--text); background: var(--glass-strong); }
 
   .stepper { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
   .stepper button {
     width: 44px; height: 44px; border-radius: 14px; border: 1px solid var(--line);
-    background: var(--field); color: var(--text); font-size: 20px; cursor: pointer;
+    background: var(--glass); color: var(--text); font-size: 20px; cursor: pointer;
   }
   .stepper .val { flex: 1; text-align: center; font-size: 20px; font-weight: 700; }
   .stepper .val small { display: block; font-size: 12px; font-weight: 400; color: var(--muted); }
 
   .cta {
-    width: 100%; padding: 15px; border: 0; border-radius: 16px; margin-top: 18px; font: inherit;
-    font-size: 16px; font-weight: 700; color: #04110c; cursor: pointer;
-    background: linear-gradient(90deg, var(--a1), var(--a2));
+    width: 100%; padding: 15px; border: 0; border-radius: 18px; margin-top: 18px; font: inherit;
+    font-size: 16px; font-weight: 700; color: #fff; cursor: pointer;
+    background: linear-gradient(120deg, #7c5cff, #4f7bff); box-shadow: 0 10px 28px rgba(92,80,255,.3);
   }
   .cta:disabled { opacity: .55; }
   .loader { display: none; text-align: center; color: var(--muted); font-size: 14px; margin-top: 14px; }
   .result {
     white-space: pre-wrap; line-height: 1.65; font-size: 14px; margin-top: 16px;
-    padding: 16px; border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line);
+    padding: 16px; border-radius: var(--radius); background: var(--glass); border: 1px solid var(--line);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   }
   .disclaimer { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
 
-  .item { padding: 13px 14px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line); margin-bottom: 10px; }
+  .item {
+    padding: 13px 14px; border-radius: 18px; background: var(--glass); border: 1px solid var(--line);
+    margin-bottom: 10px; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  }
   .item b { font-size: 14px; }
   .item small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
   .empty { text-align: center; color: var(--muted); padding: 36px 10px; font-size: 14px; }
   .stat { display: flex; justify-content: space-between; padding: 12px 2px; border-bottom: 1px solid var(--line); font-size: 14px; }
   .stat:last-child { border-bottom: 0; }
-  .stat span:last-child { color: var(--a1); }
+  .stat span:last-child { color: #8f7bff; font-weight: 600; }
 
-  /* Pastki menyu */
+  /* Pastki menyu (shaffof) */
   .dock {
     position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); width: calc(100% - 28px); max-width: 488px;
     display: grid; grid-template-columns: 1fr 1fr 64px 1fr 1fr; align-items: center; padding: 8px 6px;
-    background: var(--dock); backdrop-filter: blur(12px); border: 1px solid var(--line); border-radius: 22px; z-index: 20;
+    background: var(--dock); border: 1px solid var(--line); border-radius: 24px; z-index: 20;
+    backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%);
   }
   .dock button {
     background: none; border: 0; color: var(--muted); font: inherit; font-size: 11px; cursor: pointer;
     display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0;
   }
-  .dock button .ic { font-size: 17px; }
-  .dock button.on { color: var(--a1); }
+  .dock button .ic { font-size: 18px; }
+  .dock button.on { color: #8f7bff; }
   .dock .plus {
-    width: 56px; height: 56px; margin: 0 auto; border-radius: 50%; border: 0; color: #04110c; font-size: 28px; font-weight: 700;
-    background: linear-gradient(135deg, var(--a1), var(--a2)); box-shadow: 0 8px 24px rgba(16,185,129,.35);
+    width: 56px; height: 56px; margin: 0 auto; border-radius: 50%; border: 0; color: #fff; font-size: 28px; font-weight: 700;
+    background: linear-gradient(135deg, #7c5cff, #4f7bff); box-shadow: 0 8px 24px rgba(92,80,255,.4);
     display: flex; align-items: center; justify-content: center; padding: 0; transform: translateY(-14px);
   }
   .screen { display: none; }
@@ -147,17 +200,34 @@
   <!-- BOSH -->
   <section id="home" class="screen on">
     <div class="top">
-      <div class="hello">
-        <h1 id="greet">Assalomu alaykum!</h1>
-        <p>Qaysi ishni tayyorlaymiz?</p>
-      </div>
+      <div class="brand">Talaba<span>AI</span></div>
       <div class="top-right">
-        <div class="pill"><small>Kunlik limit</small><b id="limit">3 / 3</b></div>
-        <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Rejimni almashtirish">☾</button>
+        <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Rejimni almashtirish">☾</button>
       </div>
     </div>
 
-    <div class="chips" id="cats"></div>
+    <div class="hello">
+      <h1 id="greet">Assalomu alaykum!</h1>
+      <p>Bugun nima tayyorlaymiz?</p>
+    </div>
+
+    <div class="balance-row">
+      <div class="pill">
+        <div><small>Balans</small><b>Sinov rejimi</b></div>
+        <button class="plus-btn" onclick="alert('To\'lov tizimi keyinroq ulanadi.')">+</button>
+      </div>
+    </div>
+
+    <div class="seg-bar" id="cats"></div>
+
+    <div class="banner">
+      <div>
+        <h3>Bugungi limit</h3>
+        <p>Kuniga <span id="limitTxt"></span> ta so'rov</p>
+        <div class="bar"><i id="limitBar" style="width:0%"></i></div>
+      </div>
+      <div class="num" id="limitNum">3</div>
+    </div>
 
     <div class="label">Tavsiya etiladi</div>
     <div class="list" id="featured"></div>
@@ -184,7 +254,7 @@
       <textarea id="topic" placeholder="Masalan: Iqtisodiyot asoslari"></textarea>
 
       <span class="field-label" id="sizeLabel"></span>
-      <div class="seg" id="sizeSeg"></div>
+      <div class="opts" id="sizeSeg"></div>
 
       <span class="field-label">Hajm (soni)</span>
       <div class="stepper">
@@ -213,7 +283,7 @@
     </div>
     <div class="sheet">
       <div class="stat"><span>Balans</span><span>Sinov rejimi</span></div>
-      <div class="stat"><span>Kunlik limit</span><span>3 ta so'rov</span></div>
+      <div class="stat"><span>Kunlik limit</span><span id="pdaily">3 ta so'rov</span></div>
       <div class="stat"><span>Bugun ishlatilgan</span><span id="pused">0</span></div>
     </div>
     <p class="disclaimer">To'lov tizimi keyinroq ulanadi. Hozircha xizmat bepul sinov rejimida.</p>
@@ -238,7 +308,7 @@
 </div>
 
 <nav class="dock">
-  <button class="on" data-go="home"><span class="ic">◉</span>Bosh</button>
+  <button class="on" data-go="home"><span class="ic">⌂</span>Asosiy</button>
   <button data-go="history"><span class="ic">▤</span>Ishlar</button>
   <button class="plus" data-go="new" aria-label="Yangi ish">+</button>
   <button data-go="profile"><span class="ic">◌</span>Profil</button>
@@ -255,7 +325,7 @@ if (tg) {
   tg.ready(); tg.expand();
   const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
   if (u) {
-    document.getElementById("greet").textContent = "Assalomu alaykum, " + u.first_name + "!";
+    document.getElementById("greet").textContent = "Salom, " + u.first_name + "!";
     document.getElementById("pname").textContent = u.first_name + (u.last_name ? " " + u.last_name : "");
     document.getElementById("puser").textContent = u.username ? "@" + u.username : "Telegram orqali kirgan";
   }
@@ -266,10 +336,9 @@ const TEMA_KEY = "talaba_tema";
 function temaQollash(rejim) {
   document.body.classList.toggle("light", rejim === "kunduzgi");
   document.getElementById("themeBtn").textContent = rejim === "kunduzgi" ? "☀" : "☾";
-  const meta = document.querySelector('meta[name="theme-color"]') || document.createElement("meta");
-  meta.name = "theme-color";
-  meta.content = rejim === "kunduzgi" ? "#f2f8f5" : "#0b1210";
-  document.head.appendChild(meta);
+  let meta = document.querySelector('meta[name="theme-color"]');
+  if (!meta) { meta = document.createElement("meta"); meta.name = "theme-color"; document.head.appendChild(meta); }
+  meta.content = rejim === "kunduzgi" ? "#f7f5ff" : "#0d0b1f";
 }
 function toggleTheme() {
   const yangi = document.body.classList.contains("light") ? "tungi" : "kunduzgi";
@@ -280,27 +349,23 @@ function toggleTheme() {
   let saqlangan = null;
   try { saqlangan = localStorage.getItem(TEMA_KEY); } catch (e) {}
   if (saqlangan) return temaQollash(saqlangan);
-  const tgRejim = tg && tg.colorScheme;
-  temaQollash(tgRejim === "light" ? "kunduzgi" : "tungi");
+  temaQollash(tg && tg.colorScheme === "light" ? "kunduzgi" : "tungi");
 })();
 
 /* ---------- Yo'nalishlar ---------- */
 const TYPES = {
-  referat:       { name: "Referat",           short: "Ref",  color: "#34d399", hint: "Mavzu bo'yicha reja va to'liq matn",       sizeLabel: "Hajm", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet", min: 3, max: 10, def: 5 },
-  prezentatsiya: { name: "Prezentatsiya",     short: "Slayd", color: "#fbbf24", hint: "Slaydlar ro'yxati va asosiy matn",       sizeLabel: "Uslub", sizes: ["Oddiy", "Ilmiy", "Ijodiy"], unit: "slayd", min: 5, max: 20, def: 8 },
-  mustaqil:      { name: "Mustaqil ish",      short: "Must", color: "#60a5fa", hint: "Reja, bo'limlar va tekshirish ro'yxati",  sizeLabel: "Chuqurlik", sizes: ["Yengil", "O'rta", "Chuqur"], unit: "savol", min: 2, max: 6, def: 3 },
-  ilmiy:         { name: "Ilmiy ish",         short: "Ilmi", color: "#c084fc", hint: "Dolzarblik, maqsad, metodika, xulosa",    sizeLabel: "Hajm", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bob", min: 2, max: 5, def: 3 },
-  konspekt:      { name: "Ma'ruza konspekti", short: "Kons", color: "#f472b6", hint: "Mavzu bo'yicha tayyor konspekt",           sizeLabel: "Uzunlik", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "band", min: 3, max: 10, def: 5 }
+  referat:       { name: "Referat",           short: "Ref",  color: "#7c5cff", hint: "Mavzu bo'yicha reja va to'liq matn",      sizeLabel: "Hajm", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet", min: 3, max: 10, def: 5 },
+  prezentatsiya: { name: "Prezentatsiya",     short: "Slayd", color: "#5b8cff", hint: "Slaydlar ro'yxati va asosiy matn",      sizeLabel: "Uslub", sizes: ["Oddiy", "Ilmiy", "Ijodiy"], unit: "slayd", min: 5, max: 20, def: 8 },
+  mustaqil:      { name: "Mustaqil ish",      short: "Must", color: "#9b6dff", hint: "Reja, bo'limlar va tekshirish ro'yxati", sizeLabel: "Chuqurlik", sizes: ["Yengil", "O'rta", "Chuqur"], unit: "savol", min: 2, max: 6, def: 3 },
+  ilmiy:         { name: "Ilmiy ish",         short: "Ilmi", color: "#4f8bff", hint: "Dolzarblik, maqsad, metodika, xulosa",   sizeLabel: "Hajm", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bob", min: 2, max: 5, def: 3 },
+  konspekt:      { name: "Ma'ruza konspekti", short: "Kons", color: "#a268ff", hint: "Mavzu bo'yicha tayyor konspekt",          sizeLabel: "Uzunlik", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "band", min: 3, max: 10, def: 5 }
 };
 const KEYS = Object.keys(TYPES);
 
-function badgeHTML(k) {
-  return `<div class="badge" style="background:${TYPES[k].color}">${TYPES[k].short}</div>`;
-}
 function rowHTML(k) {
   const t = TYPES[k];
   return `<button class="row" onclick="openForm('${k}')">
-    ${badgeHTML(k)}
+    <div class="badge" style="background:linear-gradient(135deg, ${t.color}, #4f7bff)">${t.short}</div>
     <div class="info"><h3>${t.name}</h3><p>${t.hint}</p></div>
     <span class="arrow">›</span></button>`;
 }
@@ -310,7 +375,7 @@ let filter = "hammasi";
 function renderCats() {
   const items = [["hammasi", "Hammasi"], ...KEYS.map(k => [k, TYPES[k].name])];
   document.getElementById("cats").innerHTML = items.map(([k, n]) =>
-    `<button class="chip ${filter === k ? "on" : ""}" onclick="setFilter('${k}')">${n}</button>`).join("");
+    `<button class="${filter === k ? "on" : ""}" onclick="setFilter('${k}')">${n}</button>`).join("");
 }
 function setFilter(k) { filter = k; renderHome(); }
 function renderHome() {
@@ -318,8 +383,13 @@ function renderHome() {
   const shown = filter === "hammasi" ? KEYS.slice(0, 3) : [filter];
   document.getElementById("featured").innerHTML = shown.map(rowHTML).join("");
   renderRecent();
-  document.getElementById("pused").textContent = bugunSoni();
-  document.getElementById("limit").textContent = (DAILY_LIMIT - bugunSoni()) + " / " + DAILY_LIMIT;
+  const used = bugunSoni();
+  const left = Math.max(0, DAILY_LIMIT - used);
+  document.getElementById("limitTxt").textContent = left;
+  document.getElementById("limitNum").textContent = left + "/" + DAILY_LIMIT;
+  document.getElementById("limitBar").style.width = (left / DAILY_LIMIT * 100) + "%";
+  document.getElementById("pused").textContent = used;
+  document.getElementById("pdaily").textContent = DAILY_LIMIT + " ta so'rov";
 }
 
 /* ---------- Tarix ---------- */
