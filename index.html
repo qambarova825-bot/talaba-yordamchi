@@ -2,262 +2,307 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Talaba yordamchi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Talaba Yordamchi</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
+  :root {
+    --bg: #f5f7fb; --card: #ffffff; --text: #14161f; --muted: #6b7280;
+    --accent: #2563eb; --accent-soft: #e8efff; --border: #e5e7eb; --radius: 18px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0f1117; --card: #181b24; --text: #f3f4f6; --muted: #9ca3af;
+            --accent: #3b82f6; --accent-soft: #1d2a4a; --border: #262a36; }
+  }
   * { box-sizing: border-box; }
-  body { font-family: system-ui, sans-serif; margin: 0; background: #f4f6fb; color: #222; }
-  header { background: #2b6cb0; color: #fff; padding: 16px; text-align: center; }
-  header h1 { margin: 0; font-size: 1.4em; }
-  nav { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; padding: 12px; background: #fff; }
-  nav button { padding: 8px 12px; border: 1px solid #2b6cb0; background: #fff; color: #2b6cb0; border-radius: 8px; cursor: pointer; }
-  nav button.active { background: #2b6cb0; color: #fff; }
-  main { max-width: 760px; margin: 20px auto; padding: 20px; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
-  input, select, textarea { width: 100%; padding: 10px; margin: 6px 0 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1em; }
-  .btn { padding: 10px 16px; background: #2b6cb0; color: #fff; border: 0; border-radius: 8px; cursor: pointer; font-size: 1em; }
-  .natija { white-space: pre-wrap; background: #f0f4fa; padding: 14px; border-radius: 8px; margin-top: 14px; line-height: 1.6; }
-  .sec { display: none; }
-  .sec.active { display: block; }
-  .kartochka { border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; margin: 10px 0; }
-  .kartochka h3 { margin: 0 0 6px; font-size: 1.05em; }
-  .kartochka ul { margin: 0; padding-left: 20px; }
+  body {
+    margin: 0; font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased;
+  }
+  .app { max-width: 520px; margin: 0 auto; min-height: 100vh; padding: 0 0 100px; }
+  .hero {
+    padding: 28px 20px 24px; color: #fff; border-radius: 0 0 28px 28px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+  }
+  .hero h1 { margin: 0 0 6px; font-size: 22px; font-weight: 700; }
+  .hero p { margin: 0; opacity: .85; font-size: 14px; }
+  .screen { display: none; padding: 20px; }
+  .screen.active { display: block; }
+  .section-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin: 22px 0 10px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .tile {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 16px; cursor: pointer; transition: transform .15s, box-shadow .15s; text-align: left;
+    color: var(--text); font: inherit;
+  }
+  .tile:active { transform: scale(.98); }
+  .tile .ico { width: 40px; height: 40px; border-radius: 12px; background: var(--accent-soft);
+    color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 700; margin-bottom: 10px; }
+  .tile h3 { margin: 0 0 4px; font-size: 15px; }
+  .tile p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 16px; margin-bottom: 12px;
+  }
+  .card h3 { margin: 0 0 6px; font-size: 15px; }
+  .card p, .card small { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+  .btn {
+    width: 100%; padding: 14px; border: 0; border-radius: 14px; background: var(--accent);
+    color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .btn:disabled { opacity: .6; cursor: default; }
+  .btn.ghost { background: var(--accent-soft); color: var(--accent); }
+  label { display: block; font-size: 13px; color: var(--muted); margin: 14px 0 6px; }
+  input, select, textarea {
+    width: 100%; padding: 13px 14px; border: 1px solid var(--border); border-radius: 14px;
+    background: var(--card); color: var(--text); font: inherit; font-size: 15px;
+  }
+  textarea { min-height: 90px; resize: vertical; }
+  .back { background: none; border: 0; color: var(--accent); font: inherit; font-size: 15px; padding: 0; margin-bottom: 14px; cursor: pointer; }
+  .result {
+    white-space: pre-wrap; line-height: 1.65; font-size: 14px; background: var(--card);
+    border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-top: 16px;
+  }
+  .note { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
+  .empty { text-align: center; color: var(--muted); padding: 40px 10px; font-size: 14px; }
+  .stat { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .stat:last-child { border-bottom: 0; }
+  .loader { display: none; text-align: center; color: var(--muted); padding: 16px; font-size: 14px; }
+  nav {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 520px;
+    display: flex; justify-content: space-around; background: var(--card); border-top: 1px solid var(--border);
+    padding: 10px 6px calc(10px + env(safe-area-inset-bottom)); z-index: 10;
+  }
+  nav button {
+    flex: 1; background: none; border: 0; color: var(--muted); font: inherit; font-size: 11px;
+    display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer;
+  }
+  nav button .n { font-size: 18px; font-weight: 700; }
+  nav button.active { color: var(--accent); }
 </style>
 </head>
 <body>
+<div class="app">
 
-<header><h1>🎓 TALABA YORDAMCHI</h1></header>
-
-<nav id="nav"></nav>
-
-<main>
+  <div class="hero">
+    <h1 id="greet">Assalomu alaykum!</h1>
+    <p>Referat, prezentatsiya va ilmiy ishlar uchun tayyor reja va matn.</p>
+  </div>
 
   <!-- BOSH SAHIFA -->
-  <section id="bosh" class="sec">
-    <h2>Assalomu alaykum! 👋</h2>
-    <p>Bu yerda mustaqil ish, referat, prezentatsiya, ilmiy ish va konspekt uchun tayyor reja va shablonlar topasiz. Yuqoridagi bo'limlardan birini tanlang.</p>
-    <div class="kartochka">
-      <h3>📝 Referat rejasi</h3>
-      <p>Mavzuni yozing, tayyor reja (kirish, boblar, xulosa) chiqadi.</p>
+  <section id="home" class="screen active">
+    <div class="section-title">Yo'nalishlar</div>
+    <div class="grid" id="tiles"></div>
+    <div class="section-title">So'nggi ishlar</div>
+    <div id="recent"></div>
+  </section>
+
+  <!-- YANGI ISH -->
+  <section id="new" class="screen">
+    <div id="pick">
+      <div class="section-title" style="margin-top:0">Yo'nalishni tanlang</div>
+      <div class="grid" id="tiles2"></div>
     </div>
-    <div class="kartochka">
-      <h3>📊 Prezentatsiya rejasi</h3>
-      <p>Slaydlar soni va mavzu bo'yicha slaydlar ro'yxati.</p>
-    </div>
-    <div class="kartochka">
-      <h3>📚 Mustaqil ish talablari</h3>
-      <p>Odatda talab qilinadigan tarkib va tekshirish ro'yxati.</p>
-    </div>
-    <div class="kartochka">
-      <h3>🔬 Ilmiy ish tuzilishi</h3>
-      <p>Dolzarblik, maqsad, metodika, natijalar va xulosa qismlari.</p>
-    </div>
-    <div class="kartochka">
-      <h3>📖 Konspekt shabloni</h3>
-      <p>Ma'ruzani yozib borish uchun tayyor shablon.</p>
+    <div id="form" style="display:none">
+      <button class="back" onclick="showPick()">← Orqaga</button>
+      <div class="card"><h3 id="ftitle"></h3><p id="fhint"></p></div>
+      <label for="topic">Mavzu</label>
+      <textarea id="topic" placeholder="Masalan: Iqtisodiyot asoslari"></textarea>
+      <div id="extraWrap">
+        <label for="extra" id="extraLabel"></label>
+        <select id="extra"></select>
+      </div>
+      <div style="margin-top:18px"><button class="btn" id="submitBtn" onclick="submitForm()">Tayyorlash</button></div>
+      <div class="loader" id="loader">Tayyorlanmoqda, biroz kuting...</div>
+      <div id="out"></div>
     </div>
   </section>
 
-  <!-- REFERAT -->
-  <section id="referat" class="sec">
-    <h2>📝 Referat rejasi</h2>
-    <label>Mavzu:</label>
-    <input id="referat-mavzu" placeholder="Masalan: Iqtisodiyot asoslari">
-    <button class="btn" onclick="referatYarat()">Reja tuzish</button>
-    <div id="referat-natija" class="natija" style="display:none"></div>
+  <!-- TARIX -->
+  <section id="history" class="screen">
+    <div class="section-title" style="margin-top:0">Tarix</div>
+    <div id="histList"></div>
   </section>
 
-  <!-- PREZENTATSIYA -->
-  <section id="prezentatsiya" class="sec">
-    <h2>📊 Prezentatsiya rejasi</h2>
-    <label>Mavzu:</label>
-    <input id="pr-mavzu" placeholder="Masalan: Ekologik muammolar">
-    <label>Slaydlar soni:</label>
-    <select id="pr-soni">
-      <option>5</option><option selected>8</option><option>10</option><option>12</option>
-    </select>
-    <button class="btn" onclick="prezentatsiyaYarat()">Slaydlar rejasi</button>
-    <div id="pr-natija" class="natija" style="display:none"></div>
+  <!-- PROFIL -->
+  <section id="profile" class="screen">
+    <div class="card">
+      <h3 id="pname">Foydalanuvchi</h3>
+      <p id="puser">Telegram orqali kirgan</p>
+    </div>
+    <div class="card">
+      <div class="stat"><span>Balans</span><span id="pbal">Sinov rejimi</span></div>
+      <div class="stat"><span>Kunlik limit</span><span>3 ta so'rov</span></div>
+      <div class="stat"><span>Bugun ishlatilgan</span><span id="pused">0</span></div>
+    </div>
+    <p class="note">To'lov tizimi keyinroq ulanadi. Hozircha xizmat bepul sinov rejimida.</p>
   </section>
 
-  <!-- MUSTAQIL ISH -->
-  <section id="mustaqil" class="sec">
-    <h2>📚 Mustaqil ish</h2>
-    <label>Mavzu:</label>
-    <input id="must-mavzu" placeholder="Masalan: Marketing strategiyasi">
-    <button class="btn" onclick="mustaqilYarat()">Reja va tekshiruv ro'yxati</button>
-    <div id="must-natija" class="natija" style="display:none"></div>
+  <!-- BOT HAQIDA -->
+  <section id="about" class="screen">
+    <div class="card">
+      <h3>Talaba Yordamchi</h3>
+      <p>Mustaqil ish, referat, prezentatsiya, ilmiy ish va ma'ruza konspektlari uchun tayyor reja va matn. Har bir javobni o'zingiz tekshirib, manbalar bilan to'ldiring.</p>
+    </div>
+    <div class="card">
+      <h3>Yordam</h3>
+      <p>Savollar va takliflar uchun bot orqali murojaat qiling.</p>
+    </div>
+    <div class="card">
+      <h3>Huquqiy ma'lumot</h3>
+      <p>Ommaviy oferta va maxfiylik siyosati tez orada shu yerda bo'ladi.</p>
+    </div>
   </section>
 
-  <!-- ILMIY ISH -->
-  <section id="ilmiy" class="sec">
-    <h2>🔬 Ilmiy ish tuzilishi</h2>
-    <label>Mavzu:</label>
-    <input id="ilmiy-mavzu" placeholder="Masalan: Sun'iy intellektning ta'limdagi o'rni">
-    <button class="btn" onclick="ilmiyYarat()">Tuzilish</button>
-    <div id="ilmiy-natija" class="natija" style="display:none"></div>
-  </section>
+</div>
 
-  <!-- KONSPEKT -->
-  <section id="konspekt" class="sec">
-    <h2>📖 Ma'ruza konspekti</h2>
-    <label>Fan nomi:</label>
-    <input id="kons-fan" placeholder="Fan">
-    <label>Mavzu:</label>
-    <input id="kons-mavzu" placeholder="Mavzu">
-    <label>Sana:</label>
-    <input id="kons-sana" type="date">
-    <button class="btn" onclick="konspektYarat()">Shablon yaratish</button>
-    <div id="kons-natija" class="natija" style="display:none"></div>
-  </section>
-
-</main>
+<nav>
+  <button class="active" data-go="home"><span class="n">⌂</span>Bosh</button>
+  <button data-go="new"><span class="n">+</span>Yangi</button>
+  <button data-go="history"><span class="n">≡</span>Tarix</button>
+  <button data-go="profile"><span class="n">○</span>Profil</button>
+  <button data-go="about"><span class="n">i</span>Haqida</button>
+</nav>
 
 <script>
-const bolimlar = [
-  { id: "bosh", nom: "Bosh sahifa" },
-  { id: "referat", nom: "📝 Referat" },
-  { id: "prezentatsiya", nom: "📊 Prezentatsiya" },
-  { id: "mustaqil", nom: "📚 Mustaqil ish" },
-  { id: "ilmiy", nom: "🔬 Ilmiy ish" },
-  { id: "konspekt", nom: "📖 Konspekt" }
-];
+// Server manzili: server tayyor bo'lgach shu yerga yozing, masalan "https://api.sizningdomen.uz/generate"
+const API_URL = "";
 
-const nav = document.getElementById("nav");
-bolimlar.forEach(b => {
-  const btn = document.createElement("button");
-  btn.textContent = b.nom;
-  btn.dataset.id = b.id;
-  btn.onclick = () => bolimniKorsat(b.id);
-  nav.appendChild(btn);
-});
-
-function bolimniKorsat(id) {
-  document.querySelectorAll(".sec").forEach(s => s.classList.toggle("active", s.id === id));
-  document.querySelectorAll("nav button").forEach(b => b.classList.toggle("active", b.dataset.id === id));
-}
-bolimniKorsat("bosh");
-
-function natijaniChiqar(id, matn) {
-  const el = document.getElementById(id);
-  el.textContent = matn;
-  el.style.display = "block";
-}
-
-function mavzuniOl(id) {
-  const v = document.getElementById(id).value.trim();
-  if (!v) { alert("Avval mavzuni yozing."); return null; }
-  return v;
-}
-
-function referatYarat() {
-  const m = mavzuniOl("referat-mavzu"); if (!m) return;
-  natijaniChiqar("referat-natija",
-`REFERAT REJASI
-Mavzu: ${m}
-
-KIRISH
-  - Mavzuning dolzarbligi
-  - Maqsad va vazifalar
-
-I BOB. Nazariy asoslar
-  1.1. Asosiy tushunchalar
-  1.2. Mavzu bo'yicha yondashuvlar
-
-II BOB. Amaliy qism
-  2.1. Mavzuning joriy holati
-  2.2. Misollar va tahlil
-
-XULOSA
-  - Asosiy natijalar
-  - Tavsiyalar
-
-FOYDALANILGAN ADABIYOTLAR
-  - Kitoblar, maqolalar, rasmiy manbalar`);
-}
-
-function prezentatsiyaYarat() {
-  const m = mavzuniOl("pr-mavzu"); if (!m) return;
-  const n = parseInt(document.getElementById("pr-soni").value);
-  const qismlar = ["Mavzu va muallif", "Dolzarblik", "Maqsad va vazifalar", "Asosiy tushunchalar"];
-  const oraliq = ["Birinchi yondashuv", "Ikkinchi yondashuv", "Misol va tahlil", "Statistika va natijalar", "Muammolar", "Yechimlar"];
-  let matn = `PREZENTATSIYA REJASI (${n} slayd)\nMavzu: ${m}\n\n`;
-  const royxat = [...qismlar, ...oraliq, "Xulosa", "Foydalanilgan manbalar", "E'tiboringiz uchun rahmat"];
-  for (let i = 0; i < n; i++) {
-    matn += `Slayd ${i + 1}: ${royxat[i] || "Qo'shimcha ma'lumot"}\n`;
+const tg = window.Telegram && window.Telegram.WebApp;
+if (tg) {
+  tg.ready(); tg.expand();
+  const p = tg.themeParams || {};
+  const root = document.documentElement.style;
+  if (p.bg_color) root.setProperty("--bg", p.bg_color);
+  if (p.secondary_bg_color) root.setProperty("--card", p.secondary_bg_color);
+  if (p.text_color) root.setProperty("--text", p.text_color);
+  if (p.hint_color) root.setProperty("--muted", p.hint_color);
+  if (p.button_color) root.setProperty("--accent", p.button_color);
+  const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
+  if (u) {
+    document.getElementById("greet").textContent = "Assalomu alaykum, " + u.first_name + "!";
+    document.getElementById("pname").textContent = u.first_name + (u.last_name ? " " + u.last_name : "");
+    document.getElementById("puser").textContent = u.username ? "@" + u.username : "Telegram orqali kirgan";
   }
-  natijaniChiqar("pr-natija", matn);
 }
 
-function mustaqilYarat() {
-  const m = mavzuniOl("must-mavzu"); if (!m) return;
-  natijaniChiqar("must-natija",
-`MUSTAQIL ISH REJASI
-Mavzu: ${m}
+const TYPES = {
+  referat:       { name: "Referat",         hint: "Mavzu bo'yicha reja va to'liq matn",    extra: "Hajm", opts: ["3 bet", "5 bet", "10 bet"] },
+  prezentatsiya: { name: "Prezentatsiya",   hint: "Slaydlar ro'yxati va asosiy matn",      extra: "Slaydlar soni", opts: ["5", "8", "10", "12"] },
+  mustaqil:      { name: "Mustaqil ish",    hint: "Reja, bo'limlar va tekshirish ro'yxati", extra: "Savollar soni", opts: ["2", "3", "4"] },
+  ilmiy:         { name: "Ilmiy ish",       hint: "Tuzilish: dolzarblik, maqsad, metodika", extra: "Hajm", opts: ["Qisqa", "O'rta", "Batafsil"] },
+  konspekt:      { name: "Ma'ruza konspekti", hint: "Mavzu bo'yicha tayyor konspekt",     extra: "Uzunlik", opts: ["Qisqa", "O'rta", "Batafsil"] }
+};
 
-Tarkib:
-  1. Kirish
-  2. Asosiy qism (2–3 savol yoki bo'lim)
-  3. Xulosa
-  4. Foydalanilgan adabiyotlar
+function tileHTML(key, t) {
+  return `<button class="tile" onclick="openForm('${key}')">
+    <div class="ico">${t.name[0]}</div><h3>${t.name}</h3><p>${t.hint}</p></button>`;
+}
+document.getElementById("tiles").innerHTML = Object.keys(TYPES).slice(0, 4).map(k => tileHTML(k, TYPES[k])).join("");
+document.getElementById("tiles2").innerHTML = Object.keys(TYPES).map(k => tileHTML(k, TYPES[k])).join("");
 
-TEKSHIRISH RO'YXATI
-  [ ] Titul varag'i to'ldirilgan
-  [ ] Mavzu topshiriqqa mos
-  [ ] Reja va bo'limlar mantiqiy ketma-ketlikda
-  [ ] Har bir fikr manbaga asoslangan
-  [ ] Xulosa savollarga javob beradi
-  [ ] Imloviy va uslubiy xatolar tekshirilgan
-  [ ] Talab qilingan hajm (varaq, so'z) bajarilgan`);
+const KEY = "talaba_tarix";
+function tarixOl() { try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) { return []; } }
+function tarixSaqla(list) { try { localStorage.setItem(KEY, JSON.stringify(list.slice(0, 50))); } catch (e) {} }
+
+function renderRecent() {
+  const list = tarixOl();
+  document.getElementById("recent").innerHTML = list.length
+    ? list.slice(0, 3).map(renderItem).join("")
+    : `<div class="empty">Hali ishlar yo'q. "Yangi" bo'limidan boshlang.</div>`;
+  document.getElementById("pused").textContent = bugunSoni();
+}
+function renderItem(x) {
+  return `<div class="card"><h3>${TYPES[x.type].name}: ${escapeHTML(x.topic)}</h3>
+    <small>${x.sana}</small></div>`;
+}
+function renderHistory() {
+  const list = tarixOl();
+  document.getElementById("histList").innerHTML = list.length
+    ? list.map(renderItem).join("")
+    : `<div class="empty">Tarix bo'sh.</div>`;
 }
 
-function ilmiyYarat() {
-  const m = mavzuniOl("ilmiy-mavzu"); if (!m) return;
-  natijaniChiqar("ilmiy-natija",
-`ILMIY ISH TUZILISHI
-Mavzu: ${m}
-
-  1. Annotatsiya
-  2. Kirish
-     - Dolzarblik
-     - Tadqiqot maqsadi va vazifalari
-     - Ob'ekt va predmet
-  3. Nazariy qism
-     - Adabiyotlar sharhi
-  4. Metodologiya
-     - Ma'lumot yig'ish usullari
-     - Tahlil usullari
-  5. Natijalar va muhokama
-  6. Xulosa va tavsiyalar
-  7. Foydalanilgan adabiyotlar`);
+function bugunSoni() {
+  const bugun = new Date().toISOString().slice(0, 10);
+  return tarixOl().filter(x => x.sana.startsWith(bugun)).length;
 }
 
-function konspektYarat() {
-  const fan = document.getElementById("kons-fan").value.trim() || "_______";
-  const mavzu = document.getElementById("kons-mavzu").value.trim() || "_______";
-  const sana = document.getElementById("kons-sana").value || "_______";
-  natijaniChiqar("kons-natija",
-`MA'RUZA KONSPEKTI
-Fan: ${fan}
-Mavzu: ${mavzu}
-Sana: ${sana}
-
-Asosiy tushunchalar:
-  -
-  -
-
-Asosiy g'oyalar:
-  1.
-  2.
-
-Misollar:
-  -
-
-Savollar (keyinroq o'rganish uchun):
-  -
-
-Xulosa:
-  `);
+let joriy = null;
+function openForm(key) {
+  joriy = key;
+  const t = TYPES[key];
+  document.getElementById("pick").style.display = "none";
+  document.getElementById("form").style.display = "block";
+  document.getElementById("ftitle").textContent = t.name;
+  document.getElementById("fhint").textContent = t.hint;
+  document.getElementById("extraLabel").textContent = t.extra;
+  document.getElementById("extra").innerHTML = t.opts.map(o => `<option>${o}</option>`).join("");
+  document.getElementById("topic").value = "";
+  document.getElementById("out").innerHTML = "";
 }
+function showPick() {
+  document.getElementById("pick").style.display = "block";
+  document.getElementById("form").style.display = "none";
+}
+
+async function submitForm() {
+  const topic = document.getElementById("topic").value.trim();
+  if (!topic) { alert("Avval mavzuni yozing."); return; }
+  if (bugunSoni() >= 3) { alert("Bugungi limit tugadi (3 ta so'rov). Ertaga qaytib keling."); return; }
+
+  const btn = document.getElementById("submitBtn");
+  const loader = document.getElementById("loader");
+  btn.disabled = true; loader.style.display = "block";
+  document.getElementById("out").innerHTML = "";
+
+  let matn;
+  try {
+    matn = await generate(joriy, topic, document.getElementById("extra").value);
+  } catch (e) {
+    matn = "Xato yuz berdi. Qayta urinib ko'ring.";
+  }
+
+  btn.disabled = false; loader.style.display = "none";
+  document.getElementById("out").innerHTML = `<div class="result">${escapeHTML(matn)}</div>
+    <div class="note">AI javobini darslik va manbalar bilan tekshiring.</div>`;
+
+  const list = tarixOl();
+  list.unshift({ type: joriy, topic, sana: new Date().toISOString().slice(0, 16).replace("T", " ") });
+  tarixSaqla(list);
+  renderRecent();
+}
+
+async function generate(type, topic, extra) {
+  if (!API_URL) {
+    await new Promise(r => setTimeout(r, 900));
+    return "Demo rejim: server hali ulanmagan.\n\nMavzu: " + topic + "\nYo'nalish: " + TYPES[type].name + "\nTanlov: " + extra + "\n\nServer ulangach, bu yerda haqiqiy tayyor matn chiqadi.";
+  }
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ initData: tg ? tg.initData : "", type, topic, extra })
+  });
+  if (!res.ok) throw new Error("server xatosi");
+  const data = await res.json();
+  return data.text;
+}
+
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+function go(id) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.toggle("active", s.id === id));
+  document.querySelectorAll("nav button").forEach(b => b.classList.toggle("active", b.dataset.go === id));
+  if (id === "history") renderHistory();
+  if (id === "home") renderRecent();
+  if (id === "new") showPick();
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll("nav button").forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
+
+renderRecent();
 </script>
 </body>
 </html>
