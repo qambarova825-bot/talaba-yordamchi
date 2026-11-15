@@ -7,24 +7,24 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
   :root {
-    --bg1: #0d0b1f; --bg2: #1a1438;
-    --glow-a: rgba(124,92,255,.35); --glow-b: rgba(56,120,255,.22);
-    --glass: rgba(255,255,255,.07); --glass-strong: rgba(255,255,255,.12);
-    --line: rgba(255,255,255,.14);
-    --text: #f4f2ff; --muted: #a9a5c7;
-    --accent: #7c5cff; --accent2: #4f7bff; --soft: #8f7bff;
-    --field: rgba(10,8,30,.45);
-    --dock: rgba(20,16,44,.6);
+    --bg1: #0b0920; --bg2: #1d1549;
+    --glow-a: rgba(155,107,255,.42); --glow-b: rgba(61,155,255,.30);
+    --glass: rgba(255,255,255,.09); --glass-strong: rgba(255,255,255,.16);
+    --line: rgba(255,255,255,.18);
+    --text: #ffffff; --muted: #c2bde0;
+    --accent: #9b6bff; --accent2: #3d9bff; --soft: #c4a8ff; --cyan: #5ee7ff;
+    --field: rgba(12,8,36,.5);
+    --dock: rgba(30,22,64,.7);
     --radius: 22px;
   }
   body.light {
-    --bg1: #f7f5ff; --bg2: #e9ecff;
-    --glow-a: rgba(124,92,255,.18); --glow-b: rgba(91,140,255,.14);
-    --glass: rgba(255,255,255,.55); --glass-strong: rgba(255,255,255,.8);
-    --line: rgba(110,90,230,.16);
-    --text: #1b1640; --muted: #6b6a86; --soft: #6d4cf0;
-    --field: rgba(255,255,255,.75);
-    --dock: rgba(255,255,255,.65);
+    --bg1: #f5f2ff; --bg2: #dfe7ff;
+    --glow-a: rgba(155,107,255,.25); --glow-b: rgba(61,155,255,.20);
+    --glass: rgba(255,255,255,.62); --glass-strong: rgba(255,255,255,.9);
+    --line: rgba(110,80,240,.20);
+    --text: #15103a; --muted: #5d5a80; --soft: #6d3ff5; --cyan: #0ea5c9;
+    --field: rgba(255,255,255,.85);
+    --dock: rgba(255,255,255,.75);
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; min-height: 100%; color: var(--text);
@@ -35,122 +35,145 @@
     background: radial-gradient(520px 320px at 100% 0%, var(--glow-a), transparent 65%),
                 radial-gradient(480px 320px at 0% 55%, var(--glow-b), transparent 65%);
   }
-  .app { max-width: 520px; margin: 0 auto; min-height: 100vh; padding: 18px 16px calc(130px + env(safe-area-inset-bottom)); }
+  .app { max-width: 520px; margin: 0 auto; min-height: 100vh; padding: 18px 16px calc(120px + env(safe-area-inset-bottom)); }
   .glass {
     background: var(--glass); border: 1px solid var(--line); border-radius: var(--radius);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
   }
 
-  /* Yuqori qism */
-  .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-  .brand { font-size: 20px; font-weight: 800; }
-  .brand span { color: var(--soft); }
-  .theme-btn {
-    width: 40px; height: 40px; border-radius: 14px; border: 1px solid var(--line);
-    background: var(--glass); color: var(--text); font-size: 17px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .brand { font-size: 21px; font-weight: 800; }
+  .brand span { color: var(--cyan); }
+  .icon-btn {
+    width: 42px; height: 42px; border-radius: 14px; border: 1px solid var(--line); background: var(--glass);
+    color: var(--text); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
   }
-  h1.hello { margin: 20px 0 4px; font-size: 24px; font-weight: 800; }
-  .sub { margin: 0; font-size: 14px; color: var(--muted); }
+  h1.hello { margin: 18px 0 4px; font-size: 25px; font-weight: 800; }
+  .sub { margin: 0 0 14px; font-size: 14px; color: var(--muted); }
 
-  .limit { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; padding: 14px 16px; }
-  .limit small { color: var(--muted); font-size: 12px; }
-  .limit b { font-size: 16px; }
-  .limit b em { font-style: normal; color: var(--soft); }
+  /* Rol almashtirgich */
+  .roles { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 5px; border-radius: 18px; }
+  .roles button {
+    padding: 12px; border: 0; border-radius: 14px; background: transparent; color: var(--muted);
+    font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
+  }
+  .roles button.on { background: linear-gradient(120deg, var(--accent), var(--accent2)); color: #fff; box-shadow: 0 6px 20px rgba(155,107,255,.45); }
 
-  .label { margin: 22px 2px 10px; font-size: 13px; color: var(--muted); }
+  .free { display: flex; align-items: center; gap: 12px; padding: 14px 16px; margin-top: 14px; }
+  .free .st { font-size: 22px; }
+  .free b { display: block; font-size: 15px; }
+  .free small { color: var(--muted); font-size: 12px; }
 
-  /* Yo'nalish kartalari */
+  .label { margin: 22px 2px 10px; font-size: 13px; color: var(--muted); letter-spacing: .04em; }
+
   .list { display: flex; flex-direction: column; gap: 12px; }
-  .row {
-    display: flex; align-items: center; gap: 14px; padding: 14px; color: var(--text);
-    font: inherit; text-align: left; width: 100%; cursor: pointer;
-  }
+  .row { display: flex; align-items: center; gap: 14px; padding: 14px; color: var(--text); font: inherit; text-align: left; width: 100%; cursor: pointer; }
   .row:active { transform: scale(.985); }
-  .badge {
-    width: 52px; height: 52px; flex: 0 0 52px; border-radius: 16px; display: flex;
-    align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
+  .sticker {
+    width: 54px; height: 54px; flex: 0 0 54px; border-radius: 18px; display: flex; align-items: center; justify-content: center;
+    font-size: 26px; background: linear-gradient(135deg, rgba(155,107,255,.45), rgba(61,155,255,.45));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.25);
   }
   .row .info { flex: 1; min-width: 0; }
   .row h3 { margin: 0 0 3px; font-size: 16px; }
   .row p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.4; }
-  .arrow { color: var(--muted); font-size: 20px; }
+  .price { font-size: 12px; color: var(--cyan); font-weight: 600; margin-top: 4px; display: block; }
+  .arrow { color: var(--muted); font-size: 22px; }
 
-  /* Savollar oqimi */
-  .flow-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-  .back { background: none; border: 0; color: var(--soft); font: inherit; font-size: 15px; cursor: pointer; padding: 6px 0; }
-  .dots { display: flex; gap: 6px; }
-  .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
-  .dots i.on { background: var(--soft); }
-  .q-title { margin: 6px 0 4px; font-size: 22px; font-weight: 800; }
-  .q-hint { margin: 0 0 16px; font-size: 14px; color: var(--muted); line-height: 1.5; }
-  .qcard { padding: 16px; margin-bottom: 14px; }
-
-  input, textarea {
-    width: 100%; padding: 14px; border-radius: 16px; border: 1px solid var(--line);
+  /* Forma */
+  .back { background: none; border: 0; color: var(--soft); font: inherit; font-size: 15px; cursor: pointer; padding: 4px 0; margin-bottom: 12px; }
+  .form-title { margin: 0 0 4px; font-size: 22px; font-weight: 800; }
+  .form-hint { margin: 0 0 16px; font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .field { padding: 14px; margin-bottom: 12px; }
+  .field > label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  input, textarea, select {
+    width: 100%; padding: 13px 14px; border-radius: 14px; border: 1px solid var(--line);
     background: var(--field); color: var(--text); font: inherit; font-size: 15px;
   }
-  textarea { min-height: 110px; resize: vertical; }
-
-  .opts { display: flex; flex-direction: column; gap: 10px; }
-  .opts button {
-    padding: 15px; border-radius: 16px; border: 1px solid var(--line); background: var(--glass);
-    color: var(--text); font: inherit; font-size: 15px; text-align: left; cursor: pointer;
+  textarea { min-height: 96px; resize: vertical; }
+  .seg3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .seg3 button {
+    padding: 11px 4px; border-radius: 14px; border: 1px solid var(--line); background: var(--field);
+    color: var(--muted); font: inherit; font-size: 13px; cursor: pointer;
   }
-  .opts button.on { border-color: var(--soft); background: var(--glass-strong); font-weight: 600; }
-
+  .seg3 button.on { border-color: var(--soft); color: var(--text); background: var(--glass-strong); font-weight: 600; }
   .stepper { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .stepper button {
-    width: 56px; height: 56px; border-radius: 18px; border: 1px solid var(--line);
-    background: var(--glass); color: var(--text); font-size: 24px; cursor: pointer;
+    width: 52px; height: 52px; border-radius: 16px; border: 1px solid var(--line); background: var(--glass);
+    color: var(--text); font-size: 24px; cursor: pointer;
   }
-  .stepper .val { flex: 1; text-align: center; font-size: 30px; font-weight: 800; }
+  .stepper .val { flex: 1; text-align: center; font-size: 28px; font-weight: 800; }
   .stepper .val small { display: block; font-size: 13px; font-weight: 400; color: var(--muted); }
 
-  .summary { padding: 6px 16px; }
-  .summary div { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
-  .summary div:last-child { border-bottom: 0; }
-  .summary span:first-child { color: var(--muted); }
-  .summary span:last-child { font-weight: 600; text-align: right; }
+  .extra-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; }
+  .extra-head b { font-size: 15px; }
+  .extra-head small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .tick { width: 22px; height: 22px; accent-color: #9b6bff; }
+  .extra-body { display: none; margin-top: 14px; }
+  .extra-body.on { display: block; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .two .field { margin-bottom: 0; }
 
   .cta {
-    width: 100%; padding: 16px; border: 0; border-radius: 18px; margin-top: 8px; font: inherit;
+    width: 100%; padding: 16px; border: 0; border-radius: 18px; margin-top: 6px; font: inherit;
     font-size: 16px; font-weight: 700; color: #fff; cursor: pointer;
-    background: linear-gradient(120deg, var(--accent), var(--accent2)); box-shadow: 0 10px 28px rgba(92,80,255,.3);
+    background: linear-gradient(120deg, var(--accent), var(--accent2)); box-shadow: 0 10px 28px rgba(155,107,255,.4);
   }
-  .cta.ghost { background: var(--glass); color: var(--text); box-shadow: none; border: 1px solid var(--line); margin-top: 10px; }
   .cta:disabled { opacity: .55; }
   .loader { display: none; text-align: center; color: var(--muted); font-size: 14px; margin-top: 14px; }
   .result { white-space: pre-wrap; line-height: 1.65; font-size: 14px; padding: 16px; margin-top: 14px; }
   .disclaimer { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
 
-  .item { padding: 13px 14px; margin-bottom: 10px; }
+  /* Ishlar */
+  .item { display: flex; justify-content: space-between; gap: 10px; padding: 13px 14px; margin-bottom: 10px; }
   .item b { font-size: 14px; }
   .item small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
+  .item .cost { font-size: 13px; font-weight: 700; white-space: nowrap; }
+  .cost.free { color: var(--cyan); }
+  .cost.paid { color: #ff9ab5; }
   .empty { text-align: center; color: var(--muted); padding: 36px 10px; font-size: 14px; }
-  .stat { display: flex; justify-content: space-between; padding: 12px 2px; border-bottom: 1px solid var(--line); font-size: 14px; }
-  .stat:last-child { border-bottom: 0; }
-  .stat span:last-child { color: var(--soft); font-weight: 600; }
-  .sheet { padding: 16px; margin-bottom: 14px; }
-  .sheet h2 { margin: 0 0 6px; font-size: 18px; }
-  .sheet p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.55; }
 
-  /* Pastki menyu */
+  /* Profil */
+  .sheet { padding: 16px; margin-bottom: 14px; }
+  .sheet h2 { margin: 0 0 4px; font-size: 18px; }
+  .sheet p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.55; }
+  .sec-title { margin: 22px 2px 10px; font-size: 13px; color: var(--muted); letter-spacing: .04em; }
+  .balance { padding: 22px 18px; text-align: center; background: linear-gradient(135deg, rgba(155,107,255,.35), rgba(61,155,255,.30)); }
+  .balance small { color: var(--muted); font-size: 13px; }
+  .balance .amount { font-size: 34px; font-weight: 800; margin-top: 6px; }
+  .pay-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .pay-btns button {
+    padding: 14px 8px; border-radius: 16px; border: 1px solid var(--line); background: var(--glass);
+    color: var(--text); font: inherit; font-size: 14px; font-weight: 600; cursor: not-allowed; opacity: .65;
+  }
+  .pay-note { font-size: 12px; color: var(--muted); margin: 10px 2px 0; line-height: 1.5; }
+  .gift { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
+  .gift .st { font-size: 26px; }
+  .gift b { font-size: 15px; display: block; }
+  .gift small { color: var(--muted); font-size: 12px; line-height: 1.4; }
+  .roles-profile { margin-top: 0; }
+  .spend .row2 { display: flex; justify-content: space-between; padding: 12px 2px; border-bottom: 1px solid var(--line); font-size: 14px; gap: 10px; }
+  .spend .row2:last-child { border-bottom: 0; }
+  .spend .row2 span:last-child { font-weight: 700; white-space: nowrap; }
+  .about-row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; font-size: 14px; }
+  .about-row + .about-row { border-top: 1px solid var(--line); }
+  .about-row .st { font-size: 20px; }
+  .about-row small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; line-height: 1.4; }
+
+  /* Pastki menyu (plus yo'q) */
   .dock {
     position: fixed; left: 50%; transform: translateX(-50%);
-    bottom: calc(12px + env(safe-area-inset-bottom)); width: calc(100% - 28px); max-width: 488px;
-    display: grid; grid-template-columns: repeat(4, 1fr); align-items: center; padding: 8px 6px;
+    bottom: calc(12px + env(safe-area-inset-bottom)); width: calc(100% - 28px); max-width: 420px;
+    display: grid; grid-template-columns: repeat(3, 1fr); align-items: center; padding: 8px 8px;
     background: var(--dock); border: 1px solid var(--line); border-radius: 24px; z-index: 20;
-    backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%);
+    backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%);
   }
   .dock button {
     background: none; border: 0; color: var(--muted); font: inherit; font-size: 12px; cursor: pointer;
-    display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 0; border-radius: 16px;
+    display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 0; border-radius: 16px;
   }
-  .dock button.on { color: var(--soft); background: var(--glass-strong); }
-  .dock button .ic { font-size: 18px; line-height: 1; }
+  .dock button .ic { font-size: 20px; line-height: 1.1; }
+  .dock button.on { color: var(--text); background: var(--glass-strong); }
 
   .screen { display: none; }
   .screen.on { display: block; }
@@ -163,37 +186,33 @@
   <section id="home" class="screen on">
     <div class="top">
       <div class="brand">Talaba<span>AI</span></div>
-      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Rejimni almashtirish">☾</button>
+      <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Rejim">☾</button>
     </div>
 
     <h1 class="hello" id="greet">Assalomu alaykum!</h1>
-    <p class="sub">Bugun nima tayyorlaymiz?</p>
+    <p class="sub" id="homeSub">Bugun nima tayyorlaymiz?</p>
 
-    <div class="glass limit">
-      <div>
-        <small>Bugungi so'rovlar</small><br>
-        <b><em id="leftNum">3</em> / <span id="limitMax">3</span> qoldi</b>
-      </div>
-    </div>
+    <div class="glass roles" id="homeRoles"></div>
+
+    <div class="glass free" id="homeFree"></div>
 
     <div class="label">Yo'nalishlar</div>
     <div class="list" id="allTypes"></div>
   </section>
 
-  <!-- SAVOLLAR OQIMI -->
-  <section id="flow" class="screen">
-    <div class="flow-head">
-      <button class="back" onclick="prevStep()">‹ Orqaga</button>
-      <div class="dots" id="dots"></div>
-    </div>
-    <div id="stepBox"></div>
+  <!-- FORMA (savollar tepadan pastga) -->
+  <section id="form" class="screen">
+    <button class="back" onclick="go('home')">‹ Orqaga</button>
+    <h2 class="form-title" id="fTitle"></h2>
+    <p class="form-hint" id="fHint"></p>
+    <div id="formBox"></div>
     <div class="loader" id="loader">Tayyorlanmoqda, biroz kuting...</div>
     <div id="out"></div>
   </section>
 
   <!-- ISHLAR -->
   <section id="history" class="screen">
-    <div class="label" style="margin-top:0">Barcha ishlar</div>
+    <div class="sec-title" style="margin-top:0">Barcha ishlar</div>
     <div id="histList"></div>
   </section>
 
@@ -203,253 +222,336 @@
       <h2 id="pname">Foydalanuvchi</h2>
       <p id="puser">Telegram orqali kirgan</p>
     </div>
-    <div class="glass sheet">
-      <div class="stat"><span>Balans</span><span>Sinov rejimi</span></div>
-      <div class="stat"><span>Kunlik limit</span><span id="pdaily">3 ta so'rov</span></div>
-      <div class="stat"><span>Bugun ishlatilgan</span><span id="pused">0</span></div>
-    </div>
-    <p class="disclaimer">To'lov tizimi keyinroq ulanadi. Hozircha xizmat bepul sinov rejimida.</p>
-  </section>
 
-  <!-- HAQIDA -->
-  <section id="about" class="screen">
-    <div class="glass sheet">
-      <h2>Talaba Yordamchi</h2>
-      <p>Mustaqil ish, referat, prezentatsiya, ilmiy ish va ma'ruza konspektlari uchun tayyor reja va matn. Har bir javobni o'zingiz tekshirib, manbalar bilan to'ldiring.</p>
+    <div class="sec-title">Mening rolim</div>
+    <div class="glass roles" id="profRoles"></div>
+
+    <div class="sec-title">Balans</div>
+    <div class="glass balance">
+      <small>Umumiy balans</small>
+      <div class="amount" id="balAmount">0 so'm</div>
     </div>
+
+    <div class="sec-title">Balansni to'ldirish</div>
     <div class="glass sheet">
-      <h2 style="font-size:16px">Yordam</h2>
-      <p>Savollar va takliflar uchun bot orqali murojaat qiling.</p>
+      <div class="pay-btns">
+        <button disabled>⭐ Telegram Stars</button>
+        <button disabled>💳 Click / Payme</button>
+      </div>
+      <p class="pay-note">To'lov tizimi hali ishlamayapti. Ulanish tugagach, shu yerdan balansni to'ldirasiz.</p>
     </div>
-    <div class="glass sheet">
-      <h2 style="font-size:16px">Huquqiy ma'lumot</h2>
-      <p>Ommaviy oferta va maxfiylik siyosati tez orada shu yerda bo'ladi.</p>
+
+    <div class="sec-title">Birinchi ish uchun sovg'a</div>
+    <div class="glass gift" id="giftBox"></div>
+
+    <div class="sec-title">Sarflash tarixi</div>
+    <div class="glass sheet spend" id="spendBox"></div>
+
+    <div class="sec-title">Haqida</div>
+    <div class="glass">
+      <div class="about-row"><span class="st">🤖</span><div><b>AI versiyasi</b><small>Claude Haiku 4.5. Demo rejimda hozircha haqiqiy AI javob chiqmaydi.</small></div></div>
+      <div class="about-row"><span class="st">📝</span><div><b>Talaba Yordamchi</b><small>Mustaqil ish, referat, prezentatsiya, ilmiy ish va ma'ruza konspektlari uchun reja va matn. Har bir javobni o'zingiz tekshiring.</small></div></div>
+      <div class="about-row"><span class="st">💬</span><div><b>Yordam</b><small>Savollar va takliflar uchun bot orqali murojaat qiling.</small></div></div>
+      <div class="about-row"><span class="st">📄</span><div><b>Huquqiy ma'lumot</b><small>Ommaviy oferta va maxfiylik siyosati tez orada shu yerda bo'ladi.</small></div></div>
     </div>
   </section>
 
 </div>
 
 <nav class="dock">
-  <button class="on" data-go="home"><span class="ic">⌂</span>Asosiy</button>
-  <button data-go="history"><span class="ic">▤</span>Ishlar</button>
-  <button data-go="profile"><span class="ic">◌</span>Profil</button>
-  <button data-go="about"><span class="ic">i</span>Haqida</button>
+  <button class="on" data-go="home"><span class="ic">🏠</span>Asosiy</button>
+  <button data-go="history"><span class="ic">🗂</span>Ishlar</button>
+  <button data-go="profile"><span class="ic">👤</span>Profil</button>
 </nav>
 
 <script>
 // Server manzili: server tayyor bo'lgach shu yerga yozing, masalan "https://api.sizningdomen.uz/generate"
 const API_URL = "";
-const DAILY_LIMIT = 3;
+const FREE_FIRST = 1;
 
 const tg = window.Telegram && window.Telegram.WebApp;
+if (tg) { tg.ready(); tg.expand(); }
+
+/* ---------- Saqlash ---------- */
+function lsGet(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } }
+function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+let S = {
+  role: lsGet("talaba_rol", "talaba"),
+  freeUsed: lsGet("talaba_bepul", false),
+  balance: lsGet("talaba_balans", 0),
+  history: lsGet("talaba_tarix", [])
+};
+function saveAll() {
+  lsSet("talaba_rol", S.role);
+  lsSet("talaba_bepul", S.freeUsed);
+  lsSet("talaba_balans", S.balance);
+  lsSet("talaba_tarix", S.history.slice(0, 80));
+}
+
+/* ---------- Foydalanuvchi ma'lumoti ---------- */
 if (tg) {
-  tg.ready(); tg.expand();
   const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
   if (u) {
-    document.getElementById("greet").textContent = "Salom, " + u.first_name + "!";
     document.getElementById("pname").textContent = u.first_name + (u.last_name ? " " + u.last_name : "");
     document.getElementById("puser").textContent = u.username ? "@" + u.username : "Telegram orqali kirgan";
+    document.getElementById("greet").textContent = "Salom, " + u.first_name + "!";
   }
 }
 
-/* ---------- Kunduzgi / tungi rejim ---------- */
+/* ---------- Rejim ---------- */
 const TEMA_KEY = "talaba_tema";
 function temaQollash(rejim) {
   document.body.classList.toggle("light", rejim === "kunduzgi");
   document.getElementById("themeBtn").textContent = rejim === "kunduzgi" ? "☀" : "☾";
   let meta = document.querySelector('meta[name="theme-color"]');
   if (!meta) { meta = document.createElement("meta"); meta.name = "theme-color"; document.head.appendChild(meta); }
-  meta.content = rejim === "kunduzgi" ? "#f7f5ff" : "#0d0b1f";
+  meta.content = rejim === "kunduzgi" ? "#f5f2ff" : "#0b0920";
 }
 function toggleTheme() {
   const yangi = document.body.classList.contains("light") ? "tungi" : "kunduzgi";
-  try { localStorage.setItem(TEMA_KEY, yangi); } catch (e) {}
+  lsSet(TEMA_KEY, yangi);
   temaQollash(yangi);
 }
 (function boshlangichTema() {
-  let saqlangan = null;
-  try { saqlangan = localStorage.getItem(TEMA_KEY); } catch (e) {}
+  const saqlangan = lsGet(TEMA_KEY, null);
   if (saqlangan) return temaQollash(saqlangan);
   temaQollash(tg && tg.colorScheme === "light" ? "kunduzgi" : "tungi");
 })();
 
+/* ---------- Rol ---------- */
+const ROLE_LBL = {
+  talaba:   { uni: "Universitet nomi", group: "Guruh raqami", dir: "Yo'nalish",        hint: "Mustaqil ish va referat uchun" },
+  oqituvchi:{ uni: "Muassasa nomi",    group: "Sinf",         dir: "Fan yo'nalishi",   hint: "Dars uchun materiallar" }
+};
+function setRole(r) {
+  S.role = r; saveAll();
+  renderRoles();
+  renderHome();
+  renderProfile();
+  if (document.getElementById("form").classList.contains("on") && st) renderForm();
+}
+function rolesHTML() {
+  return `<button class="${S.role === "talaba" ? "on" : ""}" onclick="setRole('talaba')">🎓 Talaba</button>
+          <button class="${S.role === "oqituvchi" ? "on" : ""}" onclick="setRole('oqituvchi')">👩‍🏫 O'qituvchi</button>`;
+}
+function renderRoles() {
+  document.getElementById("homeRoles").innerHTML = rolesHTML();
+  document.getElementById("profRoles").innerHTML = rolesHTML();
+  document.getElementById("homeSub").textContent = S.role === "talaba"
+    ? "Bugun qaysi ishni tayyorlaymiz?" : "Dars uchun nimani tayyorlaymiz?";
+}
+
 /* ---------- Yo'nalishlar ---------- */
 const TYPES = {
-  referat:       { name: "Referat",           short: "Ref",  hint: "Reja va to'liq matn",                  topicQ: "Referat mavzusi nima?",       sizeQ: "Referat qanday hajmda bo'lsin?", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet",   min: 3, max: 10, def: 5 },
-  prezentatsiya: { name: "Prezentatsiya",     short: "Slayd", hint: "Slaydlar va asosiy matn",              topicQ: "Prezentatsiya mavzusi nima?", sizeQ: "Uslub qanday bo'lsin?",          sizes: ["Oddiy", "Ilmiy", "Ijodiy"],   unit: "slayd", min: 5, max: 20, def: 8 },
-  mustaqil:      { name: "Mustaqil ish",      short: "Must", hint: "Reja, bo'limlar va tekshiruv",         topicQ: "Mustaqil ish mavzusi nima?",  sizeQ: "Chuqurlik qanday bo'lsin?",      sizes: ["Yengil", "O'rta", "Chuqur"],  unit: "savol", min: 2, max: 6,  def: 3 },
-  ilmiy:         { name: "Ilmiy ish",         short: "Ilmi", hint: "Dolzarblik, maqsad, metodika, xulosa", topicQ: "Ilmiy ish mavzusi nima?",     sizeQ: "Hajm qanday bo'lsin?",           sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bob",   min: 2, max: 5,  def: 3 },
-  konspekt:      { name: "Ma'ruza konspekti", short: "Kons", hint: "Tayyor konspekt",                      topicQ: "Ma'ruza mavzusi nima?",       sizeQ: "Uzunlik qanday bo'lsin?",        sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "band",  min: 3, max: 10, def: 5 }
+  referat:       { name: "Referat",           icon: "📝", hint: "Reja va to'liq matn",                  topicQ: "Referat mavzusi nima?",       sizeQ: "Referat hajmi",     sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet",   min: 3, max: 10, def: 5, price: 2000 },
+  prezentatsiya: { name: "Prezentatsiya",     icon: "📊", hint: "Slaydlar va asosiy matn",              topicQ: "Prezentatsiya mavzusi nima?", sizeQ: "Uslub",             sizes: ["Oddiy", "Ilmiy", "Ijodiy"],   unit: "slayd", min: 5, max: 20, def: 8, price: 4000 },
+  mustaqil:      { name: "Mustaqil ish",      icon: "📚", hint: "Reja, bo'limlar va tekshiruv",         topicQ: "Mustaqil ish mavzusi nima?",  sizeQ: "Chuqurlik",         sizes: ["Yengil", "O'rta", "Chuqur"],  unit: "savol", min: 2, max: 6,  def: 3, price: 2000 },
+  ilmiy:         { name: "Ilmiy ish",         icon: "🔬", hint: "Dolzarblik, maqsad, metodika",         topicQ: "Ilmiy ish mavzusi nima?",     sizeQ: "Hajm",              sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bob",   min: 2, max: 5,  def: 3, price: 4000 },
+  konspekt:      { name: "Ma'ruza konspekti", icon: "📖", hint: "Tayyor konspekt",                      topicQ: "Ma'ruza mavzusi nima?",       sizeQ: "Uzunlik",           sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "band",  min: 3, max: 10, def: 5, price: 2000 }
 };
 const KEYS = Object.keys(TYPES);
-const STEPS = 4; // 0 mavzu, 1 hajm, 2 soni, 3 tekshirish
+const fmt = n => Number(n).toLocaleString("uz-UZ").replace(/,/g, " ") + " so'm";
 
 function rowHTML(k) {
   const t = TYPES[k];
-  return `<button class="row glass" onclick="startFlow('${k}')">
-    <div class="badge">${t.short}</div>
-    <div class="info"><h3>${t.name}</h3><p>${t.hint}</p></div>
+  return `<button class="row glass" onclick="openForm('${k}')">
+    <div class="sticker">${t.icon}</div>
+    <div class="info"><h3>${t.name}</h3><p>${t.hint}</p><span class="price">${fmt(t.price)}</span></div>
     <span class="arrow">›</span></button>`;
 }
-document.getElementById("allTypes").innerHTML = KEYS.map(rowHTML).join("");
 
-/* ---------- Tarix va limit ---------- */
-const KEY = "talaba_tarix";
-function tarixOl() { try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) { return []; } }
-function tarixSaqla(list) { try { localStorage.setItem(KEY, JSON.stringify(list.slice(0, 50))); } catch (e) {} }
-function bugunSoni() {
-  const bugun = new Date().toISOString().slice(0, 10);
-  return tarixOl().filter(x => x.sana.startsWith(bugun)).length;
+function renderFree() {
+  const box = document.getElementById("homeFree");
+  if (!S.freeUsed) {
+    box.innerHTML = `<div class="st" style="font-size:24px">🎁</div>
+      <div><b>Birinchi ish bepul</b><small>Bu imkoniyat faqat bir marta beriladi.</small></div>`;
+  } else {
+    box.innerHTML = `<div class="st" style="font-size:24px">✨</div>
+      <div><b>Bepul imkoniyat ishlatilgan</b><small>Keyingi ishlar balansdan yechiladi.</small></div>`;
+  }
 }
-function renderLimit() {
-  const used = bugunSoni();
-  document.getElementById("leftNum").textContent = Math.max(0, DAILY_LIMIT - used);
-  document.getElementById("limitMax").textContent = DAILY_LIMIT;
-  document.getElementById("pused").textContent = used;
-  document.getElementById("pdaily").textContent = DAILY_LIMIT + " ta so'rov";
+function renderHome() {
+  renderRoles();
+  renderFree();
+  document.getElementById("allTypes").innerHTML = KEYS.map(rowHTML).join("");
 }
+
+/* ---------- Ishlar va profil ---------- */
 function itemHTML(x) {
-  return `<div class="glass item"><b>${TYPES[x.type].name}: ${escapeHTML(x.topic)}</b><small>${x.sana}</small></div>`;
+  const costTxt = x.cost === 0 ? `<span class="cost free">Bepul</span>` : `<span class="cost paid">−${fmt(x.cost)}</span>`;
+  return `<div class="glass item"><div><b>${TYPES[x.type].icon} ${TYPES[x.type].name}: ${escapeHTML(x.topic)}</b><small>${x.sana}</small></div>${costTxt}</div>`;
 }
 function renderHistory() {
-  const list = tarixOl();
-  document.getElementById("histList").innerHTML = list.length
-    ? list.map(itemHTML).join("")
+  document.getElementById("histList").innerHTML = S.history.length
+    ? S.history.map(itemHTML).join("")
     : `<div class="empty">Hali ishlar yo'q. Asosiy sahifadan yo'nalish tanlang.</div>`;
 }
+function renderProfile() {
+  renderRoles();
+  document.getElementById("balAmount").textContent = fmt(S.balance);
+  document.getElementById("giftBox").innerHTML = S.freeUsed
+    ? `<div class="st" style="font-size:26px">✨</div>
+       <div><b>Ishlatilgan</b><small>Bepul imkoniyat faqat bir marta beriladi va allaqachon sarflangan.</small></div>`
+    : `<div class="st" style="font-size:26px">🎁</div>
+       <div><b>1 marta bepul</b><small>Birinchi ishingiz uchun bir marta beriladi. Keyingi ishlar balansdan yechiladi.</small></div>`;
+  document.getElementById("spendBox").innerHTML = S.history.length
+    ? S.history.slice(0, 20).map(x => `<div class="row2"><span>${TYPES[x.type].icon} ${TYPES[x.type].name}</span><span class="${x.cost === 0 ? "cost free" : "cost paid"}">${x.cost === 0 ? "Bepul" : "−" + fmt(x.cost)}</span></div>`).join("")
+    : `<div class="empty" style="padding:14px">Hali sarflanmagan.</div>`;
+}
 
-/* ---------- Savollar oqimi ---------- */
+/* ---------- Forma: savollar tepadan pastga ---------- */
 let st = null;
-function startFlow(k) {
-  if (bugunSoni() >= DAILY_LIMIT) {
-    alert("Bugungi limit tugadi (" + DAILY_LIMIT + " ta so'rov). Ertaga qaytib keling.");
-    return;
-  }
-  st = { type: k, step: 0, topic: "", hajm: -1, soni: TYPES[k].def };
+function openForm(k) {
+  st = { type: k, hajm: -1, soni: TYPES[k].def, extraOn: true };
   document.getElementById("out").innerHTML = "";
-  go("flow");
-  renderStep();
+  go("form");
+  renderForm();
 }
-function renderDots() {
-  document.getElementById("dots").innerHTML = Array.from({ length: STEPS }, (_, i) =>
-    `<i class="${i <= st.step ? "on" : ""}"></i>`).join("");
-}
-function renderStep() {
+function v(id) { const el = document.getElementById(id); return el ? el.value.trim() : ""; }
+
+function renderForm() {
   const t = TYPES[st.type];
-  renderDots();
-  const box = document.getElementById("stepBox");
-  box.style.display = "block";
+  const L = ROLE_LBL[S.role];
+  document.getElementById("fTitle").textContent = t.name;
+  document.getElementById("fHint").textContent = L.hint;
   document.getElementById("out").innerHTML = "";
 
-  if (st.step === 0) {
-    box.innerHTML = `
-      <div class="q-title">${t.topicQ}</div>
-      <p class="q-hint">Mavzuni aniq yozing, masalan: "Iqtisodiyot asoslari".</p>
-      <div class="glass qcard"><textarea id="topic" placeholder="Mavzuni yozing">${escapeHTML(st.topic)}</textarea></div>
-      <button class="cta" onclick="nextStep()">Davom etish</button>`;
-    setTimeout(() => { const el = document.getElementById("topic"); if (el) el.focus(); }, 50);
-  }
-
-  if (st.step === 1) {
-    box.innerHTML = `
-      <div class="q-title">${t.sizeQ}</div>
-      <p class="q-hint">Bitta variantni tanlang.</p>
-      <div class="opts">${t.sizes.map((s, i) =>
-        `<button class="${i === st.hajm ? "on" : ""}" onclick="pickSize(${i})">${s}</button>`).join("")}</div>
-      <div style="height:14px"></div>
-      <button class="cta" onclick="nextStep()">Davom etish</button>`;
-  }
-
-  if (st.step === 2) {
-    box.innerHTML = `
-      <div class="q-title">Nechta ${t.unit} kerak?</div>
-      <p class="q-hint">${t.min} dan ${t.max} gacha.</p>
-      <div class="glass qcard">
-        <div class="stepper">
-          <button onclick="stepBy(-1)">−</button>
-          <div class="val">${st.soni}<small>${t.unit}</small></div>
-          <button onclick="stepBy(1)">+</button>
+  let extra = "";
+  if (st.type === "prezentatsiya") {
+    extra = `
+    <div class="glass field">
+      <div class="extra-head" onclick="toggleExtra()">
+        <div><b>Titul ma'lumotlari</b><small>Slaydga muallif ma'lumotlari qo'shiladi</small></div>
+        <input type="checkbox" class="tick" id="f_extra_chk" ${st.extraOn ? "checked" : ""} onclick="event.stopPropagation(); toggleExtra()">
+      </div>
+      <div class="extra-body ${st.extraOn ? "on" : ""}" id="extraBody">
+        <div class="two">
+          <div class="field glass"><label>Ism</label><input id="f_ism" placeholder="Ism"></div>
+          <div class="field glass"><label>Familiya</label><input id="f_fam" placeholder="Familiya"></div>
+        </div>
+        <div class="field glass"><label>${L.uni}</label><input id="f_uni" placeholder="${L.uni}"></div>
+        <div class="field glass"><label>Fan</label><input id="f_fan" placeholder="Masalan: Iqtisodiyot"></div>
+        <div class="two">
+          <div class="field glass"><label>${L.group}</label><input id="f_guruh" placeholder="${L.group}"></div>
+          <div class="field glass"><label>${L.dir}</label><input id="f_yonalish" placeholder="${L.dir}"></div>
         </div>
       </div>
-      <button class="cta" onclick="nextStep()">Davom etish</button>`;
+    </div>`;
   }
 
-  if (st.step === 3) {
-    const hajmMatn = st.hajm >= 0 ? t.sizes[st.hajm] : "—";
-    box.innerHTML = `
-      <div class="q-title">Tekshiring va tayyorlang</div>
-      <p class="q-hint">Hammasi to'g'ri bo'lsa, tayyorlashni bosing.</p>
-      <div class="glass qcard summary">
-        <div><span>Yo'nalish</span><span>${t.name}</span></div>
-        <div><span>Mavzu</span><span>${escapeHTML(st.topic)}</span></div>
-        <div><span>Tanlov</span><span>${hajmMatn}</span></div>
-        <div><span>Soni</span><span>${st.soni} ${t.unit}</span></div>
-        <div><span>Til</span><span>O'zbek</span></div>
+  document.getElementById("formBox").innerHTML = `
+    <div class="glass field">
+      <label for="f_topic">${t.topicQ}</label>
+      <textarea id="f_topic" placeholder="Mavzuni aniq yozing">${escapeHTML(st.topic || "")}</textarea>
+    </div>
+    ${extra}
+    <div class="glass field">
+      <label>${t.sizeQ}</label>
+      <div class="seg3">${t.sizes.map((s, i) =>
+        `<button class="${i === st.hajm ? "on" : ""}" onclick="pickSize(${i})">${s}</button>`).join("")}</div>
+    </div>
+    <div class="glass field">
+      <label>Nechta ${t.unit} kerak? (${t.min}–${t.max})</label>
+      <div class="stepper">
+        <button onclick="stepBy(-1)">−</button>
+        <div class="val">${st.soni}<small>${t.unit}</small></div>
+        <button onclick="stepBy(1)">+</button>
       </div>
-      <button class="cta" id="submitBtn" onclick="submitForm()">Tayyorlash</button>`;
+    </div>
+    <div class="glass field" style="display:flex;justify-content:space-between;align-items:center">
+      <span style="color:var(--muted);font-size:14px">Narxi</span>
+      <b style="color:var(--cyan)">${S.freeUsed ? fmt(t.price) : "Birinchi ish bepul"}</b>
+    </div>
+    <button class="cta" id="submitBtn" onclick="submitForm()">Tayyorlash</button>`;
+
+  if (st.type === "prezentatsiya") {
+    // qiymatlarni saqlab qolish uchun
+    ["f_ism","f_fam","f_uni","f_fan","f_guruh","f_yonalish"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && st[id]) el.value = st[id];
+      if (el) el.addEventListener("input", () => { st[id] = el.value; });
+    });
   }
+  const topicEl = document.getElementById("f_topic");
+  topicEl.addEventListener("input", () => { st.topic = topicEl.value; });
 }
 
-function pickSize(i) { st.hajm = i; renderStep(); }
+function toggleExtra() {
+  st.extraOn = !st.extraOn;
+  const body = document.getElementById("extraBody");
+  const chk = document.getElementById("f_extra_chk");
+  if (body) body.classList.toggle("on", st.extraOn);
+  if (chk) chk.checked = st.extraOn;
+}
+function pickSize(i) { st.hajm = i; renderForm(); }
 function stepBy(d) {
   const t = TYPES[st.type];
   st.soni = Math.min(t.max, Math.max(t.min, st.soni + d));
-  renderStep();
-}
-function nextStep() {
-  if (st.step === 0) {
-    const v = document.getElementById("topic").value.trim();
-    if (!v) { alert("Avval mavzuni yozing."); return; }
-    st.topic = v;
-  }
-  if (st.step === 1 && st.hajm < 0) { alert("Variantlardan birini tanlang."); return; }
-  st.step = Math.min(STEPS - 1, st.step + 1);
-  renderStep();
-}
-function prevStep() {
-  if (st.step === 0) { go("home"); return; }
-  st.step -= 1;
-  renderStep();
+  renderForm();
 }
 
 async function submitForm() {
-  if (bugunSoni() >= DAILY_LIMIT) { alert("Bugungi limit tugadi (" + DAILY_LIMIT + " ta so'rov). Ertaga qaytib keling."); return; }
   const t = TYPES[st.type];
+  const topic = v("f_topic");
+  if (!topic) { alert("Avval mavzuni yozing."); return; }
+  if (st.hajm < 0) { alert("Hajm yoki uslubni tanlang."); return; }
+
+  let cost = 0, bepul = false;
+  if (!S.freeUsed) { bepul = true; }
+  else {
+    if (S.balance < t.price) {
+      alert("Balans yetarli emas (" + fmt(t.price) + " kerak). Balansni to'ldirish tez orada ishga tushadi.");
+      return;
+    }
+    cost = t.price;
+  }
+
+  const meta = {};
+  if (st.type === "prezentatsiya" && st.extraOn) {
+    meta.ism = v("f_ism"); meta.familiya = v("f_fam"); meta.uni = v("f_uni");
+    meta.fan = v("f_fan"); meta.guruh = v("f_guruh"); meta.yonalish = v("f_yonalish");
+  }
+
   const btn = document.getElementById("submitBtn");
   const loader = document.getElementById("loader");
   btn.disabled = true; loader.style.display = "block";
 
   let matn;
   try {
-    matn = await generate(st.type, st.topic, t.sizes[st.hajm], st.soni);
+    matn = await generate(st.type, topic, t.sizes[st.hajm], st.soni, meta);
   } catch (e) {
     matn = "Xato yuz berdi. Qayta urinib ko'ring.";
   }
 
+  // to'lov faqat muvaffaqiyatli javobdan keyin yechiladi
+  if (bepul) { S.freeUsed = true; }
+  else { S.balance -= cost; }
+  S.history.unshift({ type: st.type, topic, cost: bepul ? 0 : cost, sana: new Date().toISOString().slice(0, 16).replace("T", " ") });
+  saveAll();
+
   loader.style.display = "none";
-  document.getElementById("stepBox").style.display = "none";
+  document.getElementById("formBox").style.display = "none";
   document.getElementById("out").innerHTML = `
     <div class="glass result">${escapeHTML(matn)}</div>
     <div class="disclaimer">AI javobini darslik va manbalar bilan tekshiring.</div>
-    <button class="cta" onclick="startFlow('${st.type}')">Yangi ish</button>
-    <button class="cta ghost" onclick="go('home')">Asosiy sahifa</button>`;
-
-  const list = tarixOl();
-  list.unshift({ type: st.type, topic: st.topic, sana: new Date().toISOString().slice(0, 16).replace("T", " ") });
-  tarixSaqla(list);
-  renderLimit();
+    <button class="cta" onclick="openForm('${st.type}')">Yangi ish</button>
+    <button class="cta" style="background:var(--glass);color:var(--text);box-shadow:none;border:1px solid var(--line);margin-top:10px" onclick="go('home')">Asosiy sahifa</button>`;
+  renderHome();
 }
 
-async function generate(type, topic, hajmMatn, son) {
+async function generate(type, topic, hajmMatn, son, meta) {
   if (!API_URL) {
     await new Promise(r => setTimeout(r, 900));
+    const m = meta && Object.keys(meta).length ? "\nMuallif: " + [meta.ism, meta.familiya].filter(Boolean).join(" ") + ", " + (meta.uni || "") : "";
     return "Demo rejim: server hali ulanmagan.\n\nMavzu: " + topic + "\nYo'nalish: " + TYPES[type].name +
-           "\nHajm: " + hajmMatn + ", " + son + " " + TYPES[type].unit + "\n\nServer ulangach, bu yerda haqiqiy tayyor matn chiqadi.";
+           "\nHajm: " + hajmMatn + ", " + son + " " + TYPES[type].unit + m +
+           "\n\nServer ulangach, bu yerda haqiqiy tayyor matn chiqadi.";
   }
   const res = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ initData: tg ? tg.initData : "", type, topic, hajm: hajmMatn, son })
+    body: JSON.stringify({ initData: tg ? tg.initData : "", type, topic, hajm: hajmMatn, son, meta, role: S.role })
   });
   if (!res.ok) throw new Error("server xatosi");
   const data = await res.json();
@@ -457,21 +559,23 @@ async function generate(type, topic, hajmMatn, son) {
 }
 
 function escapeHTML(s) {
-  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
 /* ---------- Navigatsiya ---------- */
 function go(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.toggle("on", s.id === id));
-  const menuId = id === "flow" ? "home" : id;
-  document.querySelectorAll(".dock button").forEach(b => b.classList.toggle("on", b.dataset.go === menuId));
+  document.querySelectorAll(".dock button").forEach(b => b.classList.toggle("on", b.dataset.go === id));
+  if (id === "home") renderHome();
   if (id === "history") renderHistory();
-  if (id === "home" || id === "profile") renderLimit();
+  if (id === "profile") renderProfile();
+  if (id === "form" && st) { document.getElementById("formBox").style.display = "block"; }
   window.scrollTo(0, 0);
 }
 document.querySelectorAll(".dock button").forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
 
-renderLimit();
+renderHome();
+renderProfile();
 </script>
 </body>
 </html>
