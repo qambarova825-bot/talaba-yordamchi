@@ -44,14 +44,18 @@
   .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .brand { font-size: 21px; font-weight: 800; }
   .brand span { color: var(--cyan); }
+  .top-right { display: flex; align-items: center; gap: 8px; }
+  .mini-bal {
+    padding: 7px 11px; border-radius: 12px; background: var(--glass-strong); border: 1px solid var(--line);
+    font-size: 12px; font-weight: 700; color: var(--cyan); white-space: nowrap;
+  }
   .icon-btn {
-    width: 42px; height: 42px; border-radius: 14px; border: 1px solid var(--line); background: var(--glass);
-    color: var(--text); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    width: 38px; height: 38px; border-radius: 13px; border: 1px solid var(--line); background: var(--glass);
+    color: var(--text); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
   }
   h1.hello { margin: 18px 0 4px; font-size: 25px; font-weight: 800; }
   .sub { margin: 0 0 14px; font-size: 14px; color: var(--muted); }
 
-  /* Rol almashtirgich */
   .roles { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 5px; border-radius: 18px; }
   .roles button {
     padding: 12px; border: 0; border-radius: 14px; background: transparent; color: var(--muted);
@@ -60,12 +64,11 @@
   .roles button.on { background: linear-gradient(120deg, var(--accent), var(--accent2)); color: #fff; box-shadow: 0 6px 20px rgba(155,107,255,.45); }
 
   .free { display: flex; align-items: center; gap: 12px; padding: 14px 16px; margin-top: 14px; }
-  .free .st { font-size: 22px; }
+  .free .st { font-size: 24px; }
   .free b { display: block; font-size: 15px; }
   .free small { color: var(--muted); font-size: 12px; }
 
   .label { margin: 22px 2px 10px; font-size: 13px; color: var(--muted); letter-spacing: .04em; }
-
   .list { display: flex; flex-direction: column; gap: 12px; }
   .row { display: flex; align-items: center; gap: 14px; padding: 14px; color: var(--text); font: inherit; text-align: left; width: 100%; cursor: pointer; }
   .row:active { transform: scale(.985); }
@@ -86,7 +89,7 @@
   .form-hint { margin: 0 0 16px; font-size: 14px; color: var(--muted); line-height: 1.5; }
   .field { padding: 14px; margin-bottom: 12px; }
   .field > label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
-  input, textarea, select {
+  input, textarea {
     width: 100%; padding: 13px 14px; border-radius: 14px; border: 1px solid var(--line);
     background: var(--field); color: var(--text); font: inherit; font-size: 15px;
   }
@@ -108,32 +111,31 @@
   .extra-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; }
   .extra-head b { font-size: 15px; }
   .extra-head small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
-  .tick { width: 22px; height: 22px; accent-color: #9b6bff; }
-  .extra-body { display: none; margin-top: 14px; }
-  .extra-body.on { display: block; }
+  .tick { width: 22px; height: 22px; accent-color: #9b6bff; pointer-events: none; }
+  .extra-body { margin-top: 14px; }
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .two .field { margin-bottom: 0; }
+  .inner { padding: 12px; margin-bottom: 10px; }
 
   .cta {
     width: 100%; padding: 16px; border: 0; border-radius: 18px; margin-top: 6px; font: inherit;
     font-size: 16px; font-weight: 700; color: #fff; cursor: pointer;
     background: linear-gradient(120deg, var(--accent), var(--accent2)); box-shadow: 0 10px 28px rgba(155,107,255,.4);
   }
+  .cta.ghost { background: var(--glass); color: var(--text); box-shadow: none; border: 1px solid var(--line); margin-top: 10px; }
   .cta:disabled { opacity: .55; }
   .loader { display: none; text-align: center; color: var(--muted); font-size: 14px; margin-top: 14px; }
   .result { white-space: pre-wrap; line-height: 1.65; font-size: 14px; padding: 16px; margin-top: 14px; }
   .disclaimer { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
 
-  /* Ishlar */
   .item { display: flex; justify-content: space-between; gap: 10px; padding: 13px 14px; margin-bottom: 10px; }
   .item b { font-size: 14px; }
   .item small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
-  .item .cost { font-size: 13px; font-weight: 700; white-space: nowrap; }
+  .cost { font-size: 13px; font-weight: 700; white-space: nowrap; }
   .cost.free { color: var(--cyan); }
   .cost.paid { color: #ff9ab5; }
   .empty { text-align: center; color: var(--muted); padding: 36px 10px; font-size: 14px; }
 
-  /* Profil */
   .sheet { padding: 16px; margin-bottom: 14px; }
   .sheet h2 { margin: 0 0 4px; font-size: 18px; }
   .sheet p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.55; }
@@ -141,7 +143,7 @@
   .balance { padding: 22px 18px; text-align: center; background: linear-gradient(135deg, rgba(155,107,255,.35), rgba(61,155,255,.30)); }
   .balance small { color: var(--muted); font-size: 13px; }
   .balance .amount { font-size: 34px; font-weight: 800; margin-top: 6px; }
-  .pay-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .pay-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .pay-btns button {
     padding: 14px 8px; border-radius: 16px; border: 1px solid var(--line); background: var(--glass);
     color: var(--text); font: inherit; font-size: 14px; font-weight: 600; cursor: not-allowed; opacity: .65;
@@ -151,20 +153,17 @@
   .gift .st { font-size: 26px; }
   .gift b { font-size: 15px; display: block; }
   .gift small { color: var(--muted); font-size: 12px; line-height: 1.4; }
-  .roles-profile { margin-top: 0; }
-  .spend .row2 { display: flex; justify-content: space-between; padding: 12px 2px; border-bottom: 1px solid var(--line); font-size: 14px; gap: 10px; }
-  .spend .row2:last-child { border-bottom: 0; }
-  .spend .row2 span:last-child { font-weight: 700; white-space: nowrap; }
+  .row2 { display: flex; justify-content: space-between; padding: 12px 2px; border-bottom: 1px solid var(--line); font-size: 14px; gap: 10px; }
+  .row2:last-child { border-bottom: 0; }
   .about-row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; font-size: 14px; }
   .about-row + .about-row { border-top: 1px solid var(--line); }
   .about-row .st { font-size: 20px; }
   .about-row small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; line-height: 1.4; }
 
-  /* Pastki menyu (plus yo'q) */
   .dock {
     position: fixed; left: 50%; transform: translateX(-50%);
     bottom: calc(12px + env(safe-area-inset-bottom)); width: calc(100% - 28px); max-width: 420px;
-    display: grid; grid-template-columns: repeat(3, 1fr); align-items: center; padding: 8px 8px;
+    display: grid; grid-template-columns: repeat(3, 1fr); align-items: center; padding: 8px;
     background: var(--dock); border: 1px solid var(--line); border-radius: 24px; z-index: 20;
     backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%);
   }
@@ -186,21 +185,23 @@
   <section id="home" class="screen on">
     <div class="top">
       <div class="brand">Talaba<span>AI</span></div>
-      <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Rejim">☾</button>
+      <div class="top-right">
+        <div class="mini-bal" id="miniBal">0 so'm</div>
+        <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Rejim">☾</button>
+      </div>
     </div>
 
     <h1 class="hello" id="greet">Assalomu alaykum!</h1>
     <p class="sub" id="homeSub">Bugun nima tayyorlaymiz?</p>
 
     <div class="glass roles" id="homeRoles"></div>
-
     <div class="glass free" id="homeFree"></div>
 
     <div class="label">Yo'nalishlar</div>
     <div class="list" id="allTypes"></div>
   </section>
 
-  <!-- FORMA (savollar tepadan pastga) -->
+  <!-- FORMA -->
   <section id="form" class="screen">
     <button class="back" onclick="go('home')">‹ Orqaga</button>
     <h2 class="form-title" id="fTitle"></h2>
@@ -245,12 +246,12 @@
     <div class="glass gift" id="giftBox"></div>
 
     <div class="sec-title">Sarflash tarixi</div>
-    <div class="glass sheet spend" id="spendBox"></div>
+    <div class="glass sheet" id="spendBox"></div>
 
     <div class="sec-title">Haqida</div>
     <div class="glass">
       <div class="about-row"><span class="st">🤖</span><div><b>AI versiyasi</b><small>Claude Haiku 4.5. Demo rejimda hozircha haqiqiy AI javob chiqmaydi.</small></div></div>
-      <div class="about-row"><span class="st">📝</span><div><b>Talaba Yordamchi</b><small>Mustaqil ish, referat, prezentatsiya, ilmiy ish va ma'ruza konspektlari uchun reja va matn. Har bir javobni o'zingiz tekshiring.</small></div></div>
+      <div class="about-row"><span class="st">📝</span><div><b>Talaba Yordamchi</b><small>Mustaqil ish, referat va prezentatsiya uchun reja va matn. Har bir javobni o'zingiz tekshiring.</small></div></div>
       <div class="about-row"><span class="st">💬</span><div><b>Yordam</b><small>Savollar va takliflar uchun bot orqali murojaat qiling.</small></div></div>
       <div class="about-row"><span class="st">📄</span><div><b>Huquqiy ma'lumot</b><small>Ommaviy oferta va maxfiylik siyosati tez orada shu yerda bo'ladi.</small></div></div>
     </div>
@@ -267,7 +268,6 @@
 <script>
 // Server manzili: server tayyor bo'lgach shu yerga yozing, masalan "https://api.sizningdomen.uz/generate"
 const API_URL = "";
-const FREE_FIRST = 1;
 
 const tg = window.Telegram && window.Telegram.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
@@ -289,7 +289,7 @@ function saveAll() {
   lsSet("talaba_tarix", S.history.slice(0, 80));
 }
 
-/* ---------- Foydalanuvchi ma'lumoti ---------- */
+/* ---------- Foydalanuvchi ---------- */
 if (tg) {
   const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
   if (u) {
@@ -319,39 +319,27 @@ function toggleTheme() {
   temaQollash(tg && tg.colorScheme === "light" ? "kunduzgi" : "tungi");
 })();
 
-/* ---------- Rol ---------- */
-const ROLE_LBL = {
-  talaba:   { uni: "Universitet nomi", group: "Guruh raqami", dir: "Yo'nalish",        hint: "Mustaqil ish va referat uchun" },
-  oqituvchi:{ uni: "Muassasa nomi",    group: "Sinf",         dir: "Fan yo'nalishi",   hint: "Dars uchun materiallar" }
-};
-function setRole(r) {
-  S.role = r; saveAll();
-  renderRoles();
-  renderHome();
-  renderProfile();
-  if (document.getElementById("form").classList.contains("on") && st) renderForm();
-}
-function rolesHTML() {
-  return `<button class="${S.role === "talaba" ? "on" : ""}" onclick="setRole('talaba')">🎓 Talaba</button>
-          <button class="${S.role === "oqituvchi" ? "on" : ""}" onclick="setRole('oqituvchi')">👩‍🏫 O'qituvchi</button>`;
-}
-function renderRoles() {
-  document.getElementById("homeRoles").innerHTML = rolesHTML();
-  document.getElementById("profRoles").innerHTML = rolesHTML();
-  document.getElementById("homeSub").textContent = S.role === "talaba"
-    ? "Bugun qaysi ishni tayyorlaymiz?" : "Dars uchun nimani tayyorlaymiz?";
-}
-
-/* ---------- Yo'nalishlar ---------- */
+/* ---------- Yo'nalishlar (rolga qarab) ---------- */
 const TYPES = {
-  referat:       { name: "Referat",           icon: "📝", hint: "Reja va to'liq matn",                  topicQ: "Referat mavzusi nima?",       sizeQ: "Referat hajmi",     sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet",   min: 3, max: 10, def: 5, price: 2000 },
-  prezentatsiya: { name: "Prezentatsiya",     icon: "📊", hint: "Slaydlar va asosiy matn",              topicQ: "Prezentatsiya mavzusi nima?", sizeQ: "Uslub",             sizes: ["Oddiy", "Ilmiy", "Ijodiy"],   unit: "slayd", min: 5, max: 20, def: 8, price: 4000 },
-  mustaqil:      { name: "Mustaqil ish",      icon: "📚", hint: "Reja, bo'limlar va tekshiruv",         topicQ: "Mustaqil ish mavzusi nima?",  sizeQ: "Chuqurlik",         sizes: ["Yengil", "O'rta", "Chuqur"],  unit: "savol", min: 2, max: 6,  def: 3, price: 2000 },
-  ilmiy:         { name: "Ilmiy ish",         icon: "🔬", hint: "Dolzarblik, maqsad, metodika",         topicQ: "Ilmiy ish mavzusi nima?",     sizeQ: "Hajm",              sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bob",   min: 2, max: 5,  def: 3, price: 4000 },
-  konspekt:      { name: "Ma'ruza konspekti", icon: "📖", hint: "Tayyor konspekt",                      topicQ: "Ma'ruza mavzusi nima?",       sizeQ: "Uzunlik",           sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "band",  min: 3, max: 10, def: 5, price: 2000 }
+  referat:       { name: "Referat",           icon: "📝", hint: "Reja va to'liq matn",          topicQ: "Referat mavzusi nima?",       sizeQ: "Referat hajmi", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet",   min: 3, max: 10, def: 5,  price: 2000, personal: true },
+  prezentatsiya: { name: "Prezentatsiya",     icon: "📊", hint: "Slaydlar va asosiy matn",      topicQ: "Prezentatsiya mavzusi nima?", sizeQ: "Uslub",         sizes: ["Oddiy", "Ilmiy", "Ijodiy"],   unit: "slayd", min: 5, max: 20, def: 8,  price: 4000, personal: true },
+  mustaqil:      { name: "Mustaqil ish",      icon: "📚", hint: "Reja, bo'limlar va tekshiruv", topicQ: "Mustaqil ish mavzusi nima?",  sizeQ: "Chuqurlik",     sizes: ["Yengil", "O'rta", "Chuqur"],  unit: "savol", min: 2, max: 6,  def: 3,  price: 2000, personal: false },
+  ilmiy:         { name: "Ilmiy ish",         icon: "🔬", hint: "Dolzarblik, maqsad, metodika", topicQ: "Ilmiy ish mavzusi nima?",     sizeQ: "Hajm",          sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bob",   min: 2, max: 5,  def: 3,  price: 4000, personal: false },
+  konspekt:      { name: "Ma'ruza konspekti", icon: "📖", hint: "Tayyor konspekt",              topicQ: "Ma'ruza mavzusi nima?",       sizeQ: "Uzunlik",       sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "band",  min: 3, max: 10, def: 5,  price: 2000, personal: false }
 };
-const KEYS = Object.keys(TYPES);
+const ROLE_TYPES = {
+  talaba: ["prezentatsiya", "mustaqil", "referat"],
+  oqituvchi: ["prezentatsiya", "mustaqil", "ilmiy", "konspekt"]
+};
+const ROLE_TYPE_KEYS = { talaba: ["prezentatsiya", "mustaqil", "referat"], oqituvchi: ["prezentatsiya", "mustaqil", "ilmiy", "konspekt"] };
+const ROLE_LBL = {
+  talaba:    { uni: "Universitet nomi", group: "Guruh raqami", dir: "Yo'nalish",      hint: "Mustaqil ish, referat va prezentatsiya uchun" },
+  oqituvchi: { uni: "Muassasa nomi",    group: "Sinf",         dir: "Fan yo'nalishi", hint: "Dars uchun materiallar" }
+};
+const PERSONAL_FIELDS = ["f_ism", "f_fam", "f_uni", "f_fan", "f_guruh", "f_yonalish"];
 const fmt = n => Number(n).toLocaleString("uz-UZ").replace(/,/g, " ") + " so'm";
+
+function typesForRole() { return ROLE_TYPE_KEYS[S.role] || ROLE_TYPE_KEYS.talaba; }
 
 function rowHTML(k) {
   const t = TYPES[k];
@@ -361,26 +349,39 @@ function rowHTML(k) {
     <span class="arrow">›</span></button>`;
 }
 
-function renderFree() {
-  const box = document.getElementById("homeFree");
-  if (!S.freeUsed) {
-    box.innerHTML = `<div class="st" style="font-size:24px">🎁</div>
-      <div><b>Birinchi ish bepul</b><small>Bu imkoniyat faqat bir marta beriladi.</small></div>`;
-  } else {
-    box.innerHTML = `<div class="st" style="font-size:24px">✨</div>
-      <div><b>Bepul imkoniyat ishlatilgan</b><small>Keyingi ishlar balansdan yechiladi.</small></div>`;
-  }
+/* ---------- Rol ---------- */
+function rolesHTML() {
+  return `<button class="${S.role === "talaba" ? "on" : ""}" onclick="setRole('talaba')">🎓 Talaba</button>
+          <button class="${S.role === "oqituvchi" ? "on" : ""}" onclick="setRole('oqituvchi')">👩‍🏫 O'qituvchi</button>`;
 }
+function setRole(r) {
+  S.role = r; saveAll();
+  if (st && !ROLE_TYPE_KEYS[r].includes(st.type)) { st = null; go("home"); }
+  renderRoles(); renderHome(); renderProfile();
+  if (st && document.getElementById("form").classList.contains("on")) renderForm();
+}
+function renderRoles() {
+  document.getElementById("homeRoles").innerHTML = rolesHTML();
+  document.getElementById("profRoles").innerHTML = rolesHTML();
+  document.getElementById("homeSub").textContent = S.role === "talaba"
+    ? "Bugun qaysi ishni tayyorlaymiz?" : "Dars uchun nimani tayyorlaymiz?";
+}
+
+/* ---------- Asosiy sahifa ---------- */
 function renderHome() {
   renderRoles();
-  renderFree();
-  document.getElementById("allTypes").innerHTML = KEYS.map(rowHTML).join("");
+  const free = document.getElementById("homeFree");
+  free.innerHTML = !S.freeUsed
+    ? `<div class="st">🎁</div><div><b>Birinchi ish bepul</b><small>Bu imkoniyat faqat bir marta beriladi.</small></div>`
+    : `<div class="st">✨</div><div><b>Bepul imkoniyat ishlatilgan</b><small>Keyingi ishlar balansdan yechiladi.</small></div>`;
+  document.getElementById("allTypes").innerHTML = typesForRole().map(rowHTML).join("");
+  document.getElementById("miniBal").textContent = fmt(S.balance);
 }
 
 /* ---------- Ishlar va profil ---------- */
 function itemHTML(x) {
-  const costTxt = x.cost === 0 ? `<span class="cost free">Bepul</span>` : `<span class="cost paid">−${fmt(x.cost)}</span>`;
-  return `<div class="glass item"><div><b>${TYPES[x.type].icon} ${TYPES[x.type].name}: ${escapeHTML(x.topic)}</b><small>${x.sana}</small></div>${costTxt}</div>`;
+  const c = x.cost === 0 ? `<span class="cost free">Bepul</span>` : `<span class="cost paid">−${fmt(x.cost)}</span>`;
+  return `<div class="glass item"><div><b>${TYPES[x.type].icon} ${TYPES[x.type].name}: ${escapeHTML(x.topic)}</b><small>${x.sana}</small></div>${c}</div>`;
 }
 function renderHistory() {
   document.getElementById("histList").innerHTML = S.history.length
@@ -390,53 +391,64 @@ function renderHistory() {
 function renderProfile() {
   renderRoles();
   document.getElementById("balAmount").textContent = fmt(S.balance);
-  document.getElementById("giftBox").innerHTML = S.freeUsed
-    ? `<div class="st" style="font-size:26px">✨</div>
-       <div><b>Ishlatilgan</b><small>Bepul imkoniyat faqat bir marta beriladi va allaqachon sarflangan.</small></div>`
-    : `<div class="st" style="font-size:26px">🎁</div>
-       <div><b>1 marta bepul</b><small>Birinchi ishingiz uchun bir marta beriladi. Keyingi ishlar balansdan yechiladi.</small></div>`;
+  document.getElementById("giftBox").innerHTML = !S.freeUsed
+    ? `<div class="st">🎁</div><div><b>1 marta bepul</b><small>Birinchi ishingiz uchun bir marta beriladi. Keyingi ishlar balansdan yechiladi.</small></div>`
+    : `<div class="st">✨</div><div><b>Ishlatilgan</b><small>Bepul imkoniyat faqat bir marta beriladi va allaqachon sarflangan.</small></div>`;
   document.getElementById("spendBox").innerHTML = S.history.length
-    ? S.history.slice(0, 20).map(x => `<div class="row2"><span>${TYPES[x.type].icon} ${TYPES[x.type].name}</span><span class="${x.cost === 0 ? "cost free" : "cost paid"}">${x.cost === 0 ? "Bepul" : "−" + fmt(x.cost)}</span></div>`).join("")
+    ? S.history.slice(0, 20).map(x => `<div class="row2"><span>${TYPES[x.type].icon} ${TYPES[x.type].name}</span><span class="cost ${x.cost === 0 ? "free" : "paid"}">${x.cost === 0 ? "Bepul" : "−" + fmt(x.cost)}</span></div>`).join("")
     : `<div class="empty" style="padding:14px">Hali sarflanmagan.</div>`;
+  document.getElementById("miniBal").textContent = fmt(S.balance);
 }
 
-/* ---------- Forma: savollar tepadan pastga ---------- */
+/* ---------- Forma ---------- */
 let st = null;
 function openForm(k) {
-  st = { type: k, hajm: -1, soni: TYPES[k].def, extraOn: true };
+  st = { type: k, hajm: -1, soni: TYPES[k].def, topic: "", extraOn: true, ism: "", f_ism: "", f_fam: "", f_uni: "", f_fan: "", f_guruh: "", f_yonalish: "" };
   document.getElementById("out").innerHTML = "";
   go("form");
   renderForm();
 }
 function v(id) { const el = document.getElementById(id); return el ? el.value.trim() : ""; }
 
+// Qiymatlarni render paytida saqlab qolish
+function saveFields() {
+  if (!st) return;
+  const t = document.getElementById("f_topic");
+  if (t) st.topic = t.value;
+  PERSONAL_FIELDS.forEach(id => { const el = document.getElementById(id); if (el) st[id] = el.value; });
+}
+
 function renderForm() {
   const t = TYPES[st.type];
   const L = ROLE_LBL[S.role];
+  saveFields();
   document.getElementById("fTitle").textContent = t.name;
   document.getElementById("fHint").textContent = L.hint;
   document.getElementById("out").innerHTML = "";
 
-  let extra = "";
-  if (st.type === "prezentatsiya") {
-    extra = `
+  let personal = "";
+  if (t.personal) {
+    const labels = { f_uni: L.uni, f_guruh: L.group, f_yonalish: L.dir, f_fan: "Fan" };
+    const val = id => escapeHTML(st[id] || "");
+    personal = `
     <div class="glass field">
       <div class="extra-head" onclick="toggleExtra()">
-        <div><b>Titul ma'lumotlari</b><small>Slaydga muallif ma'lumotlari qo'shiladi</small></div>
-        <input type="checkbox" class="tick" id="f_extra_chk" ${st.extraOn ? "checked" : ""} onclick="event.stopPropagation(); toggleExtra()">
+        <div><b>Shaxsiy ma'lumot</b><small>Titulga chiqadigan ma'lumotlar</small></div>
+        <input type="checkbox" class="tick" ${st.extraOn ? "checked" : ""} tabindex="-1">
       </div>
-      <div class="extra-body ${st.extraOn ? "on" : ""}" id="extraBody">
+      ${st.extraOn ? `
+      <div class="extra-body">
         <div class="two">
-          <div class="field glass"><label>Ism</label><input id="f_ism" placeholder="Ism"></div>
-          <div class="field glass"><label>Familiya</label><input id="f_fam" placeholder="Familiya"></div>
+          <div class="field inner glass"><label>Ism</label><input id="f_ism" value="${val("f_ism")}" placeholder="Ism"></div>
+          <div class="field inner glass"><label>Familiya</label><input id="f_fam" value="${val("f_fam")}" placeholder="Familiya"></div>
         </div>
-        <div class="field glass"><label>${L.uni}</label><input id="f_uni" placeholder="${L.uni}"></div>
-        <div class="field glass"><label>Fan</label><input id="f_fan" placeholder="Masalan: Iqtisodiyot"></div>
+        <div class="field inner glass"><label>${labels.f_uni}</label><input id="f_uni" value="${val("f_uni")}" placeholder="${labels.f_uni}"></div>
+        <div class="field inner glass"><label>${labels.f_fan}</label><input id="f_fan" value="${val("f_fan")}" placeholder="Masalan: Iqtisodiyot"></div>
         <div class="two">
-          <div class="field glass"><label>${L.group}</label><input id="f_guruh" placeholder="${L.group}"></div>
-          <div class="field glass"><label>${L.dir}</label><input id="f_yonalish" placeholder="${L.dir}"></div>
+          <div class="field inner glass"><label>${labels.f_guruh}</label><input id="f_guruh" value="${val("f_guruh")}" placeholder="${labels.f_guruh}"></div>
+          <div class="field inner glass"><label>${labels.f_yonalish}</label><input id="f_yonalish" value="${val("f_yonalish")}" placeholder="${labels.f_yonalish}"></div>
         </div>
-      </div>
+      </div>` : ""}
     </div>`;
   }
 
@@ -445,7 +457,7 @@ function renderForm() {
       <label for="f_topic">${t.topicQ}</label>
       <textarea id="f_topic" placeholder="Mavzuni aniq yozing">${escapeHTML(st.topic || "")}</textarea>
     </div>
-    ${extra}
+    ${personal}
     <div class="glass field">
       <label>${t.sizeQ}</label>
       <div class="seg3">${t.sizes.map((s, i) =>
@@ -464,28 +476,12 @@ function renderForm() {
       <b style="color:var(--cyan)">${S.freeUsed ? fmt(t.price) : "Birinchi ish bepul"}</b>
     </div>
     <button class="cta" id="submitBtn" onclick="submitForm()">Tayyorlash</button>`;
-
-  if (st.type === "prezentatsiya") {
-    // qiymatlarni saqlab qolish uchun
-    ["f_ism","f_fam","f_uni","f_fan","f_guruh","f_yonalish"].forEach(id => {
-      const el = document.getElementById(id);
-      if (el && st[id]) el.value = st[id];
-      if (el) el.addEventListener("input", () => { st[id] = el.value; });
-    });
-  }
-  const topicEl = document.getElementById("f_topic");
-  topicEl.addEventListener("input", () => { st.topic = topicEl.value; });
 }
 
-function toggleExtra() {
-  st.extraOn = !st.extraOn;
-  const body = document.getElementById("extraBody");
-  const chk = document.getElementById("f_extra_chk");
-  if (body) body.classList.toggle("on", st.extraOn);
-  if (chk) chk.checked = st.extraOn;
-}
-function pickSize(i) { st.hajm = i; renderForm(); }
+function toggleExtra() { saveFields(); st.extraOn = !st.extraOn; renderForm(); }
+function pickSize(i) { saveFields(); st.hajm = i; renderForm(); }
 function stepBy(d) {
+  saveFields();
   const t = TYPES[st.type];
   st.soni = Math.min(t.max, Math.max(t.min, st.soni + d));
   renderForm();
@@ -497,18 +493,15 @@ async function submitForm() {
   if (!topic) { alert("Avval mavzuni yozing."); return; }
   if (st.hajm < 0) { alert("Hajm yoki uslubni tanlang."); return; }
 
-  let cost = 0, bepul = false;
-  if (!S.freeUsed) { bepul = true; }
-  else {
-    if (S.balance < t.price) {
-      alert("Balans yetarli emas (" + fmt(t.price) + " kerak). Balansni to'ldirish tez orada ishga tushadi.");
-      return;
-    }
-    cost = t.price;
+  const bepul = !S.freeUsed;
+  const cost = bepul ? 0 : t.price;
+  if (!bepul && S.balance < cost) {
+    alert("Balans yetarli emas (" + fmt(cost) + " kerak). Balansni to'ldirish tez orada ishga tushadi.");
+    return;
   }
 
   const meta = {};
-  if (st.type === "prezentatsiya" && st.extraOn) {
+  if (t.personal && st.extraOn) {
     meta.ism = v("f_ism"); meta.familiya = v("f_fam"); meta.uni = v("f_uni");
     meta.fan = v("f_fan"); meta.guruh = v("f_guruh"); meta.yonalish = v("f_yonalish");
   }
@@ -524,28 +517,27 @@ async function submitForm() {
     matn = "Xato yuz berdi. Qayta urinib ko'ring.";
   }
 
-  // to'lov faqat muvaffaqiyatli javobdan keyin yechiladi
-  if (bepul) { S.freeUsed = true; }
-  else { S.balance -= cost; }
-  S.history.unshift({ type: st.type, topic, cost: bepul ? 0 : cost, sana: new Date().toISOString().slice(0, 16).replace("T", " ") });
+  // to'lov faqat javob olingandan keyin yechiladi
+  if (bepul) S.freeUsed = true; else S.balance -= cost;
+  S.history.unshift({ type: st.type, topic, cost, sana: new Date().toISOString().slice(0, 16).replace("T", " ") });
   saveAll();
 
   loader.style.display = "none";
-  document.getElementById("formBox").style.display = "none";
+  document.getElementById("formBox").innerHTML = "";
   document.getElementById("out").innerHTML = `
     <div class="glass result">${escapeHTML(matn)}</div>
     <div class="disclaimer">AI javobini darslik va manbalar bilan tekshiring.</div>
     <button class="cta" onclick="openForm('${st.type}')">Yangi ish</button>
-    <button class="cta" style="background:var(--glass);color:var(--text);box-shadow:none;border:1px solid var(--line);margin-top:10px" onclick="go('home')">Asosiy sahifa</button>`;
+    <button class="cta ghost" onclick="go('home')">Asosiy sahifa</button>`;
   renderHome();
 }
 
 async function generate(type, topic, hajmMatn, son, meta) {
   if (!API_URL) {
     await new Promise(r => setTimeout(r, 900));
-    const m = meta && Object.keys(meta).length ? "\nMuallif: " + [meta.ism, meta.familiya].filter(Boolean).join(" ") + ", " + (meta.uni || "") : "";
+    const kishi = meta && meta.ism ? "\nMuallif: " + [meta.ism, meta.familiya].filter(Boolean).join(" ") : "";
     return "Demo rejim: server hali ulanmagan.\n\nMavzu: " + topic + "\nYo'nalish: " + TYPES[type].name +
-           "\nHajm: " + hajmMatn + ", " + son + " " + TYPES[type].unit + m +
+           "\nHajm: " + hajmMatn + ", " + son + " " + TYPES[type].unit + kishi +
            "\n\nServer ulangach, bu yerda haqiqiy tayyor matn chiqadi.";
   }
   const res = await fetch(API_URL, {
@@ -569,11 +561,11 @@ function go(id) {
   if (id === "home") renderHome();
   if (id === "history") renderHistory();
   if (id === "profile") renderProfile();
-  if (id === "form" && st) { document.getElementById("formBox").style.display = "block"; }
   window.scrollTo(0, 0);
 }
 document.querySelectorAll(".dock button").forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
 
+temaQollash(lsGet(TEMA_KEY, "tungi"));
 renderHome();
 renderProfile();
 </script>
