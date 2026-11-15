@@ -12,184 +12,143 @@
     --glass: rgba(255,255,255,.07); --glass-strong: rgba(255,255,255,.12);
     --line: rgba(255,255,255,.14);
     --text: #f4f2ff; --muted: #a9a5c7;
-    --accent1: #7c5cff; --accent2: #5b8cff;
+    --accent: #7c5cff; --accent2: #4f7bff;
     --field: rgba(10,8,30,.45);
-    --dock: rgba(20,16,44,.55);
+    --dock: rgba(20,16,44,.6);
     --radius: 22px;
   }
   body.light {
     --bg1: #f7f5ff; --bg2: #e9ecff;
     --glow-a: rgba(124,92,255,.18); --glow-b: rgba(91,140,255,.14);
-    --glass: rgba(255,255,255,.55); --glass-strong: rgba(255,255,255,.75);
+    --glass: rgba(255,255,255,.55); --glass-strong: rgba(255,255,255,.8);
     --line: rgba(110,90,230,.16);
     --text: #1b1640; --muted: #6b6a86;
-    --field: rgba(255,255,255,.7);
-    --dock: rgba(255,255,255,.6);
+    --field: rgba(255,255,255,.75);
+    --dock: rgba(255,255,255,.65);
   }
   * { box-sizing: border-box; }
-  html, body {
-    margin: 0; min-height: 100%; color: var(--text);
-    font-family: -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased;
-  }
-  body {
-    background: linear-gradient(170deg, var(--bg1) 0%, var(--bg2) 100%);
-    background-attachment: fixed;
-  }
+  html, body { margin: 0; min-height: 100%; color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { background: linear-gradient(170deg, var(--bg1) 0%, var(--bg2) 100%); background-attachment: fixed; }
   body::before {
     content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
-    background:
-      radial-gradient(520px 320px at 100% 0%, var(--glow-a), transparent 65%),
-      radial-gradient(480px 320px at 0% 55%, var(--glow-b), transparent 65%);
+    background: radial-gradient(520px 320px at 100% 0%, var(--glow-a), transparent 65%),
+                radial-gradient(480px 320px at 0% 55%, var(--glow-b), transparent 65%);
   }
-  .app { max-width: 520px; margin: 0 auto; min-height: 100vh; padding: 18px 16px 130px; }
+  .app { max-width: 520px; margin: 0 auto; min-height: 100vh; padding: 18px 16px 120px; }
+  .glass {
+    background: var(--glass); border: 1px solid var(--line); border-radius: var(--radius);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  }
 
   /* Yuqori qism */
-  .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
-  .brand { font-size: 20px; font-weight: 800; letter-spacing: .2px; }
+  .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .brand { font-size: 20px; font-weight: 800; }
   .brand span { color: #8f7bff; }
-  .top-right { display: flex; gap: 8px; }
-  .icon-btn {
+  .theme-btn {
     width: 40px; height: 40px; border-radius: 14px; border: 1px solid var(--line);
-    background: var(--glass); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    color: var(--text); font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-  }
-
-  .hello h1 { margin: 22px 0 4px; font-size: 24px; font-weight: 800; }
-  .hello p { margin: 0; font-size: 14px; color: var(--muted); }
-
-  /* Balans va limit */
-  .balance-row { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; gap: 10px; }
-  .pill {
-    display: flex; align-items: center; gap: 10px; padding: 9px 9px 9px 14px; border-radius: 16px;
-    background: var(--glass-strong); border: 1px solid var(--line);
+    background: var(--glass); color: var(--text); font-size: 17px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
     backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   }
-  .pill small { display: block; font-size: 11px; color: var(--muted); }
-  .pill b { font-size: 14px; }
-  .plus-btn {
-    width: 32px; height: 32px; border-radius: 10px; border: 0; color: #fff; font-size: 18px; font-weight: 700;
-    background: linear-gradient(135deg, var(--accent1), var(--accent2)); cursor: pointer;
-  }
+  h1.hello { margin: 20px 0 4px; font-size: 24px; font-weight: 800; }
+  .sub { margin: 0; font-size: 14px; color: var(--muted); }
 
-  /* Segment: kategoriya */
-  .seg-bar {
-    display: flex; gap: 6px; margin-top: 16px; padding: 5px; border-radius: 16px;
-    background: var(--glass); border: 1px solid var(--line);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    overflow-x: auto; scrollbar-width: none;
-  }
-  .seg-bar::-webkit-scrollbar { display: none; }
-  .seg-bar button {
-    flex: 0 0 auto; padding: 9px 14px; border-radius: 12px; border: 0; background: transparent;
-    color: var(--muted); font: inherit; font-size: 13px; cursor: pointer;
-  }
-  .seg-bar button.on { background: linear-gradient(135deg, var(--accent1), var(--accent2)); color: #fff; font-weight: 600; }
-
-  /* Katta gradient banner */
-  .banner {
-    margin-top: 18px; padding: 18px; border-radius: var(--radius); color: #fff;
-    background: linear-gradient(120deg, #7c5cff, #4f7bff);
-    box-shadow: 0 10px 30px rgba(92,80,255,.25);
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  }
-  .banner h3 { margin: 0 0 4px; font-size: 16px; }
-  .banner p { margin: 0; font-size: 13px; opacity: .85; }
-  .banner .bar { margin-top: 10px; height: 6px; border-radius: 6px; background: rgba(255,255,255,.25); overflow: hidden; }
-  .banner .bar i { display: block; height: 100%; background: #fff; border-radius: 6px; }
-  .banner .num { font-size: 26px; font-weight: 800; }
+  .limit { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; padding: 12px 14px; }
+  .limit small { color: var(--muted); font-size: 12px; }
+  .limit b { font-size: 15px; }
+  .limit b em { font-style: normal; color: #8f7bff; }
 
   .label { margin: 22px 2px 10px; font-size: 13px; color: var(--muted); }
 
-  /* Yo'nalish kartalari (shaffof) */
+  /* Yo'nalish kartalari */
   .list { display: flex; flex-direction: column; gap: 12px; }
   .row {
-    display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: var(--radius);
-    background: var(--glass); border: 1px solid var(--line); color: var(--text);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    display: flex; align-items: center; gap: 14px; padding: 14px; color: var(--text);
     font: inherit; text-align: left; width: 100%; cursor: pointer;
   }
   .badge {
     width: 52px; height: 52px; flex: 0 0 52px; border-radius: 16px; display: flex;
     align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
   }
   .row .info { flex: 1; min-width: 0; }
   .row h3 { margin: 0 0 3px; font-size: 16px; }
   .row p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.4; }
   .arrow { color: var(--muted); font-size: 20px; }
 
-  /* Forma */
-  .back { background: none; border: 0; color: #8f7bff; font: inherit; font-size: 14px; padding: 0; margin-bottom: 12px; cursor: pointer; }
-  .sheet {
-    background: var(--glass); border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 16px; margin-bottom: 14px; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-  }
-  .sheet h2 { margin: 0 0 4px; font-size: 18px; }
-  .sheet p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.5; }
+  /* Savollar oqimi */
+  .flow-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .back { background: none; border: 0; color: #8f7bff; font: inherit; font-size: 15px; cursor: pointer; padding: 6px 0; }
+  .dots { display: flex; gap: 6px; }
+  .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+  .dots i.on { background: #8f7bff; }
+  .q-title { margin: 6px 0 4px; font-size: 22px; font-weight: 800; }
+  .q-hint { margin: 0 0 16px; font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .qcard { padding: 16px; margin-bottom: 14px; }
+
   input, textarea {
-    width: 100%; padding: 13px 14px; border-radius: 16px; border: 1px solid var(--line);
+    width: 100%; padding: 14px; border-radius: 16px; border: 1px solid var(--line);
     background: var(--field); color: var(--text); font: inherit; font-size: 15px;
   }
-  textarea { min-height: 88px; resize: vertical; }
-  .field-label { display: block; margin: 18px 2px 8px; font-size: 13px; color: var(--muted); }
+  textarea { min-height: 110px; resize: vertical; }
 
-  .opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .opts { display: flex; flex-direction: column; gap: 10px; }
   .opts button {
-    padding: 12px 6px; border-radius: 14px; border: 1px solid var(--line); background: var(--glass);
-    color: var(--muted); font: inherit; font-size: 14px; cursor: pointer;
+    padding: 15px; border-radius: 16px; border: 1px solid var(--line); background: var(--glass);
+    color: var(--text); font: inherit; font-size: 15px; text-align: left; cursor: pointer;
   }
-  .opts button.on { border-color: #8f7bff; color: var(--text); background: var(--glass-strong); }
+  .opts button.on { border-color: #8f7bff; background: var(--glass-strong); font-weight: 600; }
 
-  .stepper { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .stepper { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .stepper button {
-    width: 44px; height: 44px; border-radius: 14px; border: 1px solid var(--line);
-    background: var(--glass); color: var(--text); font-size: 20px; cursor: pointer;
+    width: 56px; height: 56px; border-radius: 18px; border: 1px solid var(--line);
+    background: var(--glass); color: var(--text); font-size: 24px; cursor: pointer;
   }
-  .stepper .val { flex: 1; text-align: center; font-size: 20px; font-weight: 700; }
-  .stepper .val small { display: block; font-size: 12px; font-weight: 400; color: var(--muted); }
+  .stepper .val { flex: 1; text-align: center; font-size: 30px; font-weight: 800; }
+  .stepper .val small { display: block; font-size: 13px; font-weight: 400; color: var(--muted); }
+
+  .summary { padding: 6px 0; }
+  .summary div { display: flex; justify-content: space-between; gap: 12px; padding: 12px 2px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .summary div:last-child { border-bottom: 0; }
+  .summary span:first-child { color: var(--muted); }
+  .summary span:last-child { font-weight: 600; text-align: right; }
 
   .cta {
-    width: 100%; padding: 15px; border: 0; border-radius: 18px; margin-top: 18px; font: inherit;
+    width: 100%; padding: 16px; border: 0; border-radius: 18px; margin-top: 8px; font: inherit;
     font-size: 16px; font-weight: 700; color: #fff; cursor: pointer;
-    background: linear-gradient(120deg, #7c5cff, #4f7bff); box-shadow: 0 10px 28px rgba(92,80,255,.3);
+    background: linear-gradient(120deg, var(--accent), var(--accent2)); box-shadow: 0 10px 28px rgba(92,80,255,.3);
   }
   .cta:disabled { opacity: .55; }
   .loader { display: none; text-align: center; color: var(--muted); font-size: 14px; margin-top: 14px; }
-  .result {
-    white-space: pre-wrap; line-height: 1.65; font-size: 14px; margin-top: 16px;
-    padding: 16px; border-radius: var(--radius); background: var(--glass); border: 1px solid var(--line);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-  }
+  .result { white-space: pre-wrap; line-height: 1.65; font-size: 14px; padding: 16px; margin-top: 14px; }
   .disclaimer { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
 
-  .item {
-    padding: 13px 14px; border-radius: 18px; background: var(--glass); border: 1px solid var(--line);
-    margin-bottom: 10px; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-  }
+  .item { padding: 13px 14px; margin-bottom: 10px; }
   .item b { font-size: 14px; }
   .item small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
   .empty { text-align: center; color: var(--muted); padding: 36px 10px; font-size: 14px; }
   .stat { display: flex; justify-content: space-between; padding: 12px 2px; border-bottom: 1px solid var(--line); font-size: 14px; }
   .stat:last-child { border-bottom: 0; }
   .stat span:last-child { color: #8f7bff; font-weight: 600; }
+  .sheet { padding: 16px; margin-bottom: 14px; }
+  .sheet h2 { margin: 0 0 6px; font-size: 18px; }
+  .sheet p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.55; }
 
-  /* Pastki menyu (shaffof) */
+  /* Pastki menyu: 4 ta bo'lim, "+" yo'q */
   .dock {
     position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); width: calc(100% - 28px); max-width: 488px;
-    display: grid; grid-template-columns: 1fr 1fr 64px 1fr 1fr; align-items: center; padding: 8px 6px;
+    display: grid; grid-template-columns: repeat(4, 1fr); align-items: center; padding: 8px 6px;
     background: var(--dock); border: 1px solid var(--line); border-radius: 24px; z-index: 20;
     backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%);
   }
   .dock button {
-    background: none; border: 0; color: var(--muted); font: inherit; font-size: 11px; cursor: pointer;
-    display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0;
+    background: none; border: 0; color: var(--muted); font: inherit; font-size: 12px; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 0; border-radius: 16px;
   }
-  .dock button .ic { font-size: 18px; }
-  .dock button.on { color: #8f7bff; }
-  .dock .plus {
-    width: 56px; height: 56px; margin: 0 auto; border-radius: 50%; border: 0; color: #fff; font-size: 28px; font-weight: 700;
-    background: linear-gradient(135deg, #7c5cff, #4f7bff); box-shadow: 0 8px 24px rgba(92,80,255,.4);
-    display: flex; align-items: center; justify-content: center; padding: 0; transform: translateY(-14px);
-  }
+  .dock button.on { color: #8f7bff; background: var(--glass-strong); }
+  .dock button .ic { font-size: 18px; line-height: 1; }
+
   .screen { display: none; }
   .screen.on { display: block; }
 </style>
@@ -197,76 +156,33 @@
 <body>
 <div class="app">
 
-  <!-- BOSH -->
+  <!-- ASOSIY -->
   <section id="home" class="screen on">
     <div class="top">
       <div class="brand">Talaba<span>AI</span></div>
-      <div class="top-right">
-        <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Rejimni almashtirish">☾</button>
-      </div>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Rejimni almashtirish">☾</button>
     </div>
 
-    <div class="hello">
-      <h1 id="greet">Assalomu alaykum!</h1>
-      <p>Bugun nima tayyorlaymiz?</p>
+    <h1 class="hello" id="greet">Assalomu alaykum!</h1>
+    <p class="sub">Bugun nima tayyorlaymiz?</p>
+
+    <div class="glass limit" style="margin-top:16px">
+      <div><small>Bugungi so'rovlar</small><br><b><em id="leftNum">3</em> / <span id="limitMax">3</span> qoldi</b></div>
     </div>
 
-    <div class="balance-row">
-      <div class="pill">
-        <div><small>Balans</small><b>Sinov rejimi</b></div>
-        <button class="plus-btn" onclick="alert('To\'lov tizimi keyinroq ulanadi.')">+</button>
-      </div>
-    </div>
-
-    <div class="seg-bar" id="cats"></div>
-
-    <div class="banner">
-      <div>
-        <h3>Bugungi limit</h3>
-        <p>Kuniga <span id="limitTxt"></span> ta so'rov</p>
-        <div class="bar"><i id="limitBar" style="width:0%"></i></div>
-      </div>
-      <div class="num" id="limitNum">3</div>
-    </div>
-
-    <div class="label">Tavsiya etiladi</div>
-    <div class="list" id="featured"></div>
-
-    <div class="label">So'nggi ishlar</div>
-    <div id="recent"></div>
+    <div class="label">Yo'nalishlar</div>
+    <div class="list" id="allTypes"></div>
   </section>
 
-  <!-- YANGI -->
-  <section id="new" class="screen">
-    <div id="pick">
-      <div class="label" style="margin-top:0">Turi</div>
-      <div class="list" id="allTypes"></div>
+  <!-- SAVOLLAR OQIMI -->
+  <section id="flow" class="screen">
+    <div class="flow-head">
+      <button class="back" onclick="prevStep()">‹ Orqaga</button>
+      <div class="dots" id="dots"></div>
     </div>
-
-    <div id="form" style="display:none">
-      <button class="back" onclick="showPick()">← Orqaga</button>
-      <div class="sheet">
-        <h2 id="ftitle"></h2>
-        <p id="fhint"></p>
-      </div>
-
-      <label class="field-label" for="topic">Mavzu</label>
-      <textarea id="topic" placeholder="Masalan: Iqtisodiyot asoslari"></textarea>
-
-      <span class="field-label" id="sizeLabel"></span>
-      <div class="opts" id="sizeSeg"></div>
-
-      <span class="field-label">Hajm (soni)</span>
-      <div class="stepper">
-        <button onclick="stepBy(-1)">−</button>
-        <div class="val"><span id="countVal">1</span><small id="countHint"></small></div>
-        <button onclick="stepBy(1)">+</button>
-      </div>
-
-      <button class="cta" id="submitBtn" onclick="submitForm()">Tayyorlash</button>
-      <div class="loader" id="loader">Tayyorlanmoqda, biroz kuting...</div>
-      <div id="out"></div>
-    </div>
+    <div id="stepBox"></div>
+    <div class="loader" id="loader">Tayyorlanmoqda, biroz kuting...</div>
+    <div id="out"></div>
   </section>
 
   <!-- ISHLAR -->
@@ -277,11 +193,11 @@
 
   <!-- PROFIL -->
   <section id="profile" class="screen">
-    <div class="sheet">
+    <div class="glass sheet">
       <h2 id="pname">Foydalanuvchi</h2>
       <p id="puser">Telegram orqali kirgan</p>
     </div>
-    <div class="sheet">
+    <div class="glass sheet">
       <div class="stat"><span>Balans</span><span>Sinov rejimi</span></div>
       <div class="stat"><span>Kunlik limit</span><span id="pdaily">3 ta so'rov</span></div>
       <div class="stat"><span>Bugun ishlatilgan</span><span id="pused">0</span></div>
@@ -291,16 +207,16 @@
 
   <!-- HAQIDA -->
   <section id="about" class="screen">
-    <div class="sheet">
+    <div class="glass sheet">
       <h2>Talaba Yordamchi</h2>
       <p>Mustaqil ish, referat, prezentatsiya, ilmiy ish va ma'ruza konspektlari uchun tayyor reja va matn. Har bir javobni o'zingiz tekshirib, manbalar bilan to'ldiring.</p>
     </div>
-    <div class="sheet">
-      <h2 style="font-size:15px">Yordam</h2>
+    <div class="glass sheet">
+      <h2 style="font-size:16px">Yordam</h2>
       <p>Savollar va takliflar uchun bot orqali murojaat qiling.</p>
     </div>
-    <div class="sheet">
-      <h2 style="font-size:15px">Huquqiy ma'lumot</h2>
+    <div class="glass sheet">
+      <h2 style="font-size:16px">Huquqiy ma'lumot</h2>
       <p>Ommaviy oferta va maxfiylik siyosati tez orada shu yerda bo'ladi.</p>
     </div>
   </section>
@@ -310,7 +226,6 @@
 <nav class="dock">
   <button class="on" data-go="home"><span class="ic">⌂</span>Asosiy</button>
   <button data-go="history"><span class="ic">▤</span>Ishlar</button>
-  <button class="plus" data-go="new" aria-label="Yangi ish">+</button>
   <button data-go="profile"><span class="ic">◌</span>Profil</button>
   <button data-go="about"><span class="ic">i</span>Haqida</button>
 </nav>
@@ -331,7 +246,7 @@ if (tg) {
   }
 }
 
-/* ---------- Kunduzgi / tungi rejim ---------- */
+/* ---------- Mavzu rejimi ---------- */
 const TEMA_KEY = "talaba_tema";
 function temaQollash(rejim) {
   document.body.classList.toggle("light", rejim === "kunduzgi");
@@ -354,45 +269,25 @@ function toggleTheme() {
 
 /* ---------- Yo'nalishlar ---------- */
 const TYPES = {
-  referat:       { name: "Referat",           short: "Ref",  color: "#7c5cff", hint: "Mavzu bo'yicha reja va to'liq matn",      sizeLabel: "Hajm", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet", min: 3, max: 10, def: 5 },
-  prezentatsiya: { name: "Prezentatsiya",     short: "Slayd", color: "#5b8cff", hint: "Slaydlar ro'yxati va asosiy matn",      sizeLabel: "Uslub", sizes: ["Oddiy", "Ilmiy", "Ijodiy"], unit: "slayd", min: 5, max: 20, def: 8 },
-  mustaqil:      { name: "Mustaqil ish",      short: "Must", color: "#9b6dff", hint: "Reja, bo'limlar va tekshirish ro'yxati", sizeLabel: "Chuqurlik", sizes: ["Yengil", "O'rta", "Chuqur"], unit: "savol", min: 2, max: 6, def: 3 },
-  ilmiy:         { name: "Ilmiy ish",         short: "Ilmi", color: "#4f8bff", hint: "Dolzarblik, maqsad, metodika, xulosa",   sizeLabel: "Hajm", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bob", min: 2, max: 5, def: 3 },
-  konspekt:      { name: "Ma'ruza konspekti", short: "Kons", color: "#a268ff", hint: "Mavzu bo'yicha tayyor konspekt",          sizeLabel: "Uzunlik", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "band", min: 3, max: 10, def: 5 }
+  referat:       { name: "Referat",           short: "Ref",  hint: "Reja va to'liq matn",                 topicQ: "Referat mavzusi nima?",         sizeQ: "Referat qanday hajmda bo'lsin?", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet", min: 3, max: 10, def: 5 },
+  prezentatsiya: { name: "Prezentatsiya",     short: "Slayd", hint: "Slaydlar va asosiy matn",             topicQ: "Prezentatsiya mavzusi nima?",   sizeQ: "Uslub qanday bo'lsin?",          sizes: ["Oddiy", "Ilmiy", "Ijodiy"], unit: "slayd", min: 5, max: 20, def: 8 },
+  mustaqil:      { name: "Mustaqil ish",      short: "Must", hint: "Reja, bo'limlar va tekshiruv",        topicQ: "Mustaqil ish mavzusi nima?",    sizeQ: "Chuqurlik qanday bo'lsin?",      sizes: ["Yengil", "O'rta", "Chuqur"], unit: "savol", min: 2, max: 6, def: 3 },
+  ilmiy:         { name: "Ilmiy ish",         short: "Ilmi", hint: "Dolzarblik, maqsad, metodika, xulosa", topicQ: "Ilmiy ish mavzusi nima?",       sizeQ: "Hajm qanday bo'lsin?",           sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bob", min: 2, max: 5, def: 3 },
+  konspekt:      { name: "Ma'ruza konspekti", short: "Kons", hint: "Tayyor konspekt",                     topicQ: "Ma'ruza mavzusi nima?",         sizeQ: "Uzunlik qanday bo'lsin?",        sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "band", min: 3, max: 10, def: 5 }
 };
 const KEYS = Object.keys(TYPES);
+const STEPS = 4; // 0 mavzu, 1 uslub/hajm, 2 soni, 3 tekshirish
 
 function rowHTML(k) {
   const t = TYPES[k];
-  return `<button class="row" onclick="openForm('${k}')">
-    <div class="badge" style="background:linear-gradient(135deg, ${t.color}, #4f7bff)">${t.short}</div>
+  return `<button class="row glass" onclick="startFlow('${k}')">
+    <div class="badge">${t.short}</div>
     <div class="info"><h3>${t.name}</h3><p>${t.hint}</p></div>
     <span class="arrow">›</span></button>`;
 }
+document.getElementById("allTypes").innerHTML = KEYS.map(rowHTML).join("");
 
-/* ---------- Bosh sahifa ---------- */
-let filter = "hammasi";
-function renderCats() {
-  const items = [["hammasi", "Hammasi"], ...KEYS.map(k => [k, TYPES[k].name])];
-  document.getElementById("cats").innerHTML = items.map(([k, n]) =>
-    `<button class="${filter === k ? "on" : ""}" onclick="setFilter('${k}')">${n}</button>`).join("");
-}
-function setFilter(k) { filter = k; renderHome(); }
-function renderHome() {
-  renderCats();
-  const shown = filter === "hammasi" ? KEYS.slice(0, 3) : [filter];
-  document.getElementById("featured").innerHTML = shown.map(rowHTML).join("");
-  renderRecent();
-  const used = bugunSoni();
-  const left = Math.max(0, DAILY_LIMIT - used);
-  document.getElementById("limitTxt").textContent = left;
-  document.getElementById("limitNum").textContent = left + "/" + DAILY_LIMIT;
-  document.getElementById("limitBar").style.width = (left / DAILY_LIMIT * 100) + "%";
-  document.getElementById("pused").textContent = used;
-  document.getElementById("pdaily").textContent = DAILY_LIMIT + " ta so'rov";
-}
-
-/* ---------- Tarix ---------- */
+/* ---------- Tarix va limit ---------- */
 const KEY = "talaba_tarix";
 function tarixOl() { try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch (e) { return []; } }
 function tarixSaqla(list) { try { localStorage.setItem(KEY, JSON.stringify(list.slice(0, 50))); } catch (e) {} }
@@ -400,86 +295,133 @@ function bugunSoni() {
   const bugun = new Date().toISOString().slice(0, 10);
   return tarixOl().filter(x => x.sana.startsWith(bugun)).length;
 }
-function itemHTML(x) {
-  return `<div class="item"><b>${TYPES[x.type].name}: ${escapeHTML(x.topic)}</b><small>${x.sana}</small></div>`;
+function renderLimit() {
+  const used = bugunSoni();
+  document.getElementById("leftNum").textContent = Math.max(0, DAILY_LIMIT - used);
+  document.getElementById("limitMax").textContent = DAILY_LIMIT;
+  document.getElementById("pused").textContent = used;
+  document.getElementById("pdaily").textContent = DAILY_LIMIT + " ta so'rov";
 }
-function renderRecent() {
-  const list = tarixOl();
-  document.getElementById("recent").innerHTML = list.length
-    ? list.slice(0, 3).map(itemHTML).join("")
-    : `<div class="empty">Hali ishlar yo'q. "+" tugmasi bilan boshlang.</div>`;
+function itemHTML(x) {
+  return `<div class="glass item"><b>${TYPES[x.type].name}: ${escapeHTML(x.topic)}</b><small>${x.sana}</small></div>`;
 }
 function renderHistory() {
   const list = tarixOl();
   document.getElementById("histList").innerHTML = list.length
     ? list.map(itemHTML).join("")
-    : `<div class="empty">Tarix bo'sh.</div>`;
+    : `<div class="empty">Hali ishlar yo'q. Asosiy sahifadan yo'nalish tanlang.</div>`;
 }
 
-/* ---------- Yangi ish formasi ---------- */
-let joriy = null, hajm = 0, soni = 0;
-function renderAllTypes() {
-  document.getElementById("allTypes").innerHTML = KEYS.map(rowHTML).join("");
-}
-function openForm(k) {
-  joriy = k; const t = TYPES[k];
-  hajm = 0; soni = t.def;
-  document.getElementById("pick").style.display = "none";
-  document.getElementById("form").style.display = "block";
-  document.getElementById("ftitle").textContent = t.name;
-  document.getElementById("fhint").textContent = t.hint;
-  document.getElementById("sizeLabel").textContent = t.sizeLabel;
-  document.getElementById("sizeSeg").innerHTML = t.sizes.map((s, i) =>
-    `<button class="${i === hajm ? "on" : ""}" onclick="setSize(${i})">${s}</button>`).join("");
-  document.getElementById("topic").value = "";
+/* ---------- Savollar oqimi ---------- */
+let st = null;
+function startFlow(k) {
+  st = { type: k, step: 0, topic: "", hajm: -1, soni: TYPES[k].def };
   document.getElementById("out").innerHTML = "";
-  renderCount();
+  go("flow");
+  renderStep();
 }
-function setSize(i) {
-  hajm = i;
-  document.querySelectorAll("#sizeSeg button").forEach((b, j) => b.classList.toggle("on", j === i));
+function renderDots() {
+  document.getElementById("dots").innerHTML = Array.from({ length: STEPS }, (_, i) =>
+    `<i class="${i <= st.step ? "on" : ""}"></i>`).join("");
 }
+function renderStep() {
+  const t = TYPES[st.type];
+  renderDots();
+  const box = document.getElementById("stepBox");
+
+  if (st.step === 0) {
+    box.innerHTML = `
+      <div class="q-title">${t.topicQ}</div>
+      <p class="q-hint">Mavzuni aniq yozing, masalan: "Iqtisodiyot asoslari".</p>
+      <div class="glass qcard"><textarea id="topic" placeholder="Mavzuni yozing">${escapeHTML(st.topic)}</textarea></div>
+      <button class="cta" onclick="nextStep()">Davom etish</button>`;
+    setTimeout(() => document.getElementById("topic").focus(), 50);
+  }
+
+  if (st.step === 1) {
+    box.innerHTML = `
+      <div class="q-title">${t.sizeQ}</div>
+      <p class="q-hint">Bitta variantni tanlang.</p>
+      <div class="opts">${t.sizes.map((s, i) =>
+        `<button class="${i === st.hajm ? "on" : ""}" onclick="pickSize(${i})">${s}</button>`).join("")}</div>
+      <div style="height:14px"></div>
+      <button class="cta" onclick="nextStep()">Davom etish</button>`;
+  }
+
+  if (st.step === 2) {
+    box.innerHTML = `
+      <div class="q-title">Nechta ${t.unit} kerak?</div>
+      <p class="q-hint">${t.min} dan ${t.max} gacha.</p>
+      <div class="glass qcard">
+        <div class="stepper">
+          <button onclick="stepBy(-1)">−</button>
+          <div class="val">${st.soni}<small>${t.unit}</small></div>
+          <button onclick="stepBy(1)">+</button>
+        </div>
+      </div>
+      <button class="cta" onclick="nextStep()">Davom etish</button>`;
+  }
+
+  if (st.step === 3) {
+    const hajmMatn = st.hajm >= 0 ? t.sizes[st.hajm] : "—";
+    box.innerHTML = `
+      <div class="q-title">Tekshiring va tayyorlang</div>
+      <p class="q-hint">Hammasi to'g'ri bo'lsa, tayyorlashni bosing.</p>
+      <div class="glass qcard summary">
+        <div><span>Yo'nalish</span><span>${t.name}</span></div>
+        <div><span>Mavzu</span><span>${escapeHTML(st.topic)}</span></div>
+        <div><span>Tanlov</span><span>${hajmMatn}</span></div>
+        <div><span>Soni</span><span>${st.soni} ${t.unit}</span></div>
+        <div><span>Til</span><span>O'zbek</span></div>
+      </div>
+      <button class="cta" id="submitBtn" onclick="submitForm()">Tayyorlash</button>`;
+  }
+}
+
+function pickSize(i) { st.hajm = i; renderStep(); }
 function stepBy(d) {
-  const t = TYPES[joriy];
-  soni = Math.min(t.max, Math.max(t.min, soni + d));
-  renderCount();
+  const t = TYPES[st.type];
+  st.soni = Math.min(t.max, Math.max(t.min, st.soni + d));
+  renderStep();
 }
-function renderCount() {
-  const t = TYPES[joriy];
-  document.getElementById("countVal").textContent = soni;
-  document.getElementById("countHint").textContent = t.unit + " (" + t.min + "–" + t.max + ")";
+function nextStep() {
+  if (st.step === 0) {
+    const v = document.getElementById("topic").value.trim();
+    if (!v) { alert("Avval mavzuni yozing."); return; }
+    st.topic = v;
+  }
+  if (st.step === 1 && st.hajm < 0) { alert("Variantlardan birini tanlang."); return; }
+  st.step = Math.min(STEPS - 1, st.step + 1);
+  renderStep();
 }
-function showPick() {
-  document.getElementById("pick").style.display = "block";
-  document.getElementById("form").style.display = "none";
+function prevStep() {
+  if (st.step === 0) { go("home"); return; }
+  st.step -= 1;
+  renderStep();
 }
 
 async function submitForm() {
-  const topic = document.getElementById("topic").value.trim();
-  if (!topic) { alert("Avval mavzuni yozing."); return; }
   if (bugunSoni() >= DAILY_LIMIT) { alert("Bugungi limit tugadi (" + DAILY_LIMIT + " ta so'rov). Ertaga qaytib keling."); return; }
-
+  const t = TYPES[st.type];
   const btn = document.getElementById("submitBtn");
   const loader = document.getElementById("loader");
   btn.disabled = true; loader.style.display = "block";
-  document.getElementById("out").innerHTML = "";
 
-  const t = TYPES[joriy];
   let matn;
   try {
-    matn = await generate(joriy, topic, t.sizes[hajm], soni);
+    matn = await generate(st.type, st.topic, t.sizes[st.hajm], st.soni);
   } catch (e) {
     matn = "Xato yuz berdi. Qayta urinib ko'ring.";
   }
 
   btn.disabled = false; loader.style.display = "none";
-  document.getElementById("out").innerHTML = `<div class="result">${escapeHTML(matn)}</div>
+  document.getElementById("out").innerHTML = `<div class="glass result">${escapeHTML(matn)}</div>
     <div class="disclaimer">AI javobini darslik va manbalar bilan tekshiring.</div>`;
 
   const list = tarixOl();
-  list.unshift({ type: joriy, topic, sana: new Date().toISOString().slice(0, 16).replace("T", " ") });
+  list.unshift({ type: st.type, topic: st.topic, sana: new Date().toISOString().slice(0, 16).replace("T", " ") });
   tarixSaqla(list);
-  renderHome();
+  renderLimit();
 }
 
 async function generate(type, topic, hajmMatn, son) {
@@ -502,18 +444,18 @@ function escapeHTML(s) {
   return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
+/* ---------- Navigatsiya ---------- */
 function go(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.toggle("on", s.id === id));
   document.querySelectorAll(".dock button").forEach(b => b.classList.toggle("on", b.dataset.go === id));
   if (id === "history") renderHistory();
-  if (id === "home") renderHome();
-  if (id === "new") showPick();
+  if (id === "home") renderLimit();
+  if (id === "profile") renderLimit();
   window.scrollTo(0, 0);
 }
 document.querySelectorAll(".dock button").forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
 
-renderAllTypes();
-renderHome();
+renderLimit();
 </script>
 </body>
 </html>
