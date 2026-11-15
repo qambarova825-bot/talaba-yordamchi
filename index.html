@@ -12,7 +12,7 @@
     --glass: rgba(255,255,255,.07); --glass-strong: rgba(255,255,255,.12);
     --line: rgba(255,255,255,.14);
     --text: #f4f2ff; --muted: #a9a5c7;
-    --accent: #7c5cff; --accent2: #4f7bff;
+    --accent: #7c5cff; --accent2: #4f7bff; --soft: #8f7bff;
     --field: rgba(10,8,30,.45);
     --dock: rgba(20,16,44,.6);
     --radius: 22px;
@@ -22,7 +22,7 @@
     --glow-a: rgba(124,92,255,.18); --glow-b: rgba(91,140,255,.14);
     --glass: rgba(255,255,255,.55); --glass-strong: rgba(255,255,255,.8);
     --line: rgba(110,90,230,.16);
-    --text: #1b1640; --muted: #6b6a86;
+    --text: #1b1640; --muted: #6b6a86; --soft: #6d4cf0;
     --field: rgba(255,255,255,.75);
     --dock: rgba(255,255,255,.65);
   }
@@ -35,7 +35,7 @@
     background: radial-gradient(520px 320px at 100% 0%, var(--glow-a), transparent 65%),
                 radial-gradient(480px 320px at 0% 55%, var(--glow-b), transparent 65%);
   }
-  .app { max-width: 520px; margin: 0 auto; min-height: 100vh; padding: 18px 16px 120px; }
+  .app { max-width: 520px; margin: 0 auto; min-height: 100vh; padding: 18px 16px calc(130px + env(safe-area-inset-bottom)); }
   .glass {
     background: var(--glass); border: 1px solid var(--line); border-radius: var(--radius);
     backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
@@ -44,7 +44,7 @@
   /* Yuqori qism */
   .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
   .brand { font-size: 20px; font-weight: 800; }
-  .brand span { color: #8f7bff; }
+  .brand span { color: var(--soft); }
   .theme-btn {
     width: 40px; height: 40px; border-radius: 14px; border: 1px solid var(--line);
     background: var(--glass); color: var(--text); font-size: 17px; cursor: pointer;
@@ -54,10 +54,10 @@
   h1.hello { margin: 20px 0 4px; font-size: 24px; font-weight: 800; }
   .sub { margin: 0; font-size: 14px; color: var(--muted); }
 
-  .limit { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; padding: 12px 14px; }
+  .limit { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; padding: 14px 16px; }
   .limit small { color: var(--muted); font-size: 12px; }
-  .limit b { font-size: 15px; }
-  .limit b em { font-style: normal; color: #8f7bff; }
+  .limit b { font-size: 16px; }
+  .limit b em { font-style: normal; color: var(--soft); }
 
   .label { margin: 22px 2px 10px; font-size: 13px; color: var(--muted); }
 
@@ -67,6 +67,7 @@
     display: flex; align-items: center; gap: 14px; padding: 14px; color: var(--text);
     font: inherit; text-align: left; width: 100%; cursor: pointer;
   }
+  .row:active { transform: scale(.985); }
   .badge {
     width: 52px; height: 52px; flex: 0 0 52px; border-radius: 16px; display: flex;
     align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff;
@@ -79,10 +80,10 @@
 
   /* Savollar oqimi */
   .flow-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-  .back { background: none; border: 0; color: #8f7bff; font: inherit; font-size: 15px; cursor: pointer; padding: 6px 0; }
+  .back { background: none; border: 0; color: var(--soft); font: inherit; font-size: 15px; cursor: pointer; padding: 6px 0; }
   .dots { display: flex; gap: 6px; }
   .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
-  .dots i.on { background: #8f7bff; }
+  .dots i.on { background: var(--soft); }
   .q-title { margin: 6px 0 4px; font-size: 22px; font-weight: 800; }
   .q-hint { margin: 0 0 16px; font-size: 14px; color: var(--muted); line-height: 1.5; }
   .qcard { padding: 16px; margin-bottom: 14px; }
@@ -98,7 +99,7 @@
     padding: 15px; border-radius: 16px; border: 1px solid var(--line); background: var(--glass);
     color: var(--text); font: inherit; font-size: 15px; text-align: left; cursor: pointer;
   }
-  .opts button.on { border-color: #8f7bff; background: var(--glass-strong); font-weight: 600; }
+  .opts button.on { border-color: var(--soft); background: var(--glass-strong); font-weight: 600; }
 
   .stepper { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .stepper button {
@@ -108,8 +109,8 @@
   .stepper .val { flex: 1; text-align: center; font-size: 30px; font-weight: 800; }
   .stepper .val small { display: block; font-size: 13px; font-weight: 400; color: var(--muted); }
 
-  .summary { padding: 6px 0; }
-  .summary div { display: flex; justify-content: space-between; gap: 12px; padding: 12px 2px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .summary { padding: 6px 16px; }
+  .summary div { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
   .summary div:last-child { border-bottom: 0; }
   .summary span:first-child { color: var(--muted); }
   .summary span:last-child { font-weight: 600; text-align: right; }
@@ -119,6 +120,7 @@
     font-size: 16px; font-weight: 700; color: #fff; cursor: pointer;
     background: linear-gradient(120deg, var(--accent), var(--accent2)); box-shadow: 0 10px 28px rgba(92,80,255,.3);
   }
+  .cta.ghost { background: var(--glass); color: var(--text); box-shadow: none; border: 1px solid var(--line); margin-top: 10px; }
   .cta:disabled { opacity: .55; }
   .loader { display: none; text-align: center; color: var(--muted); font-size: 14px; margin-top: 14px; }
   .result { white-space: pre-wrap; line-height: 1.65; font-size: 14px; padding: 16px; margin-top: 14px; }
@@ -130,14 +132,15 @@
   .empty { text-align: center; color: var(--muted); padding: 36px 10px; font-size: 14px; }
   .stat { display: flex; justify-content: space-between; padding: 12px 2px; border-bottom: 1px solid var(--line); font-size: 14px; }
   .stat:last-child { border-bottom: 0; }
-  .stat span:last-child { color: #8f7bff; font-weight: 600; }
+  .stat span:last-child { color: var(--soft); font-weight: 600; }
   .sheet { padding: 16px; margin-bottom: 14px; }
   .sheet h2 { margin: 0 0 6px; font-size: 18px; }
   .sheet p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.55; }
 
-  /* Pastki menyu: 4 ta bo'lim, "+" yo'q */
+  /* Pastki menyu */
   .dock {
-    position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); width: calc(100% - 28px); max-width: 488px;
+    position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: calc(12px + env(safe-area-inset-bottom)); width: calc(100% - 28px); max-width: 488px;
     display: grid; grid-template-columns: repeat(4, 1fr); align-items: center; padding: 8px 6px;
     background: var(--dock); border: 1px solid var(--line); border-radius: 24px; z-index: 20;
     backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%);
@@ -146,7 +149,7 @@
     background: none; border: 0; color: var(--muted); font: inherit; font-size: 12px; cursor: pointer;
     display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 0; border-radius: 16px;
   }
-  .dock button.on { color: #8f7bff; background: var(--glass-strong); }
+  .dock button.on { color: var(--soft); background: var(--glass-strong); }
   .dock button .ic { font-size: 18px; line-height: 1; }
 
   .screen { display: none; }
@@ -166,8 +169,11 @@
     <h1 class="hello" id="greet">Assalomu alaykum!</h1>
     <p class="sub">Bugun nima tayyorlaymiz?</p>
 
-    <div class="glass limit" style="margin-top:16px">
-      <div><small>Bugungi so'rovlar</small><br><b><em id="leftNum">3</em> / <span id="limitMax">3</span> qoldi</b></div>
+    <div class="glass limit">
+      <div>
+        <small>Bugungi so'rovlar</small><br>
+        <b><em id="leftNum">3</em> / <span id="limitMax">3</span> qoldi</b>
+      </div>
     </div>
 
     <div class="label">Yo'nalishlar</div>
@@ -246,7 +252,7 @@ if (tg) {
   }
 }
 
-/* ---------- Mavzu rejimi ---------- */
+/* ---------- Kunduzgi / tungi rejim ---------- */
 const TEMA_KEY = "talaba_tema";
 function temaQollash(rejim) {
   document.body.classList.toggle("light", rejim === "kunduzgi");
@@ -269,14 +275,14 @@ function toggleTheme() {
 
 /* ---------- Yo'nalishlar ---------- */
 const TYPES = {
-  referat:       { name: "Referat",           short: "Ref",  hint: "Reja va to'liq matn",                 topicQ: "Referat mavzusi nima?",         sizeQ: "Referat qanday hajmda bo'lsin?", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet", min: 3, max: 10, def: 5 },
-  prezentatsiya: { name: "Prezentatsiya",     short: "Slayd", hint: "Slaydlar va asosiy matn",             topicQ: "Prezentatsiya mavzusi nima?",   sizeQ: "Uslub qanday bo'lsin?",          sizes: ["Oddiy", "Ilmiy", "Ijodiy"], unit: "slayd", min: 5, max: 20, def: 8 },
-  mustaqil:      { name: "Mustaqil ish",      short: "Must", hint: "Reja, bo'limlar va tekshiruv",        topicQ: "Mustaqil ish mavzusi nima?",    sizeQ: "Chuqurlik qanday bo'lsin?",      sizes: ["Yengil", "O'rta", "Chuqur"], unit: "savol", min: 2, max: 6, def: 3 },
-  ilmiy:         { name: "Ilmiy ish",         short: "Ilmi", hint: "Dolzarblik, maqsad, metodika, xulosa", topicQ: "Ilmiy ish mavzusi nima?",       sizeQ: "Hajm qanday bo'lsin?",           sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bob", min: 2, max: 5, def: 3 },
-  konspekt:      { name: "Ma'ruza konspekti", short: "Kons", hint: "Tayyor konspekt",                     topicQ: "Ma'ruza mavzusi nima?",         sizeQ: "Uzunlik qanday bo'lsin?",        sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "band", min: 3, max: 10, def: 5 }
+  referat:       { name: "Referat",           short: "Ref",  hint: "Reja va to'liq matn",                  topicQ: "Referat mavzusi nima?",       sizeQ: "Referat qanday hajmda bo'lsin?", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet",   min: 3, max: 10, def: 5 },
+  prezentatsiya: { name: "Prezentatsiya",     short: "Slayd", hint: "Slaydlar va asosiy matn",              topicQ: "Prezentatsiya mavzusi nima?", sizeQ: "Uslub qanday bo'lsin?",          sizes: ["Oddiy", "Ilmiy", "Ijodiy"],   unit: "slayd", min: 5, max: 20, def: 8 },
+  mustaqil:      { name: "Mustaqil ish",      short: "Must", hint: "Reja, bo'limlar va tekshiruv",         topicQ: "Mustaqil ish mavzusi nima?",  sizeQ: "Chuqurlik qanday bo'lsin?",      sizes: ["Yengil", "O'rta", "Chuqur"],  unit: "savol", min: 2, max: 6,  def: 3 },
+  ilmiy:         { name: "Ilmiy ish",         short: "Ilmi", hint: "Dolzarblik, maqsad, metodika, xulosa", topicQ: "Ilmiy ish mavzusi nima?",     sizeQ: "Hajm qanday bo'lsin?",           sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bob",   min: 2, max: 5,  def: 3 },
+  konspekt:      { name: "Ma'ruza konspekti", short: "Kons", hint: "Tayyor konspekt",                      topicQ: "Ma'ruza mavzusi nima?",       sizeQ: "Uzunlik qanday bo'lsin?",        sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "band",  min: 3, max: 10, def: 5 }
 };
 const KEYS = Object.keys(TYPES);
-const STEPS = 4; // 0 mavzu, 1 uslub/hajm, 2 soni, 3 tekshirish
+const STEPS = 4; // 0 mavzu, 1 hajm, 2 soni, 3 tekshirish
 
 function rowHTML(k) {
   const t = TYPES[k];
@@ -315,6 +321,10 @@ function renderHistory() {
 /* ---------- Savollar oqimi ---------- */
 let st = null;
 function startFlow(k) {
+  if (bugunSoni() >= DAILY_LIMIT) {
+    alert("Bugungi limit tugadi (" + DAILY_LIMIT + " ta so'rov). Ertaga qaytib keling.");
+    return;
+  }
   st = { type: k, step: 0, topic: "", hajm: -1, soni: TYPES[k].def };
   document.getElementById("out").innerHTML = "";
   go("flow");
@@ -328,6 +338,8 @@ function renderStep() {
   const t = TYPES[st.type];
   renderDots();
   const box = document.getElementById("stepBox");
+  box.style.display = "block";
+  document.getElementById("out").innerHTML = "";
 
   if (st.step === 0) {
     box.innerHTML = `
@@ -335,7 +347,7 @@ function renderStep() {
       <p class="q-hint">Mavzuni aniq yozing, masalan: "Iqtisodiyot asoslari".</p>
       <div class="glass qcard"><textarea id="topic" placeholder="Mavzuni yozing">${escapeHTML(st.topic)}</textarea></div>
       <button class="cta" onclick="nextStep()">Davom etish</button>`;
-    setTimeout(() => document.getElementById("topic").focus(), 50);
+    setTimeout(() => { const el = document.getElementById("topic"); if (el) el.focus(); }, 50);
   }
 
   if (st.step === 1) {
@@ -414,9 +426,13 @@ async function submitForm() {
     matn = "Xato yuz berdi. Qayta urinib ko'ring.";
   }
 
-  btn.disabled = false; loader.style.display = "none";
-  document.getElementById("out").innerHTML = `<div class="glass result">${escapeHTML(matn)}</div>
-    <div class="disclaimer">AI javobini darslik va manbalar bilan tekshiring.</div>`;
+  loader.style.display = "none";
+  document.getElementById("stepBox").style.display = "none";
+  document.getElementById("out").innerHTML = `
+    <div class="glass result">${escapeHTML(matn)}</div>
+    <div class="disclaimer">AI javobini darslik va manbalar bilan tekshiring.</div>
+    <button class="cta" onclick="startFlow('${st.type}')">Yangi ish</button>
+    <button class="cta ghost" onclick="go('home')">Asosiy sahifa</button>`;
 
   const list = tarixOl();
   list.unshift({ type: st.type, topic: st.topic, sana: new Date().toISOString().slice(0, 16).replace("T", " ") });
@@ -447,10 +463,10 @@ function escapeHTML(s) {
 /* ---------- Navigatsiya ---------- */
 function go(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.toggle("on", s.id === id));
-  document.querySelectorAll(".dock button").forEach(b => b.classList.toggle("on", b.dataset.go === id));
+  const menuId = id === "flow" ? "home" : id;
+  document.querySelectorAll(".dock button").forEach(b => b.classList.toggle("on", b.dataset.go === menuId));
   if (id === "history") renderHistory();
-  if (id === "home") renderLimit();
-  if (id === "profile") renderLimit();
+  if (id === "home" || id === "profile") renderLimit();
   window.scrollTo(0, 0);
 }
 document.querySelectorAll(".dock button").forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
