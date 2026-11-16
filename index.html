@@ -42,8 +42,6 @@
     background: var(--glass); border: 1px solid var(--line); border-radius: var(--radius);
     backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
   }
-
-  /* Har bir bo'limda ko'rinadigan rejim tugmasi */
   .theme-fab {
     position: fixed; top: calc(12px + env(safe-area-inset-top)); right: 14px; z-index: 30;
     width: 40px; height: 40px; border-radius: 14px; border: 1px solid var(--line); background: var(--glass);
@@ -55,7 +53,6 @@
     padding: 9px 12px; border-radius: 13px; background: var(--glass-strong); border: 1px solid var(--line);
     font-size: 12px; font-weight: 700; color: var(--cyan);
   }
-
   h1.hello { margin: 18px 0 4px; font-size: 25px; font-weight: 800; }
   .sub { margin: 0 0 14px; font-size: 14px; color: var(--muted); }
 
@@ -85,7 +82,6 @@
   .row p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.4; }
   .arrow { color: var(--muted); font-size: 22px; }
 
-  /* Forma */
   .back { background: none; border: 0; color: var(--soft); font: inherit; font-size: 15px; cursor: pointer; padding: 4px 0; margin-bottom: 12px; }
   .form-title { margin: 0 0 4px; font-size: 22px; font-weight: 800; }
   .form-hint { margin: 0 0 16px; font-size: 14px; color: var(--muted); line-height: 1.5; }
@@ -179,7 +175,6 @@
 
 <div class="app">
 
-  <!-- ASOSIY -->
   <section id="home" class="screen on">
     <div class="mini-bal" id="miniBal" style="position:static;display:inline-block;margin-bottom:6px">0 so'm</div>
     <h1 class="hello" id="greet">Assalomu alaykum!</h1>
@@ -192,7 +187,6 @@
     <div class="list" id="allTypes"></div>
   </section>
 
-  <!-- FORMA -->
   <section id="form" class="screen">
     <button class="back" onclick="go('home')">‹ Orqaga</button>
     <h2 class="form-title" id="fTitle"></h2>
@@ -202,13 +196,11 @@
     <div id="out"></div>
   </section>
 
-  <!-- ISHLAR -->
   <section id="history" class="screen">
     <div class="sec-title" style="margin-top:0">Barcha ishlar</div>
     <div id="histList"></div>
   </section>
 
-  <!-- PROFIL -->
   <section id="profile" class="screen">
     <div class="glass sheet">
       <h2 id="pname">Foydalanuvchi</h2>
@@ -233,7 +225,7 @@
       <p class="pay-note">To'lov tizimi hali ishlamayapti. Ulanish tugagach, shu yerdan balansni to'ldirasiz.</p>
     </div>
 
-    <div class="sec-title">Birinchi ish uchun sovg'a</div>
+    <div class="sec-title">Bepul sinov</div>
     <div class="glass gift" id="giftBox"></div>
 
     <div class="sec-title">Sarflash tarixi</div>
@@ -241,7 +233,7 @@
 
     <div class="sec-title">Haqida</div>
     <div class="glass">
-      <div class="about-row"><span>🤖</span><div><b>AI versiyasi</b><small>Claude Haiku 4.5. Demo rejimda hozircha haqiqiy AI javob chiqmaydi.</small></div></div>
+      <div class="about-row"><span>🤖</span><div><b>AI versiyasi</b><small>Claude Haiku 4.5.</small></div></div>
       <div class="about-row"><span>📝</span><div><b>Talaba Yordamchi</b><small>Mustaqil ish, referat, prezentatsiya va ilmiy ishlar uchun reja va matn. Har bir javobni o'zingiz tekshiring.</small></div></div>
       <div class="about-row"><span>💬</span><div><b>Yordam</b><small>Savollar va takliflar uchun bot orqali murojaat qiling.</small></div></div>
       <div class="about-row"><span>📄</span><div><b>Huquqiy ma'lumot</b><small>Ommaviy oferta va maxfiylik siyosati tez orada shu yerda bo'ladi.</small></div></div>
@@ -257,32 +249,34 @@
 </nav>
 
 <script>
-// Server manzili: server tayyor bo'lgach shu yerga yozing, masalan "https://api.sizningdomen.uz/generate"
+// Server manzili
 const API_URL = "https://talabayordamchi.duckdns.org/generate";
+// Sinov uchun bepul ishlar soni (tugagach balansdan yechiladi)
+const FREE_TRIES = 100;
 
 const tg = window.Telegram && window.Telegram.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
 
-/* ---------- Saqlash ---------- */
 function lsGet(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } }
 function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 
 let S = {
   role: lsGet("talaba_rol", "talaba"),
-  freeUsed: lsGet("talaba_bepul", false),
+  freeCount: lsGet("talaba_bepul_soni", 0),
   balance: lsGet("talaba_balans", 0),
   history: lsGet("talaba_tarix", []),
   person: lsGet("talaba_shaxsiy", {})
 };
 function saveAll() {
   lsSet("talaba_rol", S.role);
-  lsSet("talaba_bepul", S.freeUsed);
+  lsSet("talaba_bepul_soni", S.freeCount);
   lsSet("talaba_balans", S.balance);
-  lsSet("talaba_tarix", S.history.slice(0, 80));
+  lsSet("talaba_tarix", S.history.slice(0, 200));
   lsSet("talaba_shaxsiy", S.person);
 }
+function hasFree() { return S.freeCount < FREE_TRIES; }
+function freeLeft() { return Math.max(0, FREE_TRIES - S.freeCount); }
 
-/* ---------- Foydalanuvchi ---------- */
 if (tg) {
   const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
   if (u) {
@@ -292,7 +286,6 @@ if (tg) {
   }
 }
 
-/* ---------- Rejim (har bir bo'limda) ---------- */
 const TEMA_KEY = "talaba_tema";
 function temaQollash(rejim) {
   document.body.classList.toggle("light", rejim === "kunduzgi");
@@ -307,7 +300,6 @@ function toggleTheme() {
   temaQollash(yangi);
 }
 
-/* ---------- Yo'nalishlar ---------- */
 const TYPES = {
   referat:       { name: "Referat",           icon: "📝", hint: "Reja va to'liq matn",          topicQ: "Referat mavzusi nima?",       sizeQ: "Referat hajmi", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet",   min: 3,  max: 10,  def: 5,  personal: true },
   prezentatsiya: { name: "Prezentatsiya",     icon: "📊", hint: "Slaydlar va asosiy matn",      topicQ: "Prezentatsiya mavzusi nima?", sizeQ: "Uslub",         sizes: ["Oddiy", "Ilmiy", "Ijodiy"],   unit: "slayd", min: 5,  max: 100, def: 8,  personal: true },
@@ -315,15 +307,12 @@ const TYPES = {
   ilmiy:         { name: "Ilmiy ish",         icon: "🔬", hint: "Dolzarblik, maqsad, metodika", topicQ: "Ilmiy ish mavzusi nima?",     sizeQ: "Hajm",          sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bob",   min: 2,  max: 5,   def: 3,  personal: false },
   konspekt:      { name: "Ma'ruza konspekti", icon: "📖", hint: "Tayyor konspekt",              topicQ: "Ma'ruza mavzusi nima?",       sizeQ: "Uzunlik",       sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "band",  min: 3,  max: 10,  def: 5,  personal: false }
 };
-// Ichki narxlar (ekranda ko'rsatilmaydi)
 const PRICE = { referat: 2000, prezentatsiya: 4000, mustaqil: 2000, ilmiy: 4000, konspekt: 2000 };
 
 const ROLE_TYPE_KEYS = {
   talaba: ["prezentatsiya", "mustaqil", "referat"],
   oqituvchi: ["prezentatsiya", "mustaqil", "ilmiy", "konspekt"]
 };
-
-// Shaxsiy ma'lumot maydonlari rolga qarab
 const FIELDS = {
   talaba: [
     ["ism", "Ism"], ["fam", "Familiya"], ["uni", "Universitet nomi"],
@@ -349,7 +338,6 @@ function rowHTML(k) {
     <span class="arrow">›</span></button>`;
 }
 
-/* ---------- Rol ---------- */
 function rolesHTML() {
   return `<button class="${S.role === "talaba" ? "on" : ""}" onclick="setRole('talaba')">🎓 Talaba</button>
           <button class="${S.role === "oqituvchi" ? "on" : ""}" onclick="setRole('oqituvchi')">👩‍🏫 O'qituvchi</button>`;
@@ -368,17 +356,15 @@ function renderRoles() {
     ? "Bugun qaysi ishni tayyorlaymiz?" : "Dars uchun nimani tayyorlaymiz?";
 }
 
-/* ---------- Asosiy sahifa ---------- */
 function renderHome() {
   renderRoles();
-  document.getElementById("homeFree").innerHTML = !S.freeUsed
-    ? `<div class="st">🎁</div><div><b>Birinchi ish bepul</b><small>Bu imkoniyat faqat bir marta beriladi.</small></div>`
-    : `<div class="st">✨</div><div><b>Bepul imkoniyat ishlatilgan</b><small>Keyingi ishlar balansdan yechiladi.</small></div>`;
+  document.getElementById("homeFree").innerHTML = hasFree()
+    ? `<div class="st">🎁</div><div><b>Sinov: ${freeLeft()} ta bepul ish qoldi</b><small>Bu sinov uchun berilgan bepul imkoniyat.</small></div>`
+    : `<div class="st">✨</div><div><b>Bepul imkoniyat tugadi</b><small>Keyingi ishlar balansdan yechiladi.</small></div>`;
   document.getElementById("allTypes").innerHTML = typesForRole().map(rowHTML).join("");
   document.getElementById("miniBal").textContent = fmt(S.balance);
 }
 
-/* ---------- Ishlar va profil ---------- */
 function itemHTML(x) {
   const tag = x.cost === 0 ? `<span class="tag free">Bepul</span>` : `<span class="tag bal">Balansdan</span>`;
   return `<div class="glass item"><div><b>${TYPES[x.type].icon} ${TYPES[x.type].name}: ${escapeHTML(x.topic)}</b><small>${x.sana}</small></div>${tag}</div>`;
@@ -391,16 +377,15 @@ function renderHistory() {
 function renderProfile() {
   renderRoles();
   document.getElementById("balAmount").textContent = fmt(S.balance);
-  document.getElementById("giftBox").innerHTML = !S.freeUsed
-    ? `<div class="st">🎁</div><div><b>1 marta bepul</b><small>Birinchi ishingiz uchun bir marta beriladi. Keyingi ishlar balansdan yechiladi.</small></div>`
-    : `<div class="st">✨</div><div><b>Ishlatilgan</b><small>Bepul imkoniyat faqat bir marta beriladi va allaqachon sarflangan.</small></div>`;
+  document.getElementById("giftBox").innerHTML = hasFree()
+    ? `<div class="st">🎁</div><div><b>${freeLeft()} ta bepul ish qoldi</b><small>Sinov uchun ${FREE_TRIES} ta bepul ish berilgan. Keyin balansdan yechiladi.</small></div>`
+    : `<div class="st">✨</div><div><b>Bepul sinov tugadi</b><small>Keyingi ishlar balansdan yechiladi.</small></div>`;
   document.getElementById("spendBox").innerHTML = S.history.length
-    ? S.history.slice(0, 20).map(x => `<div class="row2"><span>${TYPES[x.type].icon} ${TYPES[x.type].name}</span>${x.cost === 0 ? `<span class="tag free">Bepul</span>` : `<span class="tag bal">Balansdan</span>`}</div>`).join("")
+    ? S.history.slice(0, 30).map(x => `<div class="row2"><span>${TYPES[x.type].icon} ${TYPES[x.type].name}</span>${x.cost === 0 ? `<span class="tag free">Bepul</span>` : `<span class="tag bal">Balansdan</span>`}</div>`).join("")
     : `<div class="empty" style="padding:14px">Hali sarflanmagan.</div>`;
   document.getElementById("miniBal").textContent = fmt(S.balance);
 }
 
-/* ---------- Forma ---------- */
 let st = null;
 function openForm(k) {
   st = { type: k, hajm: -1, soni: TYPES[k].def, topic: "", extraOn: true };
@@ -483,7 +468,7 @@ async function submitForm() {
   if (!topic) { alert("Avval mavzuni yozing."); return; }
   if (st.hajm < 0) { alert("Hajm yoki uslubni tanlang."); return; }
 
-  const bepul = !S.freeUsed;
+  const bepul = hasFree();
   const cost = bepul ? 0 : PRICE[st.type];
   if (!bepul && S.balance < cost) {
     alert("Balans yetarli emas. Balansni to'ldirish tez orada ishga tushadi.");
@@ -503,8 +488,7 @@ async function submitForm() {
     matn = "Xato yuz berdi. Qayta urinib ko'ring.";
   }
 
-  // To'lov faqat javob olingandan keyin yechiladi
-  if (bepul) S.freeUsed = true; else S.balance -= cost;
+  if (bepul) S.freeCount += 1; else S.balance -= cost;
   S.history.unshift({ type: st.type, topic, cost, sana: new Date().toISOString().slice(0, 16).replace("T", " ") });
   saveAll();
 
@@ -520,10 +504,7 @@ async function submitForm() {
 async function generate(type, topic, hajmMatn, son, meta) {
   if (!API_URL) {
     await new Promise(r => setTimeout(r, 900));
-    const kishi = meta && meta.ism ? "\nMuallif: " + [meta.ism, meta.fam].filter(Boolean).join(" ") : "";
-    return "Demo rejim: server hali ulanmagan.\n\nMavzu: " + topic + "\nYo'nalish: " + TYPES[type].name +
-           "\nHajm: " + hajmMatn + ", " + son + " " + TYPES[type].unit + kishi +
-           "\n\nServer ulangach, bu yerda haqiqiy tayyor matn chiqadi.";
+    return "Demo rejim: server ulanmagan.";
   }
   const res = await fetch(API_URL, {
     method: "POST",
@@ -539,11 +520,9 @@ function escapeHTML(s) {
   return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
-/* ---------- Navigatsiya ---------- */
 function go(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.toggle("on", s.id === id));
   document.querySelectorAll(".dock button").forEach(b => b.classList.toggle("on", b.dataset.go === id));
-  document.querySelector(".mini-bal") && (document.getElementById("miniBal").style.display = id === "home" ? "inline-block" : "none");
   if (id === "home") renderHome();
   if (id === "history") renderHistory();
   if (id === "profile") renderProfile();
@@ -551,7 +530,6 @@ function go(id) {
 }
 document.querySelectorAll(".dock button").forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
 
-// Ikki marta bosganda yaqinlashishni o'chirish
 let lastTouch = 0;
 document.addEventListener("touchend", e => {
   const now = Date.now();
