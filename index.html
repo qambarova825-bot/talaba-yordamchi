@@ -372,8 +372,7 @@ function renderAll() {
 
 let st = null;
 function openForm(k) {
-  st = { type: k, hajm: -1, soni: TYPES[k].def, topic: "", extraOn: true };
-  document.getElementById("out").innerHTML = "";
+st = { type: k, hajm: -1, soni: TYPES[k].def, topic: "", extraOn: true, format: "docx" };
   go("form");
   renderForm();
 }
@@ -432,12 +431,10 @@ function renderForm() {
         <div class="val" style="min-width:70px">${st.soni}<small>${t.unit}</small></div>
       </div>
     </div>
-    <button class="cta" id="submitBtn" onclick="submitForm()">Tayyorlash</button>`;
-}
+${(st.type === "referat" || st.type === "mustaqil") ? `<div class="glass field"><label>Fayl formati</label><div class="seg3" style="grid-template-columns:1fr 1fr">${["docx", "pdf"].map(f => `<button class="${st.format === f ? "on" : ""}" onclick="pickFormat('${f}')">${f === "docx" ? "Word (.docx)" : "PDF"}</button>`).join("")}</div></div>` : ""}
 
 function toggleExtra() { saveFields(); st.extraOn = !st.extraOn; renderForm(); }
-function pickSize(i) { saveFields(); st.hajm = i; renderForm(); }
-function stepBy(d) {
+function pickFormat(f) { saveFields(); st.format = f; renderForm(); }
   saveFields();
   const t = TYPES[st.type];
   st.soni = Math.min(t.max, Math.max(t.min, st.soni + d));
@@ -501,7 +498,7 @@ async function generate(type, topic, hajmMatn, son, meta) {
   const res = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ initData: tg ? tg.initData : "", type, topic, hajm: hajmMatn, son, meta, role: S.role })
+    body: JSON.stringify({ initData: tg ? tg.initData : "", type, topic, hajm: hajmMatn, son, meta, role: S.role, format: st ? st.format : "docx" })
   });
   if (res.status === 402) throw new Error("402");
   if (!res.ok) throw new Error("server");
