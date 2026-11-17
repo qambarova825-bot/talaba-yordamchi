@@ -77,18 +77,21 @@
   .field { padding: 14px; margin-bottom: 12px; }
   .field > label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
   .inner { padding: 12px; margin-bottom: 10px; }
-  input, textarea { width: 100%; padding: 13px 14px; border-radius: 14px; border: 1px solid var(--line);
+  input[type=text], input:not([type]), textarea { width: 100%; padding: 13px 14px; border-radius: 14px; border: 1px solid var(--line);
     background: var(--field); color: var(--text); font: inherit; font-size: 16px; }
   textarea { min-height: 96px; resize: vertical; }
+  input[type=range] { width: 100%; padding: 0; border: 0; background: none; accent-color: #9b6bff; height: 6px; margin: 10px 0 4px; }
   .seg3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
   .seg3 button { padding: 11px 4px; border-radius: 14px; border: 1px solid var(--line); background: var(--field);
     color: var(--muted); font: inherit; font-size: 13px; cursor: pointer; }
   .seg3 button.on { border-color: var(--soft); color: var(--text); background: var(--glass-strong); font-weight: 600; }
-  .stepper { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .stepper button { min-width: 50px; height: 50px; padding: 0 8px; border-radius: 16px; border: 1px solid var(--line); background: var(--glass);
-    color: var(--text); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
-  .stepper .val { flex: 1; text-align: center; font-size: 28px; font-weight: 800; }
-  .stepper .val small { display: block; font-size: 13px; font-weight: 400; color: var(--muted); }
+  .slider-val { text-align: center; font-size: 30px; font-weight: 800; }
+  .slider-val span { font-size: 30px; }
+  .slider-val small { font-size: 14px; font-weight: 400; color: var(--muted); }
+  .scale { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); }
+  .price-line { font-size: 14px; color: var(--muted); margin-top: 12px; line-height: 1.5; }
+  .price-line b { color: var(--cyan); font-size: 15px; }
+  .pnote { font-size: 12px; color: var(--muted); text-align: center; margin-top: 8px; line-height: 1.4; }
   .extra-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; }
   .extra-head b { font-size: 15px; }
   .extra-head small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
@@ -119,9 +122,9 @@
   .balance small { color: var(--muted); font-size: 13px; }
   .balance .amount { font-size: 34px; font-weight: 800; margin-top: 6px; }
   .pay-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-  .pay-btns button { padding: 14px 6px; border-radius: 16px; border: 1px solid var(--line); background: var(--glass);
-    color: var(--text); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
-  .pay-btns button:disabled { opacity: .6; cursor: not-allowed; }
+  .pay-btns button { padding: 12px 6px; border-radius: 16px; border: 1px solid var(--line); background: var(--glass);
+    color: var(--text); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; line-height: 1.3; }
+  .pay-btns button small { font-size: 11px; color: var(--muted); font-weight: 400; }
   .pay-note { font-size: 12px; color: var(--muted); margin: 10px 2px 0; line-height: 1.5; }
   .gift { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
   .row2 { display: flex; justify-content: space-between; align-items: center; padding: 12px 2px; border-bottom: 1px solid var(--line); font-size: 14px; gap: 10px; }
@@ -129,6 +132,18 @@
   .about-row { display: flex; align-items: center; gap: 12px; padding: 14px 16px; font-size: 14px; }
   .about-row + .about-row { border-top: 1px solid var(--line); }
   .about-row small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; line-height: 1.4; }
+
+  .modal { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; align-items: flex-end; justify-content: center; z-index: 50; }
+  .modal.on { display: flex; }
+  .sheet2 { width: 100%; max-width: 520px; max-height: 86vh; overflow: auto; border-radius: 24px 24px 0 0; padding: 18px; background: var(--bg2); }
+  .dcard { padding: 12px; margin-bottom: 12px; cursor: pointer; }
+  .dcard b { font-size: 15px; }
+  .prev { height: 150px; border-radius: 14px; padding: 12px; font-size: 11px; line-height: 1.5; margin-bottom: 8px; overflow: hidden; }
+  .prev .h { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .prev p { margin: 0 0 4px; }
+  .prev.oddiy { background: #fff; color: #111; font-family: "Times New Roman", serif; }
+  .prev.klassik { background: #fff; color: #1F3A5F; font-family: Georgia, serif; border-top: 6px solid #1F3A5F; }
+  .prev.zamonaviy { background: linear-gradient(135deg, #6C4BFF, #3D9BFF); color: #fff; font-family: Arial, sans-serif; }
 
   .dock { position: fixed; left: 50%; transform: translateX(-50%);
     bottom: calc(12px + env(safe-area-inset-bottom)); width: calc(100% - 28px); max-width: 420px;
@@ -189,11 +204,11 @@
     <div class="sec-title">Balansni to'ldirish</div>
     <div class="glass sheet">
       <div class="pay-btns">
-        <button onclick="buyStars(50)">⭐ 50 Stars</button>
-        <button onclick="buyStars(100)">⭐ 100 Stars</button>
-        <button onclick="buyStars(200)">⭐ 200 Stars</button>
+        <button onclick="buyStars(50)">⭐ 50 Stars<br><small>10 000 so'm</small></button>
+        <button onclick="buyStars(100)">⭐ 100 Stars<br><small>20 000 so'm</small></button>
+        <button onclick="buyStars(200)">⭐ 200 Stars<br><small>40 000 so'm</small></button>
       </div>
-      <p class="pay-note">1 Star = 150 so'm. Telegram Stars orqali to'lanadi. Click/Payme hali ulanmagan.</p>
+      <p class="pay-note">1 Star = 200 so'm. Telegram Stars orqali to'lanadi. Click/Payme hali ulanmagan.</p>
     </div>
     <div class="sec-title">Birinchi ish</div>
     <div class="glass gift" id="giftBox"></div>
@@ -206,6 +221,14 @@
     </div>
   </section>
 
+</div>
+
+<div class="modal" id="designModal" onclick="if(event.target===this)closeDesigns()">
+  <div class="sheet2">
+    <h3 style="margin:0 0 12px">Dizaynlar</h3>
+    <div id="designCards"></div>
+    <button class="cta ghost" onclick="closeDesigns()">Yopish</button>
+  </div>
 </div>
 
 <nav class="dock">
@@ -276,14 +299,24 @@ function toggleTheme() {
   temaQollash(yangi);
 }
 
+/* ---------- Narx (serverdagi bilan bir xil) ---------- */
+function docNarx(p) { return 3990 + Math.ceil(Math.max(0, p - 10) / 5) * 2000; }
+function slaydNarx(n, uslub) {
+  const base = { "Oddiy": 2990, "O'rtacha": 4990, "Premium": 6990 }[uslub] || 2990;
+  return base + Math.ceil(Math.max(0, n - 10) / 5) * 100;
+}
+
+/* ---------- Yo'nalishlar ---------- */
 const TYPES = {
-  referat:       { name: "Referat",           icon: "📝", hint: "Reja va to'liq matn",          topicQ: "Referat mavzusi nima?",       sizeQ: "Referat hajmi", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet",   min: 3,  max: 10,  def: 5,  personal: true },
-  prezentatsiya: { name: "Prezentatsiya",     icon: "📊", hint: "Rasmli, mavzuga mos slaydlar", topicQ: "Prezentatsiya mavzusi nima?", sizeQ: "Uslub",         sizes: ["Oddiy", "Ilmiy", "Ijodiy"],   unit: "slayd", min: 5,  max: 100, def: 8,  personal: true },
-  mustaqil:      { name: "Mustaqil ish",      icon: "📚", hint: "Savollar va javoblar",         topicQ: "Mustaqil ish mavzusi nima?",  sizeQ: "Chuqurlik",     sizes: ["Yengil", "O'rta", "Chuqur"],  unit: "savol", min: 2,  max: 6,   def: 3,  personal: true },
-  ilmiy:         { name: "Ilmiy ish",         icon: "🔬", hint: "Dolzarblik, maqsad, metodika", topicQ: "Ilmiy ish mavzusi nima?",     sizeQ: "Hajm",          sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bob",   min: 2,  max: 5,   def: 3,  personal: false },
-  konspekt:      { name: "Ma'ruza konspekti", icon: "📖", hint: "Tayyor konspekt",              topicQ: "Ma'ruza mavzusi nima?",       sizeQ: "Uzunlik",       sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "band",  min: 3,  max: 10,  def: 5,  personal: false }
+  referat:       { name: "Referat",           icon: "📝", hint: "Reja, boblar va adabiyotlar", topicQ: "Referat mavzusi nima?", sizeQ: "Referat chuqurligi", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet", personal: true, docs: true },
+  prezentatsiya: { name: "Prezentatsiya",     icon: "📊", hint: "Rasmli, mavzuga mos slaydlar", topicQ: "Prezentatsiya mavzusi nima?", sizeQ: "Uslub", sizes: ["Oddiy", "O'rtacha", "Premium"], unit: "slayd", personal: true, slides: true },
+  mustaqil:      { name: "Mustaqil ish",      icon: "📚", hint: "Savollar va javoblar", topicQ: "Mustaqil ish mavzusi nima?", sizeQ: "Chuqurlik", sizes: ["Yengil", "O'rta", "Chuqur"], unit: "bet", personal: true, docs: true },
+  ilmiy:         { name: "Ilmiy ish",         icon: "🔬", hint: "Dolzarblik, maqsad, metodika", topicQ: "Ilmiy ish mavzusi nima?", sizeQ: "Hajm", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet", personal: false, docs: true },
+  konspekt:      { name: "Ma'ruza konspekti", icon: "📖", hint: "Tayyor konspekt", topicQ: "Ma'ruza mavzusi nima?", sizeQ: "Uzunlik", sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bet", personal: false, docs: true }
 };
+const DESIGN_TYPES = ["referat", "mustaqil"];
 const FORMAT_TYPES = ["referat", "mustaqil"];
+const DESIGNS = [["oddiy", "Oddiy"], ["klassik", "Klassik"], ["zamonaviy", "Zamonaviy"]];
 
 const ROLE_TYPE_KEYS = {
   talaba: ["prezentatsiya", "mustaqil", "referat"],
@@ -330,11 +363,9 @@ function balText() { return S.me.ok ? fmt(S.me.balance) : "—"; }
 function renderHome() {
   renderRoles();
   const box = document.getElementById("homeFree");
-  if (!S.me.free_used) {
-    box.innerHTML = `<div class="st">🎁</div><div><b>Birinchi ish bepul</b><small>Bu imkoniyat faqat bir marta beriladi.</small></div>`;
-  } else {
-    box.innerHTML = `<div class="st">💰</div><div><b>Balans: ${balText()}</b><small>Keyingi ishlar balansdan yechiladi.</small></div>`;
-  }
+  box.innerHTML = !S.me.free_used
+    ? `<div class="st">🎁</div><div><b>Birinchi ish bepul</b><small>Bu imkoniyat faqat bir marta beriladi.</small></div>`
+    : `<div class="st">💰</div><div><b>Balans: ${balText()}</b><small>Keyingi ishlar balansdan yechiladi.</small></div>`;
   document.getElementById("allTypes").innerHTML = typesForRole().map(rowHTML).join("");
   document.getElementById("miniBal").textContent = "Balans: " + balText();
 }
@@ -357,14 +388,12 @@ function renderProfile() {
     : `<div class="st">✔️</div><div><b>Ishlatilgan</b><small>Bepul imkoniyat faqat bir marta beriladi va allaqachon sarflangan.</small></div>`;
 }
 
-function renderAll() {
-  renderHome();
-  renderProfile();
-}
+function renderAll() { renderHome(); renderProfile(); }
 
+/* ---------- Forma ---------- */
 let st = null;
 function openForm(k) {
-  st = { type: k, hajm: -1, soni: TYPES[k].def, topic: "", extraOn: true, format: "docx" };
+  st = { type: k, hajm: -1, son: 10, topic: "", extraOn: true, format: "docx", design: "oddiy" };
   document.getElementById("out").innerHTML = "";
   go("form");
   renderForm();
@@ -380,11 +409,53 @@ function saveFields() {
   });
 }
 
-function formatBlock() {
-  if (!FORMAT_TYPES.includes(st.type)) return "";
-  const opts = [["docx", "Word (.docx)"], ["pdf", "PDF"]].map(([f, n]) =>
-    `<button class="${st.format === f ? "on" : ""}" onclick="pickFormat('${f}')">${n}</button>`).join("");
-  return `<div class="glass field"><label>Fayl formati</label><div class="seg3" style="grid-template-columns:1fr 1fr">${opts}</div></div>`;
+function narxNow() {
+  const t = TYPES[st.type];
+  if (t.slides) return slaydNarx(st.son, t.sizes[st.hajm >= 0 ? st.hajm : 0]);
+  return docNarx(st.son);
+}
+
+function updatePrice() {
+  const t = TYPES[st.type];
+  const n = narxNow();
+  const pl = document.getElementById("priceLine");
+  if (pl) pl.innerHTML = `${t.slides ? "Slaydlar" : "Betlar"}: <b>${st.son} ${t.unit}</b> · Narx: <b>${S.me.free_used ? fmt(n) : "Birinchi ish bepul"}</b>`;
+  const pn = document.getElementById("pnote");
+  if (pn) pn.textContent = t.slides
+    ? "Oddiy 2 990, O'rtacha 4 990, Premium 6 990 so'm (10 slaygacha). Har 5 slayd uchun +100 so'm."
+    : "10 betgacha 3 990 so'm. Har 5 bet uchun +2 000 so'm.";
+  const b = document.getElementById("submitBtn");
+  if (b) b.textContent = S.me.free_used ? `Tayyorlash — ${fmt(n)}` : "Tayyorlash (bepul)";
+}
+
+function designField() {
+  return `<div class="glass field">
+    <label>Dizayn</label>
+    <div class="seg3">${DESIGNS.map(([k, n]) =>
+      `<button class="${st.design === k ? "on" : ""}" onclick="pickDesign('${k}')">${n}</button>`).join("")}</div>
+    <button class="cta ghost" onclick="openDesigns()">🔍 Namunalarni katta ko'rish</button>
+  </div>`;
+}
+
+function formatField() {
+  return `<div class="glass field">
+    <label>Fayl formati</label>
+    <div class="seg3" style="grid-template-columns:1fr 1fr">${[["docx", "Word (.docx)"], ["pdf", "PDF"]].map(([k, n]) =>
+      `<button class="${st.format === k ? "on" : ""}" onclick="pickFormat('${k}')">${n}</button>`).join("")}</div>
+  </div>`;
+}
+
+function sliderField(t) {
+  const labels = [];
+  for (let v = 5; v <= 50; v += 5) labels.push(`<span>${v}</span>`);
+  return `<div class="glass field">
+    <label>${t.slides ? "Slaydlar soni" : "Nechta bet kerak?"}</label>
+    <div class="slider-val"><span id="sliderVal">${st.son}</span> <small>${t.unit}</small></div>
+    <input type="range" min="5" max="50" step="5" value="${st.son}" oninput="setSon(this.value)">
+    <div class="scale">${labels.join("")}</div>
+    <div class="price-line" id="priceLine"></div>
+    <div class="pnote" id="pnote"></div>
+  </div>`;
 }
 
 function renderForm() {
@@ -393,13 +464,16 @@ function renderForm() {
   document.getElementById("fHint").textContent = ROLE_HINT[S.role];
   document.getElementById("out").innerHTML = "";
 
-  let personal = "";
+  let h = `<div class="glass field">
+    <label for="f_topic">${t.topicQ}</label>
+    <textarea id="f_topic" placeholder="Mavzuni aniq yozing">${escapeHTML(st.topic)}</textarea>
+  </div>`;
+
   if (t.personal) {
     const inputs = FIELDS[S.role].map(([key, label]) =>
       `<div class="glass inner"><label style="display:block;font-size:12px;color:var(--muted);margin-bottom:6px">${label}</label>
        <input id="p_${key}" value="${escapeHTML(S.person[key] || "")}" placeholder="${label}"></div>`).join("");
-    personal = `
-    <div class="glass field">
+    h += `<div class="glass field">
       <div class="extra-head" onclick="toggleExtra()">
         <div><b>Shaxsiy ma'lumot</b><small>Titulga chiqadigan ma'lumotlar</small></div>
         <input type="checkbox" class="tick" ${st.extraOn ? "checked" : ""} tabindex="-1">
@@ -408,48 +482,66 @@ function renderForm() {
     </div>`;
   }
 
-  const stepBtns = t.max >= 20
-    ? `<button onclick="stepBy(-10)">−10</button><button onclick="stepBy(-1)">−1</button><button onclick="stepBy(1)">+1</button><button onclick="stepBy(10)">+10</button>`
-    : `<button onclick="stepBy(-1)">−</button><button onclick="stepBy(1)">+</button>`;
+  if (DESIGN_TYPES.includes(st.type)) h += designField();
 
-  document.getElementById("formBox").innerHTML = `
-    <div class="glass field">
-      <label for="f_topic">${t.topicQ}</label>
-      <textarea id="f_topic" placeholder="Mavzuni aniq yozing">${escapeHTML(st.topic)}</textarea>
-    </div>
-    ${personal}
-    <div class="glass field">
-      <label>${t.sizeQ}</label>
-      <div class="seg3">${t.sizes.map((s, i) => `<button class="${i === st.hajm ? "on" : ""}" onclick="pickSize(${i})">${s}</button>`).join("")}</div>
-    </div>
-    <div class="glass field">
-      <label>Nechta ${t.unit} kerak? (${t.min}–${t.max})</label>
-      <div class="stepper">${stepBtns}<div class="val" style="min-width:70px">${st.soni}<small>${t.unit}</small></div></div>
-    </div>
-    ${formatBlock()}
-    <button class="cta" id="submitBtn" onclick="submitForm()">Tayyorlash</button>`;
+  h += `<div class="glass field">
+    <label>${t.sizeQ}</label>
+    <div class="seg3">${t.sizes.map((s, i) =>
+      `<button class="${i === st.hajm ? "on" : ""}" onclick="pickSize(${i})">${s}</button>`).join("")}</div>
+  </div>`;
+
+  h += sliderField(t);
+
+  if (FORMAT_TYPES.includes(st.type)) h += formatField();
+
+  h += `<button class="cta" id="submitBtn" onclick="submitForm()">Tayyorlash</button>
+    <div class="pnote">Fayllar 1–3 daqiqada tayyor bo'ladi.</div>`;
+
+  document.getElementById("formBox").innerHTML = h;
+  updatePrice();
 }
 
+function setSon(v) {
+  st.son = +v;
+  const sv = document.getElementById("sliderVal");
+  if (sv) sv.textContent = v;
+  updatePrice();
+}
 function toggleExtra() { saveFields(); st.extraOn = !st.extraOn; renderForm(); }
 function pickSize(i) { saveFields(); st.hajm = i; renderForm(); }
 function pickFormat(f) { saveFields(); st.format = f; renderForm(); }
-function stepBy(d) {
-  saveFields();
-  const t = TYPES[st.type];
-  st.soni = Math.min(t.max, Math.max(t.min, st.soni + d));
-  renderForm();
+function pickDesign(d) { saveFields(); st.design = d; closeDesigns(); renderForm(); }
+
+function openDesigns() {
+  document.getElementById("designCards").innerHTML = DESIGNS.map(([k, n]) => `
+    <div class="glass dcard" onclick="pickDesign('${k}')">
+      <div class="prev ${k}">
+        <div class="h">Mavzu nomi</div>
+        <p>1. Kirish</p>
+        <p>Asosiy matn namunasi. Sarlavha va paragraf ko'rinishi shu yerda.</p>
+        <p>2. Asosiy qism</p>
+        <p>Bo'limlar shu uslubda chiqadi.</p>
+      </div>
+      <b>${n}</b>
+    </div>`).join("");
+  document.getElementById("designModal").classList.add("on");
 }
+function closeDesigns() { document.getElementById("designModal").classList.remove("on"); }
 
 async function submitForm() {
   saveFields();
   const t = TYPES[st.type];
   const topic = (st.topic || "").trim();
   if (!topic) { alert("Avval mavzuni yozing."); return; }
-  if (st.hajm < 0) { alert("Hajm yoki uslubni tanlang."); return; }
+  if (st.hajm < 0) { alert("Uslub yoki chuqurlikni tanlang."); return; }
   if (!S.me.ok) { alert("Telegram ichidan oching."); return; }
 
   const wasFree = !S.me.free_used;
-  if (!wasFree && S.me.balance <= 0) { alert("Balans yetarli emas. Balansni to'ldiring."); return; }
+  const cost = wasFree ? 0 : narxNow();
+  if (!wasFree && S.me.balance < cost) {
+    alert("Balans yetarli emas (" + fmt(cost) + " kerak). Balansni to'ldiring.");
+    return;
+  }
 
   const meta = t.personal && st.extraOn ? { ...S.person } : {};
   const btn = document.getElementById("submitBtn");
@@ -458,7 +550,7 @@ async function submitForm() {
 
   let matn = null, xato = null;
   try {
-    matn = await generate(st.type, topic, t.sizes[st.hajm], st.soni, meta);
+    matn = await generate(st.type, topic, t.sizes[st.hajm], st.son, meta);
   } catch (e) {
     xato = e.message;
   }
@@ -489,7 +581,10 @@ async function generate(type, topic, hajmMatn, son, meta) {
   const res = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ initData: tg ? tg.initData : "", type, topic, hajm: hajmMatn, son, meta, role: S.role, format: st ? st.format : "docx" })
+    body: JSON.stringify({
+      initData: tg ? tg.initData : "", type, topic, hajm: hajmMatn, son, meta,
+      role: S.role, format: st.format, design: st.design
+    })
   });
   if (res.status === 402) throw new Error("402");
   if (!res.ok) throw new Error("server");
