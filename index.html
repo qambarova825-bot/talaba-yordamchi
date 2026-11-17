@@ -85,8 +85,8 @@
     color: var(--muted); font: inherit; font-size: 13px; cursor: pointer; }
   .seg3 button.on { border-color: var(--soft); color: var(--text); background: var(--glass-strong); font-weight: 600; }
   .stepper { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .stepper button { min-width: 50px; height: 50px; padding: 0 8px; border-radius: 16px; border: 1px solid var(--line);
-    background: var(--glass); color: var(--text); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
+  .stepper button { min-width: 50px; height: 50px; padding: 0 8px; border-radius: 16px; border: 1px solid var(--line); background: var(--glass);
+    color: var(--text); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
   .stepper .val { flex: 1; text-align: center; font-size: 28px; font-weight: 800; }
   .stepper .val small { display: block; font-size: 13px; font-weight: 400; color: var(--muted); }
   .extra-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; }
@@ -118,9 +118,10 @@
   .balance { padding: 22px 18px; text-align: center; background: linear-gradient(135deg, rgba(155,107,255,.35), rgba(61,155,255,.30)); }
   .balance small { color: var(--muted); font-size: 13px; }
   .balance .amount { font-size: 34px; font-weight: 800; margin-top: 6px; }
-  .pay-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .pay-btns button { padding: 14px 8px; border-radius: 16px; border: 1px solid var(--line); background: var(--glass);
-    color: var(--text); font: inherit; font-size: 14px; font-weight: 600; cursor: not-allowed; opacity: .65; }
+  .pay-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .pay-btns button { padding: 14px 6px; border-radius: 16px; border: 1px solid var(--line); background: var(--glass);
+    color: var(--text); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .pay-btns button:disabled { opacity: .6; cursor: not-allowed; }
   .pay-note { font-size: 12px; color: var(--muted); margin: 10px 2px 0; line-height: 1.5; }
   .gift { display: flex; align-items: center; gap: 12px; padding: 14px 16px; }
   .row2 { display: flex; justify-content: space-between; align-items: center; padding: 12px 2px; border-bottom: 1px solid var(--line); font-size: 14px; gap: 10px; }
@@ -153,10 +154,8 @@
     <div class="mini-bal" id="miniBal">Balans: ...</div>
     <h1 class="hello" id="greet">Assalomu alaykum!</h1>
     <p class="sub" id="homeSub">Bugun nima tayyorlaymiz?</p>
-
     <div class="glass roles" id="homeRoles"></div>
     <div class="glass free" id="homeFree"></div>
-
     <div class="label">Yo'nalishlar</div>
     <div class="list" id="allTypes"></div>
   </section>
@@ -180,28 +179,24 @@
       <h2 id="pname">Foydalanuvchi</h2>
       <p id="puser">Telegram orqali kirgan</p>
     </div>
-
     <div class="sec-title">Mening rolim</div>
     <div class="glass roles" id="profRoles"></div>
-
     <div class="sec-title">Balans</div>
     <div class="glass balance">
       <small>Umumiy balans</small>
-      <div class="amount" id="balAmount">0 so'm</div>
+      <div class="amount" id="balAmount">—</div>
     </div>
-
     <div class="sec-title">Balansni to'ldirish</div>
     <div class="glass sheet">
       <div class="pay-btns">
-        <button disabled>⭐ Telegram Stars</button>
-        <button disabled>💳 Click / Payme</button>
+        <button onclick="buyStars(50)">⭐ 50 Stars</button>
+        <button onclick="buyStars(100)">⭐ 100 Stars</button>
+        <button onclick="buyStars(200)">⭐ 200 Stars</button>
       </div>
-      <p class="pay-note">To'lov tizimi hali ishlamayapti. Ulanish tugagach, shu yerdan balansni to'ldirasiz.</p>
+      <p class="pay-note">1 Star = 150 so'm. Telegram Stars orqali to'lanadi. Click/Payme hali ulanmagan.</p>
     </div>
-
     <div class="sec-title">Birinchi ish</div>
     <div class="glass gift" id="giftBox"></div>
-
     <div class="sec-title">Haqida</div>
     <div class="glass">
       <div class="about-row"><span>🤖</span><div><b>AI versiyasi</b><small>Claude Sonnet 5.5.</small></div></div>
@@ -222,6 +217,7 @@
 <script>
 const API_URL = "https://talabayordamchi.duckdns.org/generate";
 const ME_URL = "https://talabayordamchi.duckdns.org/me";
+const PAY_URL = "https://talabayordamchi.duckdns.org/pay_link";
 
 const tg = window.Telegram && window.Telegram.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
@@ -229,7 +225,6 @@ if (tg) { tg.ready(); tg.expand(); }
 function lsGet(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } }
 function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 
-// Holat: balans va bepul imkoniyat serverdan keladi
 let S = {
   role: lsGet("talaba_rol", "talaba"),
   history: lsGet("talaba_tarix", []),
@@ -242,13 +237,11 @@ function saveAll() {
   lsSet("talaba_shaxsiy", S.person);
 }
 
-if (tg) {
-  const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
-  if (u) {
-    document.getElementById("pname").textContent = u.first_name + (u.last_name ? " " + u.last_name : "");
-    document.getElementById("puser").textContent = u.username ? "@" + u.username : "Telegram orqali kirgan";
-    document.getElementById("greet").textContent = "Salom, " + u.first_name + "!";
-  }
+if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+  const u = tg.initDataUnsafe.user;
+  document.getElementById("pname").textContent = u.first_name + (u.last_name ? " " + u.last_name : "");
+  document.getElementById("puser").textContent = u.username ? "@" + u.username : "Telegram orqali kirgan";
+  document.getElementById("greet").textContent = "Salom, " + u.first_name + "!";
 }
 
 const fmt = n => Number(n).toLocaleString("uz-UZ").replace(/,/g, " ") + " so'm";
@@ -290,6 +283,7 @@ const TYPES = {
   ilmiy:         { name: "Ilmiy ish",         icon: "🔬", hint: "Dolzarblik, maqsad, metodika", topicQ: "Ilmiy ish mavzusi nima?",     sizeQ: "Hajm",          sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "bob",   min: 2,  max: 5,   def: 3,  personal: false },
   konspekt:      { name: "Ma'ruza konspekti", icon: "📖", hint: "Tayyor konspekt",              topicQ: "Ma'ruza mavzusi nima?",       sizeQ: "Uzunlik",       sizes: ["Qisqa", "O'rta", "Batafsil"], unit: "band",  min: 3,  max: 10,  def: 5,  personal: false }
 };
+const FORMAT_TYPES = ["referat", "mustaqil"];
 
 const ROLE_TYPE_KEYS = {
   talaba: ["prezentatsiya", "mustaqil", "referat"],
@@ -324,7 +318,6 @@ function setRole(r) {
   renderAll();
   if (st && document.getElementById("form").classList.contains("on")) renderForm();
 }
-
 function renderRoles() {
   document.getElementById("homeRoles").innerHTML = rolesHTML();
   document.getElementById("profRoles").innerHTML = rolesHTML();
@@ -367,12 +360,12 @@ function renderProfile() {
 function renderAll() {
   renderHome();
   renderProfile();
-  if (document.getElementById("history").classList.contains("on")) renderHistory();
 }
 
 let st = null;
 function openForm(k) {
-st = { type: k, hajm: -1, soni: TYPES[k].def, topic: "", extraOn: true, format: "docx" };
+  st = { type: k, hajm: -1, soni: TYPES[k].def, topic: "", extraOn: true, format: "docx" };
+  document.getElementById("out").innerHTML = "";
   go("form");
   renderForm();
 }
@@ -385,6 +378,13 @@ function saveFields() {
     const el = document.getElementById("p_" + key);
     if (el) S.person[key] = el.value;
   });
+}
+
+function formatBlock() {
+  if (!FORMAT_TYPES.includes(st.type)) return "";
+  const opts = [["docx", "Word (.docx)"], ["pdf", "PDF"]].map(([f, n]) =>
+    `<button class="${st.format === f ? "on" : ""}" onclick="pickFormat('${f}')">${n}</button>`).join("");
+  return `<div class="glass field"><label>Fayl formati</label><div class="seg3" style="grid-template-columns:1fr 1fr">${opts}</div></div>`;
 }
 
 function renderForm() {
@@ -409,8 +409,7 @@ function renderForm() {
   }
 
   const stepBtns = t.max >= 20
-    ? `<button onclick="stepBy(-10)">−10</button><button onclick="stepBy(-1)">−1</button>
-       <button onclick="stepBy(1)">+1</button><button onclick="stepBy(10)">+10</button>`
+    ? `<button onclick="stepBy(-10)">−10</button><button onclick="stepBy(-1)">−1</button><button onclick="stepBy(1)">+1</button><button onclick="stepBy(10)">+10</button>`
     : `<button onclick="stepBy(-1)">−</button><button onclick="stepBy(1)">+</button>`;
 
   document.getElementById("formBox").innerHTML = `
@@ -421,20 +420,20 @@ function renderForm() {
     ${personal}
     <div class="glass field">
       <label>${t.sizeQ}</label>
-      <div class="seg3">${t.sizes.map((s, i) =>
-        `<button class="${i === st.hajm ? "on" : ""}" onclick="pickSize(${i})">${s}</button>`).join("")}</div>
+      <div class="seg3">${t.sizes.map((s, i) => `<button class="${i === st.hajm ? "on" : ""}" onclick="pickSize(${i})">${s}</button>`).join("")}</div>
     </div>
     <div class="glass field">
       <label>Nechta ${t.unit} kerak? (${t.min}–${t.max})</label>
-      <div class="stepper">
-        ${stepBtns}
-        <div class="val" style="min-width:70px">${st.soni}<small>${t.unit}</small></div>
-      </div>
+      <div class="stepper">${stepBtns}<div class="val" style="min-width:70px">${st.soni}<small>${t.unit}</small></div></div>
     </div>
-${(st.type === "referat" || st.type === "mustaqil") ? `<div class="glass field"><label>Fayl formati</label><div class="seg3" style="grid-template-columns:1fr 1fr">${["docx", "pdf"].map(f => `<button class="${st.format === f ? "on" : ""}" onclick="pickFormat('${f}')">${f === "docx" ? "Word (.docx)" : "PDF"}</button>`).join("")}</div></div>` : ""}
+    ${formatBlock()}
+    <button class="cta" id="submitBtn" onclick="submitForm()">Tayyorlash</button>`;
+}
 
 function toggleExtra() { saveFields(); st.extraOn = !st.extraOn; renderForm(); }
+function pickSize(i) { saveFields(); st.hajm = i; renderForm(); }
 function pickFormat(f) { saveFields(); st.format = f; renderForm(); }
+function stepBy(d) {
   saveFields();
   const t = TYPES[st.type];
   st.soni = Math.min(t.max, Math.max(t.min, st.soni + d));
@@ -450,10 +449,7 @@ async function submitForm() {
   if (!S.me.ok) { alert("Telegram ichidan oching."); return; }
 
   const wasFree = !S.me.free_used;
-  if (!wasFree && S.me.balance <= 0) {
-    alert("Balans yetarli emas. Balansni to'ldirish tez orada ishga tushadi.");
-    return;
-  }
+  if (!wasFree && S.me.balance <= 0) { alert("Balans yetarli emas. Balansni to'ldiring."); return; }
 
   const meta = t.personal && st.extraOn ? { ...S.person } : {};
   const btn = document.getElementById("submitBtn");
@@ -470,12 +466,7 @@ async function submitForm() {
   loader.style.display = "none";
   btn.disabled = false;
 
-  if (xato === "402") {
-    alert("Balans yetarli emas. Balansni to'ldiring.");
-    await loadMe();
-    return;
-  }
-
+  if (xato === "402") { alert("Balans yetarli emas. Balansni to'ldiring."); await loadMe(); return; }
   if (xato) {
     document.getElementById("out").innerHTML = `<div class="glass result">Xato yuz berdi. Qayta urinib ko'ring.</div>`;
     await loadMe();
@@ -504,6 +495,22 @@ async function generate(type, topic, hajmMatn, son, meta) {
   if (!res.ok) throw new Error("server");
   const data = await res.json();
   return data.text;
+}
+
+async function buyStars(n) {
+  if (!tg || !tg.initData) { alert("Telegram ichidan oching."); return; }
+  try {
+    const r = await fetch(PAY_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ initData: tg.initData, stars: n })
+    });
+    if (!r.ok) { alert("To'lov havolasi yaratilmadi."); return; }
+    const d = await r.json();
+    tg.openInvoice(d.link, status => { if (status === "paid") loadMe(); });
+  } catch (e) {
+    alert("Xato yuz berdi. Qayta urinib ko'ring.");
+  }
 }
 
 function escapeHTML(s) {
