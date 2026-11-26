@@ -148,8 +148,12 @@ input[type=range]{width:100%;accent-color:#9b6bff;margin:8px 0 2px}
       <button type="button" class="copy-btn" onclick="copyCard()">Nusxalash</button>
     </div>
     <label class="lb">To'lov cheki rasmi</label>
-    <input type="file" id="receiptFile" accept="image/*" onchange="previewReceipt(this)">
-    <img id="receiptPreview" class="pv-img" alt="Chek rasmi">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+  <input type="file" id="receiptFile" accept="image/*" style="display:none" onchange="handleReceiptChange(this)">
+  <button type="button" class="btn gh" style="width:auto;padding:8px 14px" onclick="document.getElementById('receiptFile').click()">Chek tanlash</button>
+  <span id="receiptFileName" class="sub" style="margin:0">Chek tanlanmagan</span>
+</div>
+<img id="receiptPreview" class="pv-img" alt="Cek rasmi">
     <label class="lb" style="margin-top:10px">Izoh (ixtiyoriy)</label>
     <input type="text" id="receiptNote" placeholder="Masalan: O'tkazma vaqti yoki ismingiz" style="margin-bottom:12px">
     <button type="button" class="btn" id="sendReceiptBtn" onclick="submitReceipt()">Chekni yuborish</button>
@@ -392,6 +396,24 @@ document.addEventListener("touchend",e=>{const n=Date.now();if(n-lt<300)e.preven
 document.addEventListener("gesturestart",e=>e.preventDefault());
 applyTheme(ls("talaba_tema",tg&&tg.colorScheme==="light"?"kunduzgi":"tungi")==="kunduzgi");
 rHome();rProf();loadMe();
+  function handleReceiptChange(input) {
+  const nameEl = document.getElementById("receiptFileName");
+  if (nameEl) {
+    nameEl.textContent = input.files && input.files[0]
+      ? input.files[0].name
+      : "Chek tanlanmagan";
+  }
+  if (typeof previewReceipt === "function") {
+    previewReceipt(input);
+  }
+}
+
+function resetReceiptLabel() {
+  const nameEl = document.getElementById("receiptFileName");
+  if (nameEl) {
+    nameEl.textContent = "Chek tanlanmagan";
+  }
+}
 </script>
 </body>
 </html>
