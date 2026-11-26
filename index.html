@@ -27,7 +27,7 @@ h2{margin:0 0 10px;font-size:20px}
 .seg.in{background:var(--fd);border:1px solid var(--ln);border-radius:12px}
 .seg button{padding:8px 4px;border:0;border-radius:10px;background:transparent;color:var(--mu);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
 .seg button.on{background:linear-gradient(120deg,var(--ac),var(--ac2));color:#fff}
-input[type=text],textarea{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--ln);background:var(--fd);color:var(--tx);font:inherit;font-size:15px}
+input[type=text],input[type=number],textarea{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--ln);background:var(--fd);color:var(--tx);font:inherit;font-size:15px}
 textarea{min-height:80px;resize:vertical}
 .chips{display:flex;flex-wrap:wrap;gap:5px}
 .chips button{padding:6px 10px;border-radius:10px;border:1px solid var(--ln);background:var(--fd);color:var(--mu);font:inherit;font-size:12px;cursor:pointer}
@@ -57,6 +57,7 @@ input[type=range]{width:100%;accent-color:#9b6bff;margin:8px 0 2px}
 .bal{text-align:center;padding:18px}.bal small{color:var(--mu)}.am{font-size:30px;font-weight:800;margin-top:4px}
 .pay{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .pay button{padding:9px 4px;border-radius:12px;border:1px solid var(--ln);background:var(--g);color:var(--tx);font:inherit;font-size:12px;font-weight:600;cursor:pointer;line-height:1.3}
+.pay button.alt{border-color:var(--so);background:var(--gs);color:var(--tx)}
 .pay button:disabled{opacity:.45;cursor:not-allowed}
 .pay small{font-size:10px;color:var(--mu);font-weight:400}
 .ab{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--ln)}.ab:last-child{border:0}
@@ -65,8 +66,12 @@ input[type=range]{width:100%;accent-color:#9b6bff;margin:8px 0 2px}
 .dock button{background:none;border:0;color:var(--mu);font:inherit;font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 0;border-radius:14px}
 .dock i{font-style:normal;font-size:18px}
 .dock button.on{color:var(--tx);background:var(--gs)}
-.md{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-end;justify-content:center;z-index:50}.md.on{display:flex}
-.sh2{width:100%;max-width:520px;max-height:84vh;overflow:auto;border-radius:22px 22px 0 0;padding:16px;background:var(--bg2)}
+.md{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;z-index:50}.md.on{display:flex}
+.sh2{width:100%;max-width:520px;max-height:88vh;overflow:auto;border-radius:22px 22px 0 0;padding:16px;background:var(--bg2);border-top:1px solid var(--ln)}
+.card-box{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-radius:12px;background:var(--fd);border:1px solid var(--ln);margin-top:6px}
+.card-num{font-weight:700;font-size:15px;letter-spacing:.5px}
+.copy-btn{padding:6px 10px;border-radius:10px;border:1px solid var(--ln);background:var(--gs);color:var(--tx);font:inherit;font-size:12px;font-weight:600;cursor:pointer}
+.pv-img{display:none;width:100%;max-height:170px;object-fit:contain;border-radius:12px;margin-top:8px;background:var(--fd);border:1px solid var(--ln)}.pv-img.on{display:block}
 .pv{height:110px;border-radius:12px;padding:10px;font-size:11px;line-height:1.5;margin-bottom:6px;overflow:hidden}
 .pv.oddiy{background:#fff;color:#111;font-family:"Times New Roman",serif}
 .pv.klassik{background:#fff;color:#1F3A5F;font-family:Georgia,serif;border-top:6px solid #1F3A5F}
@@ -110,9 +115,10 @@ input[type=range]{width:100%;accent-color:#9b6bff;margin:8px 0 2px}
       <button onclick="stars(200)">⭐ 200<br><small>40 000 so'm</small></button>
     </div>
     <div class="pay" style="margin-top:6px">
-      <button disabled>Click</button><button disabled>Payme</button><button disabled>Paynet</button>
+      <button class="alt" onclick="openPayModal()">💳 Karta / Chek<br><small>Qo'lda tekshiruv</small></button>
+      <button disabled>Click</button><button disabled>Payme</button>
     </div>
-    <div class="nt">Telegram Stars ishlaydi (1 Star = 200 so'm). Click, Payme va Paynet hali ulanmagan.</div>
+    <div class="nt">Telegram Stars ishlaydi (1 Star = 200 so'm) yoki Karta orqali chek yuborishingiz mumkin.</div>
   </div>
   <div class="gl card" id="gift"></div>
   <button class="btn gh" onclick="fikr()">💬 Fikr bildirish</button>
@@ -124,6 +130,33 @@ input[type=range]{width:100%;accent-color:#9b6bff;margin:8px 0 2px}
   </div>
 </section>
 </div>
+
+<div class="md" id="pm" onclick="if(event.target===this)closePayModal()">
+  <div class="sh2">
+    <h3 style="margin:0 0 6px">Karta orqali to'lov va chek</h3>
+    <p class="sub" style="margin:0 0 12px">Summani o'tkazing va to'lov cheki rasmini yuboring.</p>
+    <label class="lb">To'lov summasi</label>
+    <div class="chips" id="amtChips" style="margin-bottom:8px">
+      <button type="button" class="on" data-amt="10000" onclick="pickAmt(10000,this)">10 000 so'm</button>
+      <button type="button" data-amt="20000" onclick="pickAmt(20000,this)">20 000 so'm</button>
+      <button type="button" data-amt="40000" onclick="pickAmt(40000,this)">40 000 so'm</button>
+    </div>
+    <input type="number" id="payAmt" value="10000" min="1000" step="500" placeholder="Summa (so'mda)" style="margin-bottom:10px">
+    <label class="lb">Karta raqami (Karta egasi: Kambarov Abdukadirdjon)</label>
+    <div class="card-box" style="margin-bottom:10px">
+      <span class="card-num" id="cardNum">8600 0000 0000 0000</span>
+      <button type="button" class="copy-btn" onclick="copyCard()">Nusxalash</button>
+    </div>
+    <label class="lb">To'lov cheki rasmi</label>
+    <input type="file" id="receiptFile" accept="image/*" onchange="previewReceipt(this)">
+    <img id="receiptPreview" class="pv-img" alt="Chek rasmi">
+    <label class="lb" style="margin-top:10px">Izoh (ixtiyoriy)</label>
+    <input type="text" id="receiptNote" placeholder="Masalan: O'tkazma vaqti yoki ismingiz" style="margin-bottom:12px">
+    <button type="button" class="btn" id="sendReceiptBtn" onclick="submitReceipt()">Chekni yuborish</button>
+    <button type="button" class="btn gh" onclick="closePayModal()">Yopish</button>
+  </div>
+</div>
+
 <div class="md" id="dm" onclick="if(event.target===this)dmClose()"><div class="sh2"><h3 style="margin:0 0 10px">Dizaynlar</h3><div id="dc"></div><button class="btn gh" onclick="dmClose()">Yopish</button></div></div>
 <nav class="dock">
   <button class="on" data-g="home"><i>🏠</i>Asosiy</button>
@@ -132,6 +165,7 @@ input[type=range]{width:100%;accent-color:#9b6bff;margin:8px 0 2px}
 </nav>
 <script>
 const API="https://talabayordamchi.duckdns.org",tg=window.Telegram&&window.Telegram.WebApp;
+const CARD_NUMBER="8600 0000 0000 0000";
 if(tg){tg.ready();tg.expand()}
 const $=id=>document.getElementById(id);
 const ls=(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}};
@@ -141,6 +175,7 @@ const fmt=n=>Number(n).toLocaleString("en-US").replace(/,/g," ")+" so'm";
 const S={role:ls("talaba_rol","talaba"),hist:ls("talaba_tarix",[]),person:ls("talaba_shaxsiy",{}),me:{free_used:true,balance:0,ok:false}};
 let st=null;
 const bt=()=>S.me.ok?fmt(S.me.balance):"—";
+$("cardNum").textContent=CARD_NUMBER;
 const T={
  referat:{n:"Referat",i:"📝",h:"Reja, boblar va adabiyotlar",q:"Referat mavzusi",zl:"Chuqurlik",z:["Qisqa","O'rta","Batafsil"],u:"bet",p:1,d:1,f:1},
  prezentatsiya:{n:"Prezentatsiya",i:"📊",h:"Rasmli, mavzuga mos slaydlar",q:"Prezentatsiya mavzusi",zl:"Uslub",z:["Oddiy","O'rtacha","Premium"],u:"slayd",p:1,s:1},
@@ -158,6 +193,67 @@ const SH=[["business","Business","FFFFFF","1969B4","0D2344"],["gradient","Gradie
 const pDoc=p=>3990+Math.ceil(Math.max(0,p-10)/5)*2000;
 const pSl=(n,z)=>({"Oddiy":2990,"O'rtacha":4990,"Premium":6990}[z]||2990)+Math.ceil(Math.max(0,n-10)/5)*100;
 const price=()=>T[st.type].s?pSl(st.son,T[st.type].z[st.z]):pDoc(st.son);
+
+function openPayModal(){$("pm").classList.add("on")}
+function closePayModal(){$("pm").classList.remove("on")}
+function pickAmt(val,btn){
+ $("payAmt").value=val;
+ document.querySelectorAll("#amtChips button").forEach(b=>b.classList.remove("on"));
+ if(btn)btn.classList.add("on");
+}
+async function copyCard(){
+ try{
+  await navigator.clipboard.writeText(CARD_NUMBER.replace(/\s+/g,""));
+  alert("Karta raqami nusxalandi");
+ }catch(e){
+  alert("Karta raqami: "+CARD_NUMBER);
+ }
+}
+function previewReceipt(input){
+ const file=input.files&&input.files[0];
+ const img=$("receiptPreview");
+ if(!file){img.classList.remove("on");img.src="";return}
+ const reader=new FileReader();
+ reader.onload=e=>{img.src=e.target.result;img.classList.add("on")};
+ reader.readAsDataURL(file);
+}
+async function submitReceipt(){
+ const amount=Number($("payAmt").value||0);
+ const file=$("receiptFile").files&&$("receiptFile").files[0];
+ const note=$("receiptNote").value.trim();
+ if(!amount||amount<1000)return alert("Kamida 1 000 so'm summa kiriting.");
+ if(!file)return alert("Iltimos, to'lov cheki rasmini tanlang.");
+ const btn=$("sendReceiptBtn");
+ btn.disabled=true;btn.textContent="Yuborilmoqda...";
+ const user=tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user?tg.initDataUnsafe.user:null;
+ try{
+  const fd=new FormData();
+  fd.append("amount",String(amount));
+  fd.append("card_number",CARD_NUMBER);
+  fd.append("note",note);
+  fd.append("receipt",file);
+  if(user)fd.append("user_id",String(user.id));
+  if(tg&&tg.initData)fd.append("initData",tg.initData);
+  const res=await fetch(API+"/api/payments/receipt",{method:"POST",body:fd});
+  if(!res.ok)throw new Error("Status "+res.status);
+  S.hist.unshift({type:"tolov",topic:"Chek ("+fmt(amount)+")",free:false,sana:new Date().toISOString().slice(0,16).replace("T"," ")});
+  sv("talaba_tarix",S.hist.slice(0,100));
+  alert("Chekingiz yuborildi! Admin tasdiqlagach, balansingiz yangilanadi.");
+  $("receiptFile").value="";$("receiptNote").value="";$("receiptPreview").classList.remove("on");
+  closePayModal();
+  await loadMe();
+ }catch(err){
+  if(tg&&typeof tg.sendData==="function"){
+   tg.sendData(JSON.stringify({type:"receipt_payment",amount,note,file_name:file.name}));
+   alert("Ma'lumot botga yuborildi. Chek rasmini bot chatiga ham jo'nating.");
+   closePayModal();
+  }else{
+   alert("Serverga ulanib bo'lmadi. Qayta urinib ko'ring.");
+  }
+ }finally{
+  btn.disabled=false;btn.textContent="Chekni yuborish";
+ }
+}
 
 function applyTheme(l){document.body.classList.toggle("light",l);$("themeBtn").textContent=l?"☀":"☾"}
 function theme(){const l=!document.body.classList.contains("light");sv("talaba_tema",l?"kunduzgi":"tungi");applyTheme(l)}
@@ -189,7 +285,7 @@ function rHome(){
  $("mb").textContent="Balans: "+bt()
 }
 function rHist(){
- $("hl").innerHTML=S.hist.length?S.hist.map(x=>`<div class="gl card"><div style="display:flex;justify-content:space-between;gap:8px"><div><b>${T[x.type]?T[x.type].i+" "+T[x.type].n:"Ish"}: ${esc(x.topic)}</b><div class="nt" style="text-align:left">${esc(x.sana||"")}</div></div><span class="tag">${x.free?"Bepul":"Balansdan"}</span></div></div>`).join(""):`<div class="nt" style="padding:30px">Hali ishlar yo'q.</div>`
+ $("hl").innerHTML=S.hist.length?S.hist.map(x=>`<div class="gl card"><div style="display:flex;justify-content:space-between;gap:8px"><div><b>${T[x.type]?T[x.type].i+" "+T[x.type].n:(x.type==="tolov"?"💳 To'lov":"Ish")}: ${esc(x.topic)}</b><div class="nt" style="text-align:left">${esc(x.sana||"")}</div></div><span class="tag">${x.type==="tolov"?"Chek":(x.free?"Bepul":"Balansdan")}</span></div></div>`).join(""):`<div class="nt" style="padding:30px">Hali ishlar yo'q.</div>`
 }
 function rProf(){
  rRoles();$("am").textContent=bt();$("mb").textContent="Balans: "+bt();
